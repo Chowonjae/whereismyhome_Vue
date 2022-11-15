@@ -1,38 +1,49 @@
-
 <template>
   <b-row
-    class="m-2 "
+    class="m-2"
     @mouseover="colorChange(true)"
     @mouseout="colorChange(false)"
     :class="{ 'mouse-over-bgcolor': isColor }"
+    align-v="stretch"
+    align-self="stretch"
+    style="height: 80px"
   >
     <b-col>
-<div class="apt-name">
-								<div>{{hospital.name }}</div>
-							</div>
-							<div class="apt-space">주소 : {{hospital.address }}</div>
-							<div class="apt-type" v-if="hospital.type=='A'">
-                유형 : 외래진료 
-              </div>
-							<div class="apt-type" v-else>
-                유형 : 외래진료 및 입원 
-              </div>
-							<div class="apt-tel">전화번호: {{hospital.phonenumber }}</div>
-
+      <div class="apt-name">
+        <a>{{ house.apartmentName }}</a>
+      </div>
+      <div>
+        <span v-if="house.coffee != null" style="font-size: 12px" class="text-success">
+          <b-img :src="coffeeImg" width="20" height="20" class="icon"></b-img
+          >{{ house.coffee.name }} {{ house.coffee.dist }}m
+        </span>
+        <span v-else style="font-size: 12px" class="text-success">
+          <b-img :src="coffeeImg" width="20" height="20" class="icon"></b-img> 1km 이내에 없음
+        </span>
+        <span v-if="house.metro != null" style="font-size: 12px">
+          <b-img :src="metroImg" width="20" height="20" class="icon"></b-img>
+          {{ house.metro.name }} {{ house.metro.dist }}m
+        </span>
+        <span v-else style="font-size: 12px"
+          ><b-img :src="metroImg" width="20" height="20" class="icon"></b-img> 1km 이내에 없음</span
+        >
+      </div>
     </b-col>
-  </b-row>  
+  </b-row>
 </template>
 
 <script>
 export default {
-  name: "HospitalListItem",
+  name: "HouseListItem",
   data() {
     return {
       isColor: false,
+      coffeeImg: require("@/assets/coffee.png"),
+      metroImg: require("@/assets/metro.png"),
     };
   },
   props: {
-    hospital: Object,
+    house: Object,
   },
   methods: {
     colorChange(flag) {
@@ -43,19 +54,24 @@ export default {
 </script>
 
 <style scoped>
+b-row {
+  height: 200px;
+}
 .apt {
   width: 50px;
 }
 .mouse-over-bgcolor {
   background-color: lightblue;
 }
-.apt-name{
+.apt-name {
   font-weight: bold;
 }
-.apt-space, .apt-price, .apt-type{
+.apt-space,
+.apt-price,
+.apt-type {
   font-size: 14px;
 }
-.apt-date{
+.apt-date {
   font-size: 14px;
   color: gray;
 }

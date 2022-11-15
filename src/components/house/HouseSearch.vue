@@ -14,7 +14,10 @@
       <b-form-select v-model="sidoCode" :options="sidos" @change="gugunList"></b-form-select>
     </b-col>
     <b-col class="sm-3">
-      <b-form-select v-model="gugunCode" :options="guguns" @change="searchHospital"></b-form-select>
+      <b-form-select v-model="gugunCode" :options="guguns" @change="dongList"></b-form-select>
+    </b-col>
+    <b-col class="sm-3">
+      <b-form-select v-model="dongCode" :options="dongs" @change="searchArea"></b-form-select>
     </b-col>
   </b-row>
 </template>
@@ -23,15 +26,16 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
-  name: "HospitalSearch",
+  name: "HouseSearch",
   data() {
     return {
       sidoCode: null,
       gugunCode: null,
+      dongCode: null,
     };
   },
   computed: {
-    ...mapState(["sidos", "guguns", "hospitals"]),
+    ...mapState(["sidos", "guguns", "dongs", "houses"]),
     // sidos() {
     //   return this.$store.state.sidos;
     // },
@@ -41,12 +45,13 @@ export default {
     // this.sidoList();
     this.CLEAR_SIDO_LIST();
     this.CLEAR_GUGUN_LIST();
-    this.CLEAR_HOSPITAL_LIST();
+    this.CLEAR_DONG_LIST();
+    this.CLEAR_HOUSE_LIST();
     this.getSido();
   },
   methods: {
-    ...mapActions(["getSido", "getGugun", "getHospitalList"]),
-    ...mapMutations(["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST", "CLEAR_HOSPITAL_LIST"]),
+    ...mapActions(["getSido", "getGugun", "getDong", "getHouseList"]),
+    ...mapMutations(["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST", "CLEAR_DONG_LIST", "CLEAR_HOUSE_LIST"]),
     // sidoList() {
     //   this.getSido();
     // },
@@ -56,8 +61,14 @@ export default {
       this.gugunCode = null;
       if (this.sidoCode) this.getGugun(this.sidoCode);
     },
-    searchHospital() {
-      if (this.gugunCode) this.getHospitalList(this.gugunCode);
+    dongList() {
+      // console.log(this.sidoCode);
+      this.CLEAR_DONG_LIST();
+      this.dongCode = null;
+      if (this.gugunCode) this.getDong(this.gugunCode);
+    },
+    searchArea() {
+      if (this.dongCode) this.getHouseList(this.dongCode);
     },
   },
 };

@@ -9,10 +9,12 @@ export default new Vuex.Store({
   state: {
     sidos: [{ value: null, text: "시도 선택" }],
     guguns: [{ value: null, text: "구군 선택" }],
+    dongs: [{ value: null, text: "동 선택" }],
     houses: [],
     house: null,
     hospitals: [],
     coronas: [],
+    deals:[]
   },
   getters: {},
   mutations: {
@@ -27,12 +29,21 @@ export default new Vuex.Store({
         state.guguns.push({ value: gugun.gugunCode, text: gugun.gugunName });
       });
     },
+    SET_DONG_LIST(state, dongs) {
+      // console.log(dongs);
+      dongs.forEach((dong) => {
+        state.dongs.push({ value: dong.dongCode, text: dong.dongName });
+      });
+    },
     CLEAR_SIDO_LIST(state) {
       state.sidos = [{ value: null, text: "시도 선택" }];
     },
-    CLEAR_APT_LIST(state) {
+    CLEAR_HOUSE_LIST(state) {
       state.houses = [];
       state.house = null;
+    },
+    CLEAR_DEAL_LIST(state) {
+      state.deals = [];
     },
     CLEAR_HOSPITAL_LIST(state) {
       state.hospitals = [];
@@ -43,8 +54,14 @@ export default new Vuex.Store({
     CLEAR_GUGUN_LIST(state) {
       state.guguns = [{ value: null, text: "구군 선택" }];
     },
+    CLEAR_DONG_LIST(state) {
+      state.dongs = [{ value: null, text: "동 선택" }];
+    },
     SET_HOUSE_LIST(state, houses) {
       state.houses = houses;
+    },
+    SET_DEAL_LIST(state, deals) {
+      state.deals = deals;
     },
     SET_HOSPITAL_LIST(state, hospitals) {
       state.hospitals = hospitals;
@@ -84,7 +101,19 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getHouseList({ commit }, gugunCode) {
+    getDong({ commit }, gugunCode) {
+      const params = { gugun: gugunCode };
+      http
+        .get(`/map/dong`, { params })
+        .then(({ data }) => {
+          // console.log(commit, response);
+          commit("SET_DONG_LIST", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getHouseList({ commit }, dongCode) {
       // vue cli enviroment variables 검색
       //.env.local file 생성.
       // 반드시 VUE_APP으로 시작해야 한다.
@@ -94,10 +123,10 @@ export default new Vuex.Store({
       //   serviceKey: decodeURIComponent(SERVICE_KEY),
       // };
       http
-        .get(`map/search/${gugunCode}`)
+        .get(`map/search/${dongCode}`)
         .then(({ data }) => {
-          // console.log(commit, data);
-          commit("SET_HOUSE_LIST", data.response.body.items.item);
+          //  console.log(data);
+          commit("SET_HOUSE_LIST", data);
         })
         .catch((error) => {
           console.log(error);

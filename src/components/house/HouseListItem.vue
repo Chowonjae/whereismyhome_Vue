@@ -1,8 +1,11 @@
 <template>
+<b-container>
+
   <b-row
-    class="m-2"
+    class="m-2 apt"
     @mouseover="colorChange(true)"
     @mouseout="colorChange(false)"
+    @click="getAptDetail"
     :class="{ 'mouse-over-bgcolor': isColor }"
     align-v="stretch"
     align-self="stretch"
@@ -28,8 +31,12 @@
           ><b-img :src="metroImg" width="20" height="20" class="icon"></b-img> 1km 이내에 없음</span
         >
       </div>
+      <div class="apt-date">
+      건축년도: {{ house.buildYear }}
+      </div>
     </b-col>
   </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -49,16 +56,16 @@ export default {
     colorChange(flag) {
       this.isColor = flag;
     },
+    getAptDetail(){
+      
+    }
   },
 };
 </script>
 
 <style scoped>
-b-row {
-  height: 200px;
-}
 .apt {
-  width: 50px;
+  border-bottom: 1px solid whitesmoke;
 }
 .mouse-over-bgcolor {
   background-color: lightblue;

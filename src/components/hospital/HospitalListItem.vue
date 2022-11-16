@@ -1,14 +1,14 @@
 
 <template>
   <b-row
-    class="m-2 "
+    class="m-2 apt"
     @mouseover="colorChange(true)"
     @mouseout="colorChange(false)"
     :class="{ 'mouse-over-bgcolor': isColor }"
   >
     <b-col>
 <div class="apt-name">
-								<div>{{hospital.name }}</div>
+								{{hospital.name }}
 							</div>
 							<div class="apt-space">주소 : {{hospital.address }}</div>
 							<div class="apt-type" v-if="hospital.type=='A'">
@@ -44,13 +44,15 @@ export default {
 
 <style scoped>
 .apt {
-  width: 50px;
+  border-block-end: 1px solid whitesmoke;
 }
 .mouse-over-bgcolor {
-  background-color: lightblue;
+  background-color: lightyellow;
+  border-radius: 5px;
 }
 .apt-name{
   font-weight: bold;
+  font-size: 20px;
 }
 .apt-space, .apt-price, .apt-type{
   font-size: 14px;

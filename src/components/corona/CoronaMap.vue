@@ -45,7 +45,7 @@ export default {
       if (this.coronas.length > 0) {
         const imageSrc = require("@/assets/clinic.png"); // 마커이미지의 주소입니다
         let imageSize = new kakao.maps.Size(50, 55); // 마커이미지의 크기입니다
-        let imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+        let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
         var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
         // 주소-좌표 변환 객체를 생성합니다
         const bounds = new kakao.maps.LatLngBounds();

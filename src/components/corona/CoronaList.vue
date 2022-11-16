@@ -1,6 +1,15 @@
 <template>
   <b-container v-if="coronas && coronas.length != 0" class="bv-example-row mt-3">
-    <corona-list-item v-for="(corona, index) in coronas" :key="index" :corona="corona" />
+    <b-container>
+    <corona-list-item v-for="(corona, index) in coronas.slice((currentPage - 1) * perPage, currentPage * perPage)" :key="index" :corona="corona" />
+  </b-container>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      align="fill"
+      limit="3"
+    ></b-pagination>  
   </b-container>
   <b-container v-else class="bv-example-row mt-3">
     <b-row>
@@ -19,10 +28,13 @@ export default {
     CoronaListItem,
   },
   data() {
-    return {};
+    return { perPage: 3, currentPage: 1 };
   },
   computed: {
     ...mapState(["coronas"]),
+    rows() {
+      return this.coronas.length;
+    },
   },
 };
 </script>

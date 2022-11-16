@@ -6,6 +6,11 @@
       </b-col>
     </b-row>
     <b-row>
+      <b-col>
+        <inter-list></inter-list>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col cols="4" align="left">
         <house-list></house-list>
       </b-col>
@@ -13,21 +18,17 @@
         <house-map></house-map>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col>
-        <house-info></house-info>
-      </b-col>
-    </b-row>
+
   </b-container>
 </template>
 
 <script>
-import HouseInfo from "@/components/house/HouseInfo.vue";
 import HouseList from "@/components/house/HouseList.vue";
+import InterList from "@/components/house/InterList.vue";
 import HouseMap from "@/components/house/HouseMap.vue";
 import HouseSearch from "@/components/house/HouseSearch.vue";
 export default {
-  components: { HouseMap, HouseSearch, HouseList,HouseInfo },
+  components: { HouseMap, HouseSearch, HouseList,InterList },
 };
 </script>
 

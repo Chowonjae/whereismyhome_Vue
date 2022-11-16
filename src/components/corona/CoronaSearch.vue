@@ -10,27 +10,19 @@
     <b-col class="sm-3" align="left">
       <b-button variant="outline-primary" @click="sendKeyword">검색</b-button>
     </b-col> -->
-    <b-col class="sm-3">
+      <b-input-group size="lg" style="justify-content:center;">
       <b-form-select v-model="query.sidoCode" :options="sidos" @change="gugunList" ref="sido"></b-form-select>
-    </b-col>
-    <b-col class="sm-3">
       <b-form-select v-model="query.gugunCode" :options="guguns" ref="gugun"></b-form-select>
-    </b-col>
-    <b-col class="sm-3">
       <b-form-select v-model="query.day"  ref="day">
         <option value=null>요일선택</option>
         <option value="WKD">평일</option>
         <option value="SAT">토요일</option>
         <option value="SUN">일요일</option>
       </b-form-select>
-    </b-col>
-    <b-col class="sm-3">
       <b-form-select v-model="query.night"  ref="night">
         <option value="AM">오전</option>
         <option value="PM">오후</option>
       </b-form-select>
-    </b-col>
-    <b-col class="sm-3">
       <b-form-select v-model="query.hour"  ref="hour">
         <option value=null>시간선택</option>
         <option value="1">01</option>
@@ -46,8 +38,6 @@
         <option value="11">11</option>
         <option value="12">12</option>
       </b-form-select>
-    </b-col>
-    <b-col class="sm-3">
       <b-form-select v-model="query.min"  @change="checkValue"  ref="min">
         <option value=null>분선택</option>
         <option value="0">00</option>
@@ -57,7 +47,7 @@
         <option value="40">40</option>
         <option value="50">50</option>
       </b-form-select>
-    </b-col>
+      </b-input-group>
   </b-row>
 </template>
 
@@ -128,4 +118,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

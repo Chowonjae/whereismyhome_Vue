@@ -12,11 +12,12 @@
       :total-rows="rows"
       :per-page="perPage"
       align="fill"
+      limit="3"
     ></b-pagination>
   </b-container>
   <b-container v-else class="bv-example-row mt-3">
     <b-row>
-      <b-col><b-alert show>이 지역의 거래내역이 없습니다.</b-alert></b-col>
+      <b-col ><b-alert show>이 지역의 거래내역이 없습니다.</b-alert></b-col>
     </b-row>
   </b-container>
 </template>
@@ -32,7 +33,7 @@ export default {
   },
   data() {
     return {
-      perPage: 5,
+      perPage: 4,
       currentPage: 1,
     };
   },

@@ -1,22 +1,21 @@
 <template>
-  <b-container v-if="hospitals && hospitals.length != 0" class="bv-example-row mt-3">
-    <hospital-list-item v-for="(hospital, index) in hospitals" :key="index" :hospital="hospital" />
-  </b-container>
-  <b-container v-else class="bv-example-row mt-3">
-    <b-row>
-      <b-col><b-alert show>이 지역에 안심진료병원이 없습니다.</b-alert></b-col>
-    </b-row>
+  <b-container class="bv-example-row mt-3">
+<div class="px-3 py-2">
+        <p>
+          Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
+          in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+        </p>
+        <b-img src="https://picsum.photos/500/500/?image=54" fluid thumbnail></b-img>
+      </div>
   </b-container>
 </template>
 
 <script>
-import HospitalListItem from "@/components/hospital/HospitalListItem";
 import { mapState } from "vuex";
 
 export default {
   name: "HospitalList",
   components: {
-    HospitalListItem,
   },
   data() {
     return {};

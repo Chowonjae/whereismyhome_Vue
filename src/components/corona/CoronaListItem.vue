@@ -1,6 +1,6 @@
 <template>
   <b-row
-    class="m-2"
+    class="m-2 apt"
     @mouseover="colorChange(true)"
     @mouseout="colorChange(false)"
     :class="{ 'mouse-over-bgcolor': isColor }"
@@ -38,11 +38,13 @@ export default {
 </script>
 
 <style scoped>
+
 .apt {
-  width: 50px;
+  border-block-end: 1px solid whitesmoke;
 }
 .mouse-over-bgcolor {
   background-color: lightblue;
+
 }
 .apt-name {
   font-weight: bold;

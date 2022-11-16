@@ -49,12 +49,12 @@ export default {
   data() {
     return {
       article: {
-        articleno: 0,
-        userid: "",
+        articleNo: 0,
+        userId: "",
         subject: "",
         content: "",
       },
-      isUserid: false,
+      isUserid: true,
     };
   },
   props: {
@@ -63,13 +63,12 @@ export default {
   created() {
     if (this.type === "modify") {
       http.get(`/qna/${this.$route.params.articleNo}`).then(({ data }) => {
-        // this.article.articleNo = data.article.articleNo;
-        // this.article.userId = data.article.userId;
-        // this.article.subject = data.article.subject;
-        // this.article.content = data.article.content;
         this.article = data;
       });
-      this.isUserid = true;
+    }else{
+      let data = sessionStorage.getItem("userinfo");
+      data = JSON.parse(data);
+      this.article.userId = data.userId;
     }
   },
   methods: {
@@ -87,15 +86,14 @@ export default {
     },
     onReset(event) {
       event.preventDefault();
-      this.article.articleNo = 0;
+      this.article.articleno = 0;
       this.article.subject = "";
       this.article.content = "";
-      this.moveList();
     },
     registArticle() {
       http
         .post(`/qna`, {
-          userid: this.article.userId,
+          userId: this.article.userid,
           subject: this.article.subject,
           content: this.article.content,
         })

@@ -6,7 +6,7 @@
 </template>
 <script>
 export default {
-  name: "AppBoard",
+  name: "QnaBoard",
 };
 </script>
 <style scoped>

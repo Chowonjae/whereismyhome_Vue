@@ -43,7 +43,7 @@
 
 <script>
 import http from "@/api/http";
-import { mapState} from "vuex";
+
 export default {
   name: "BoardInputItem",
   data() {
@@ -54,11 +54,8 @@ export default {
         subject: "",
         content: "",
       },
-      isUserid: false,
+      isUserid: true,
     };
-  },
-  computed: {
-    ...mapState(["userid"])
   },
   props: {
     type: { type: String },
@@ -66,13 +63,12 @@ export default {
   created() {
     if (this.type === "modify") {
       http.get(`/board/${this.$route.params.articleNo}`).then(({ data }) => {
-        // this.article.articleno = data.article.articleno;
-        // this.article.userid = data.article.userid;
-        // this.article.subject = data.article.subject;
-        // this.article.content = data.article.content;
         this.article = data;
       });
-      this.isUserid = true;
+    }else{
+      let data = sessionStorage.getItem("userinfo");
+      data = JSON.parse(data);
+      this.article.userId = data.userId;
     }
   },
   methods: {
@@ -93,7 +89,6 @@ export default {
       this.article.articleNo = 0;
       this.article.subject = "";
       this.article.content = "";
-      this.moveList();
     },
     registArticle() {
       http

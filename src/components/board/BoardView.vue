@@ -4,7 +4,7 @@
       <b-col class="text-left">
         <b-button variant="outline-primary" @click="moveList">목록</b-button>
       </b-col>
-      <b-col class="text-right">
+      <b-col class="text-right" v-if="check()">
         <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2">글수정</b-button>
         <b-button variant="outline-danger" size="sm" @click="deleteArticle">글삭제</b-button>
       </b-col>
@@ -50,6 +50,13 @@ export default {
     });
   },
   methods: {
+    check(){
+      let data = sessionStorage.getItem("userinfo");
+      data = JSON.parse(data);
+      let aricleId = this.article.userId;
+      if (data.userId === aricleId) return true;
+      else return false;
+    },
     moveModifyArticle() {
       this.$router.replace({
         name: "boardmodify",

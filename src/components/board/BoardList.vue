@@ -1,9 +1,16 @@
 <template>
   <b-container class="bv-example-row mt-3">
     <b-row class="mb-1">
-      <b-col class="text-right">
-        <b-button variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
-      </b-col>
+      <b-input-group class="mt-3">
+        <b-button  class="text-left" variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
+        <b-form-select v-model="key">
+          <b-form-select-option value="">검색기준</b-form-select-option>
+          <b-form-select-option value="subject">제목</b-form-select-option>
+          <b-form-select-option value="userId">작성자</b-form-select-option>
+        </b-form-select>
+        <b-form-input type="text" v-model="word" size="sm" style="width:10px;"></b-form-input>
+        <b-button variant="outline-primary" @click="searchList">검색</b-button>
+      </b-input-group>
     </b-row>
     <b-row>
       <b-col>
@@ -52,6 +59,8 @@ export default {
       ],
       perPage: 8,
       currentPage: 1,
+      key: "",
+      word: "",
     };
   },
   created() {
@@ -60,6 +69,11 @@ export default {
     });
   },
   methods: {
+    searchList() {
+      http.get(`/board/${this.key}/${this.word}`).then(({ data }) => {
+        this.articles = data;
+      });
+    },
     moveWrite() {
       this.$router.push({ name: "boardwrite" });
     },

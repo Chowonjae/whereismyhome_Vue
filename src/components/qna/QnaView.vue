@@ -104,8 +104,8 @@ export default {
       let data = sessionStorage.getItem("userinfo");
       data = JSON.parse(data);
       let replyId = this.article.userId;
-      console.log("id : " + data.userId);
-      console.log("r : " + replyId);
+      // console.log("id : " + data.userId);
+      // console.log("r : " + replyId);
       if (data.userId === replyId) return true;
       else return false;
     },
@@ -113,8 +113,8 @@ export default {
       let data = sessionStorage.getItem("userinfo");
       data = JSON.parse(data);
       let replyId = this.article.userId;
-      console.log("id : " + data.userId);
-      console.log("r : " + replyId);
+      // console.log("id : " + data.userId);
+      // console.log("r : " + replyId);
       if (data.userId === replyId) return true;
       else return false;
     },
@@ -122,9 +122,12 @@ export default {
       http.delete()
     },
     registReply() {
+      let data = sessionStorage.getItem("userinfo");
+      data = JSON.parse(data);
+      console.log(data);
       http
         .post(`/qna/repl`, {
-          user_id: sessionStorage.getItem("userid"),
+          user_id: data.userId,
           comment: this.replyComment,
           article_no: this.article.articleNo,
         })
@@ -138,10 +141,6 @@ export default {
         });
     },
     moveModifyArticle() {
-      // this.$router.replace({
-      //   name: "qnamodify",
-      //   params: { articleno: this.article.articleNo },
-      // });
       this.$router.push({ path: `/qna/modify/${this.article.articleNo}` });
     },
     deleteArticle() {

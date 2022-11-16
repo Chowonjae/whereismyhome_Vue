@@ -9,9 +9,7 @@
           <b-form-select-option value="userId">작성자</b-form-select-option>
         </b-form-select>
         <b-form-input type="text" v-model="word" size="sm" style="width:10px;"></b-form-input>
-        <b-input-group-append>
-          <b-button variant="outline-primary" @click="searchList">검색</b-button>
-        </b-input-group-append>
+        <b-button variant="outline-primary" @click="searchList">검색</b-button>
       </b-input-group>
     </b-row>
     <b-row>
@@ -72,8 +70,6 @@ export default {
   },
   methods: {
     searchList() {
-      console.log(this.key);
-      console.log(this.word);
       http.get(`/qna/${this.key}/${this.word}`).then(({ data }) => {
         this.articles = data;
       });

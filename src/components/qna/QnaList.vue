@@ -1,19 +1,44 @@
 <template>
   <b-container class="bv-example-row mt-3">
     <b-row class="mb-1">
-      <b-col class="text-right">
-        <b-button variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
-      </b-col>
+      <b-input-group class="mt-3">
+        <b-button  class="text-left" variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
+        <b-form-select v-model="key">
+          <b-form-select-option value="" >검색기준</b-form-select-option>
+          <b-form-select-option value="subject" >제목</b-form-select-option>
+          <b-form-select-option value="userId">작성자</b-form-select-option>
+        </b-form-select>
+        <b-form-input type="text" v-model="word" size="sm" style="width:10px;"></b-form-input>
+        <b-input-group-append>
+          <b-button variant="outline-primary" @click="searchList">검색</b-button>
+        </b-input-group-append>
+      </b-input-group>
     </b-row>
     <b-row>
       <b-col>
-        <b-table striped hover :items="articles" :fields="fields" @row-clicked="viewArticle">
+        <b-table
+          striped
+          hover
+          :items="articles"
+          :per-page="perPage"
+          :current-page="currentPage"
+          id="my-table"
+          :fields="fields"
+          @row-clicked="viewArticle"
+        >
           <template #cell(subject)="data">
             <router-link :to="{ name: 'qnaview', params: { articleNo: data.item.articleNo } }">
               {{ data.item.subject }}
             </router-link>
           </template>
         </b-table>
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="rows"
+          :per-page="perPage"
+          align="center"
+          aria-controls="my-table"
+        ></b-pagination>
       </b-col>
     </b-row>
   </b-container>
@@ -34,6 +59,10 @@ export default {
         { key: "registerTime", label: "작성일", tdClass: "tdClass" },
         { key: "hit", label: "조회수", tdClass: "tdClass" },
       ],
+      perPage: 8,
+      currentPage: 1,
+      key: "",
+      word: "",
     };
   },
   created() {
@@ -42,6 +71,13 @@ export default {
     });
   },
   methods: {
+    searchList() {
+      console.log(this.key);
+      console.log(this.word);
+      http.get(`/qna/${this.key}/${this.word}`).then(({ data }) => {
+        this.articles = data;
+      });
+    },
     moveWrite() {
       this.$router.push({ name: "qnawrite" });
     },
@@ -50,6 +86,11 @@ export default {
         name: "qnaview",
         params: { articleNo: article.articleNo },
       });
+    },
+  },
+  computed: {
+    rows() {
+      return this.articles.length;
     },
   },
 };

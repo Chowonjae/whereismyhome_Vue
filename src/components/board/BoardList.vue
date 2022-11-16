@@ -7,13 +7,29 @@
     </b-row>
     <b-row>
       <b-col>
-        <b-table striped hover :items="articles" :fields="fields" @row-clicked="viewArticle">
+        <b-table
+          striped
+          hover
+          :items="articles"
+          :per-page="perPage"
+          :current-page="currentPage"
+          id="my-table"
+          :fields="fields"
+          @row-clicked="viewArticle"
+        >
           <template #cell(subject)="data">
             <router-link :to="{ name: 'boardview', params: { articleNo: data.item.articleNo } }">
               {{ data.item.subject }}
             </router-link>
           </template>
         </b-table>
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="rows"
+          :per-page="perPage"
+          align="center"
+          aria-controls="my-table"
+        ></b-pagination>
       </b-col>
     </b-row>
   </b-container>
@@ -34,6 +50,8 @@ export default {
         { key: "registerTime", label: "작성일", tdClass: "tdClass" },
         { key: "hit", label: "조회수", tdClass: "tdClass" },
       ],
+      perPage: 8,
+      currentPage: 1,
     };
   },
   created() {
@@ -50,6 +68,11 @@ export default {
         name: "boardview",
         params: { articleNo: article.articleNo },
       });
+    },
+  },
+  computed: {
+    rows() {
+      return this.articles.length;
     },
   },
 };

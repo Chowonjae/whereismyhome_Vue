@@ -5,6 +5,7 @@ import HospitalView from "../views/HospitalView.vue";
 import CoronaView from "../views/CoronaView.vue";
 import HouseView from "../views/HouseView.vue";
 // import MemberView from "../views/MemberView.vue";
+import LoginForm from "@/components/LoginForm.vue";
 import AppBoard from "@/views/AppBoard";
 
 Vue.use(VueRouter);
@@ -14,6 +15,11 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView,
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: LoginForm,
   },
   {
     path: "/hospital",

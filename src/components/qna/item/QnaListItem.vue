@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <b-tr>
     <b-td>{{ articleno }}</b-td>
     <b-th class="text-left">
@@ -30,4 +30,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style></style> -->

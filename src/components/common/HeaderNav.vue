@@ -15,13 +15,13 @@
           <router-link class="notice-btn btn me-3" id="btn-notice" to="/board">Notice</router-link>
           <router-link class="notice-btn btn me-3" id="btn-notice" to="/qna">QnA</router-link>
           <router-link class="mypage-btn btn me-3" id="btn-mypage" to="/mypage">MyPage</router-link>
-          <router-link class="logout-btn btn me-3" id="btn-logout" to="/logout">Logout</router-link>
+          <b-button class="logout-btn btn me-3" id="btn-logout" @click="logout">Logout</b-button>
         </div>
 
         <div v-else class="nav justify-content-end">
           <div class="login-area me-3">
             <div class="dropdown login-pop">
-              <router-link id="btn-mv-join" class="join-btn btn me-3" to="/user/join">Join</router-link>
+              <router-link id="btn-mv-join" class="join-btn btn me-3" to="/user/regist">Join</router-link>
 
               <b-dropdown id="dropdownMenu" text="Login" right>
                 <b-dropdown-form style="width: 250px">
@@ -40,8 +40,8 @@
                   </b-form-group>
 
                   <b-form-checkbox class="mb-3">아이디 저장</b-form-checkbox>
-                  <b-button variant="primary" size="sm" @click="login">Login</b-button>
-                  <b-button size="sm" @click="findpwd">비밀번호 찾기</b-button>
+                  <b-button variant="primary" @click="login">Login</b-button>
+                  <b-button @click="findpwd">비밀번호 찾기</b-button>
                   <div v-if="msg.length">
                     <b-alert v-model="msg" variant="danger" dismissible>
                       {{ msg }}
@@ -58,32 +58,65 @@
 </template>
 
 <script>
+import http from "@/api/http";
 export default {
   data() {
     return {
+      users: [],
       id: "",
       pwd: "",
       userinfo: {
-        userName: "가나다",
-        userId: "ssafy",
+        userName: "",
+        userId: "",
       },
       msg: "ssssss",
       idck: "",
     };
   },
   methods: {
+    logout() {
+      sessionStorage.removeItem("userinfo");
+      this.$router.go();
+    },
     login() {
       let msg = "";
       let flag = true;
       !this.id && ((msg = "id를 입력해주세요"), (flag = false));
       !this.pwd && ((msg = "pwd를 입력해주세요"), (flag = false));
+      http.post(`/rmember/user/login`, {
+        userId: this.id,
+        userPwd: this.pwd,
+      }).then(({ data }) => {
+        sessionStorage.setItem("userinfo", JSON.stringify(data));
+        console.log(data.userId);
+        console.log(data.userName);
+        this.userinfo.userId = data.userId;
+        this.userinfo.userName = data.userName;
+      });
       if (!flag) {
         alert(msg);
+        this.$router.push("/");
+      }
+    },
+    getUserList() {
+      let userList = JSON.parse(localStorage.getItem("userList"));
+
+      if (userList) {
+        this.users = userList;
       }
     },
     findpwd() {
       this.$router.push("/user/findpwd");
     },
+  },
+  created() {
+    let data = sessionStorage.getItem("userinfo");
+    data = JSON.parse(data);
+    if (data != null) {
+      this.userinfo.userId = data.userId;
+      this.userinfo.userName = data.userName;
+    }
+    this.getUserList();
   },
 };
 </script>

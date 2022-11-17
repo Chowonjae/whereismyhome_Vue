@@ -5,8 +5,8 @@
         <b-form-group id="userid-group" label="작성자:" label-for="userid" description="작성자를 입력하세요.">
           <b-form-input
             id="userid"
-            :disabled="isUserid"
-            v-model="article.userId"
+            disabled
+            v-model="notice.userId"
             type="text"
             required
             placeholder="작성자 입력..."
@@ -17,7 +17,7 @@
         <b-form-group id="subject-group" label="제목:" label-for="subject" description="제목을 입력하세요.">
           <b-form-input
             id="subject"
-            v-model="article.subject"
+            v-model="notice.subject"
             type="text"
             required
             placeholder="제목 입력..."
@@ -28,7 +28,7 @@
         <b-form-group id="content-group" label="내용:" label-for="content">
           <b-form-textarea
             id="content"
-            v-model="article.content"
+            v-model="notice.content"
             placeholder="내용 입력..."
             rows="10"
             max-rows="15"
@@ -51,14 +51,26 @@ export default {
   data() {
     return {
       isUserid: true,
+      notice:{
+        userId:"",
+        subject:"",
+        content:""
+      }
     };
   },
   props: {
     type: { type: String },
   },
   created() {
-    if (this.type === "register"){
-      this.article.userId = this.userinfo.userId;
+    console.log(this.type);
+    if (this.type != "modify"){
+      console.log(this.userinfo.userId);
+      this.notice.userId = this.userinfo.userId;
+    }
+    else{
+      this.notice.userId = this.article.userId;
+      this.notice.subject=this.article.subject;
+      this.notice.content=this.article.content;
     }
   },
   computed:{
@@ -80,9 +92,9 @@ export default {
 
       let err = true;
       let msg = "";
-      !this.article.userId && ((msg = "작성자 입력해주세요"), (err = false), this.$refs.userId.focus());
-      err && !this.article.subject && ((msg = "제목 입력해주세요"), (err = false), this.$refs.subject.focus());
-      err && !this.article.content && ((msg = "내용 입력해주세요"), (err = false), this.$refs.content.focus());
+      !this.notice.userId && ((msg = "작성자 입력해주세요"), (err = false), this.$refs.userId.focus());
+      err && !this.notice.subject && ((msg = "제목 입력해주세요"), (err = false), this.$refs.subject.focus());
+      err && !this.notice.content && ((msg = "내용 입력해주세요"), (err = false), this.$refs.content.focus());
 
       if (!err) alert(msg);
       else this.type === "register" ? this.regist() : this.modify();
@@ -95,18 +107,18 @@ export default {
     },
     regist() {
       let param = {
-        userId: this.article.userId,
-          subject: this.article.subject,
-          content: this.article.content,
+        userId: this.notice.userId,
+          subject: this.notice.subject,
+          content: this.notice.content,
       };
       this.addArticle(param);
     },
     modify() {
       let param = {
-        articleNo: this.article.articleNo,
-        userId: this.article.userId,
-        subject: this.article.subject,
-        content: this.article.content,
+        articleNo: this.notice.articleNo,
+        userId: this.notice.userId,
+        subject: this.notice.subject,
+        content: this.notice.content,
       };
       this.updateArticle(param);
     },

@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { getArticle, writeArticle, modifyArticle } from "@/api/qna";
+import { getQnA, writeQnA, modifyQnA } from "@/api/qna";
 
 export default {
   name: "QnaInputItem",
@@ -62,7 +62,7 @@ export default {
   },
   created() {
     if (this.type === "modify") {
-      getArticle(this.$route.params.articleNo,
+      getQnA(this.$route.params.articleNo,
         ({ data }) => {
           this.article = data;
         },
@@ -100,7 +100,7 @@ export default {
           subject: this.article.subject,
           content: this.article.content,
       };
-      writeArticle(
+      writeQnA(
         param,
         ({ data }) => {
           let msg = "등록 처리시 문제가 발생했습니다.";
@@ -121,7 +121,7 @@ export default {
         subject: this.article.subject,
         content: this.article.content,
       };
-      modifyArticle(
+      modifyQnA(
         param,
         ({ data }) => {
           let msg = "수정 처리시 문제가 발생했습니다.";

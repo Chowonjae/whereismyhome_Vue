@@ -3,20 +3,20 @@ import { localServer } from "./http.js";
 const api = localServer();
 
 // QnaList
-function listArticle(param, success, fail) {
+function listQnA(param, success, fail) {
   api.get(`/qna`, { params: param }).then(success).catch(fail);
 }
 // QnaListSearch
-function searchListArticle(key, word, success, fail) {
+function searchListQnA(key, word, success, fail) {
   api.get(`/qna/${key}/${word}`).then(success).catch(fail);
 }
 // QnaView
-function getArticle(articleno, success, fail) {
-  api.get(`/qna/${articleno}`).then(success).catch(fail);
+function getQnA(QnAno, success, fail) {
+  api.get(`/qna/${QnAno}`).then(success).catch(fail);
 }
 // QnaReplyView
-function getReply(articleno, success, fail) {
-  api.get(`/qna/repl/${articleno}`).then(success).catch(fail);
+function getReply(QnAno, success, fail) {
+  api.get(`/qna/repl/${QnAno}`).then(success).catch(fail);
 }
 // QnaReplyWrite
 function writeReply(replyParam, success, fail) {
@@ -25,25 +25,25 @@ function writeReply(replyParam, success, fail) {
 // QnaReplyDelete
 // function deleteReply() {}
 // QnaInputItem-write
-function writeArticle(articleParam, success, fail) {
-  api.post(`/qna`, JSON.stringify(articleParam)).then(success).catch(fail);
+function writeQnA(QnAParam, success, fail) {
+  api.post(`/qna`, JSON.stringify(QnAParam)).then(success).catch(fail);
 }
 // QnaInputItem-modify
-function modifyArticle(articleParam, success, fail) {
-  api.put(`/qna`, JSON.stringify(articleParam)).then(success).catch(fail);
+function modifyQnA(QnAParam, success, fail) {
+  api.put(`/qna`, JSON.stringify(QnAParam)).then(success).catch(fail);
 }
 // QnaDelete
-function deleteArticle(articleno, success, fail) {
-  api.delete(`/qna/${articleno}`).then(success).catch(fail);
+function deleteQnA(QnAno, success, fail) {
+  api.delete(`/qna/${QnAno}`).then(success).catch(fail);
 }
 export {
-  listArticle,
+  listQnA,
   getReply,
   writeReply,
+  searchListQnA,
+  writeQnA,
+  getQnA,
+  modifyQnA,
   //deleteReply,
-  searchListArticle,
-  writeArticle,
-  getArticle,
-  modifyArticle,
-  deleteArticle,
+  deleteQnA,
 };

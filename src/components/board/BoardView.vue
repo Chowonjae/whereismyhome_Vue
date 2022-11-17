@@ -4,7 +4,7 @@
       <b-col class="text-left">
         <b-button variant="outline-primary" @click="moveList">목록</b-button>
       </b-col>
-      <b-col class="text-right" v-if="check()">
+      <b-col class="text-right" v-if="isok">
         <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2">글수정</b-button>
         <b-button variant="outline-danger" size="sm" @click="deleteArticle">글삭제</b-button>
       </b-col>
@@ -34,6 +34,7 @@ export default {
   name: "BoardDetail",
   data() {
     return {
+      isok:false
     };
   },
   computed: {
@@ -42,21 +43,28 @@ export default {
       return "";
     },
     ...mapState(["userinfo","article"]),
+
+  },
+  watch:{
+      article :function(){
+      console.log(1);
+      let articleId = this.article.userId;
+      console.log(2);
+      console.log(articleId, this.userinfo.userId);
+      console.log(3);
+      console.log(this.userinfo);
+      console.log(4);
+      if (this.userinfo.userId === articleId) this.isok= true;
+      else this.isok= false;      
+    }
   },
   created() {
     let articleno = this.$route.params.articleNo;
+    console.log("게시글번호",articleno);
     this.searchArticle(articleno);
-    console.log(this.article); 
   },
   methods: {
     ...mapActions(["searchArticle"]),
-    check(){
-      let articleId = this.article.userId;
-      console.log(articleId, this.userinfo.userId);
-      console.log(this.userinfo);
-      if (this.userinfo.userId === articleId) return true;
-      else return false;
-    },
     moveModifyArticle() {
       this.$router.replace({
         name: "boardmodify",

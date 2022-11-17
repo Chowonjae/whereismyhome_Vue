@@ -7,12 +7,12 @@
 </template>
 
 <script>
-import { deleteArticle } from "@/api/qna";
+import { deleteQnA } from "@/api/qna";
 
 export default {
   name: "QnaDelete",
   created() {
-    deleteArticle(
+    deleteQnA(
       this.$route.params.articleNo,
       ({ data }) => {
         let msg = "삭제 처리시 문제가 발생했습니다.";

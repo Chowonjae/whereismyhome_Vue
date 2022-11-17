@@ -60,7 +60,7 @@
 
 <script>
 // import moment from "moment";
-import { getArticle, getReply, writeReply } from "@/api/qna";
+import { getQnA, getReply, writeReply } from "@/api/qna";
 // import QnaReplyItem from "./item/QnaReplyItem.vue";
 
 export default {
@@ -93,7 +93,7 @@ export default {
   },
   created() {
     let articleno = this.$route.params.articleNo;
-    getArticle(articleno,
+    getQnA(articleno,
       ({ data }) => {
       this.article = data;
       },

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { listArticle, searchListArticle } from "@/api/qna";
+import { listQnA, searchListQnA } from "@/api/qna";
 
 export default {
   name: "QnaList",
@@ -70,7 +70,7 @@ export default {
       key: null,
       word: null,
     };
-    listArticle(
+    listQnA(
       param,
       ({ data }) => {
         this.articles = data;
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     searchList() {
-      searchListArticle(this.key, this.word, 
+      searchListQnA(this.key, this.word, 
       ({ data }) => {
           this.articles = data;
         },

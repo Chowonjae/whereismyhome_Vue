@@ -4,6 +4,17 @@ import http from "@/api/http";
 import createPersistedState from "vuex-persistedstate";
 
 import { listArticle, searchListArticle, writeArticle, getArticle, modifyArticle, deleteArticle } from "@/api/board";
+import {
+  listQnA,
+  // getReply,
+  // writeReply,
+  searchListQnA,
+  writeQnA,
+  getQnA,
+  modifyQnA,
+  //deleteReply,
+  deleteQnA,
+} from "@/api/qna";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -24,6 +35,13 @@ export default new Vuex.Store({
     /////////////////////Board start ///////////////////////
     articles: [],
     article: null,
+    /////////////////// Board end ////////////////////////
+
+    /////////////////////Qna start ///////////////////////
+    qnas: [],
+    qna: null,
+    reples: [],
+    /////////////////// Qna end ////////////////////////
   },
   getters: {},
   mutations: {
@@ -117,6 +135,28 @@ export default new Vuex.Store({
     SET_ARTICLE(state, article) {
       state.article = article;
     },
+    CLEAR_ARTICLE(state) {
+      state.article = null;
+    },
+    CLEAR_ARTICLE_LIST(state) {
+      state.articles = [];
+    },
+    ////////////////////////////// Board end ///////////////////////////////////////
+
+    ////////////////////////////// QnA start ////////////////////////////////////
+    SET_QNA_LIST(state, qnas) {
+      state.qnas = qnas;
+    },
+    SET_QNA(state, qna) {
+      state.qna = qna;
+    },
+    CLEAR_QNA(state) {
+      state.qna = null;
+    },
+    CLEAR_QNA_LIST(state) {
+      state.qnas = [];
+    },
+    /////////////////////////////// QnA end //////////////////////////////////////
   },
   actions: {
     userlogin({ commit }, user) {
@@ -287,6 +327,7 @@ export default new Vuex.Store({
     },
 
     /////////////////////////////// Corona end /////////////////////////////////////
+
     /////////////////////////////// Board start /////////////////////////////////////
     getArticleList({ commit }, param) {
       listArticle(
@@ -358,14 +399,98 @@ export default new Vuex.Store({
     removeArticle({ commit }, articleno) {
       deleteArticle(
         articleno,
-        ({ data }) => {
-          commit("SET_ARTICLE_LIST", data);
+        () => {
+          commit("SET_OK", true);
         },
         (error) => {
           console.log(error);
         }
       );
     },
+
+    //////////////////////////////////Board end//////////////////////////////////
+
+    /////////////////////////////// QnA start /////////////////////////////////////
+    getQnAList({ commit }, param) {
+      listQnA(
+        param,
+        ({ data }) => {
+          commit("SET_QNA_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    searchQnAList({ commit }, param) {
+      searchListQnA(
+        param.key,
+        param.word,
+        ({ data }) => {
+          commit("SET_QNA_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    updateQnA({ commit }, param) {
+      let msg = "수정이 완료되었습니다.";
+      modifyQnA(
+        param,
+        () => {
+          commit("SET_OK", true);
+        },
+        (error) => {
+          msg = "수정 과정에 문제가 발생했습니다.";
+          console.log(error);
+        }
+      );
+      alert(msg);
+    },
+
+    addQnA({ commit }, param) {
+      let msg = "등록이 완료되었습니다.";
+      writeQnA(
+        param,
+        () => {
+          commit("SET_OK", true);
+        },
+        (error) => {
+          msg = "등록 과정에 문제가 발생했습니다.";
+          console.log(error);
+        }
+      );
+      alert(msg);
+    },
+
+    searchQnA({ commit }, QnAno) {
+      getQnA(
+        QnAno,
+        ({ data }) => {
+          commit("SET_QNA", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    removeQnA({ commit }, QnAno) {
+      deleteQnA(
+        QnAno,
+        ({ data }) => {
+          commit("SET_QNA_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    //////////////////////////////////Board end//////////////////////////////////
   },
   modules: {},
   plugins: [

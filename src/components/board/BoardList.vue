@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   name: "BoardList",
   computed:{
@@ -75,10 +75,11 @@ export default {
       word: null,
     };
     this.getArticleList(param);
-
+    this.CLEAR_ARTICLE();
   },
   methods: {
     ...mapActions(["getArticleList","searchArticleList"]),
+    ...mapMutations(["CLEAR_ARTICLE"]),
     searchList() {
       if(this.key!=null){
         let param = {key:this.key, word: this.word};

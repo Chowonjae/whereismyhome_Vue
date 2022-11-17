@@ -13,7 +13,7 @@ export default {
   name: "BoardDelete",
   created() {
     deleteArticle(
-      this.$rout.params.articleNo,
+      this.$route.params.articleNo,
       ({ data }) => {
         let msg = "삭제 처리시 문제가 발생했습니다.";
       if (data === "success") {

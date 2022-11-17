@@ -10,6 +10,7 @@
             type="text"
             required
             placeholder="작성자 입력..."
+            ref="userId"
           ></b-form-input>
         </b-form-group>
 
@@ -20,6 +21,7 @@
             type="text"
             required
             placeholder="제목 입력..."
+            ref="subject"
           ></b-form-input>
         </b-form-group>
 
@@ -30,6 +32,7 @@
             placeholder="내용 입력..."
             rows="10"
             max-rows="15"
+            ref="content"
           ></b-form-textarea>
         </b-form-group>
 
@@ -42,18 +45,11 @@
 </template>
 
 <script>
-import { getArticle, writeArticle, modifyArticle } from "@/api/board";
-
+import {mapState, mapActions,mapMutations} from "vuex";
 export default {
   name: "BoardInputItem",
   data() {
     return {
-      article: {
-        articleNo: 0,
-        userId: "",
-        subject: "",
-        content: "",
-      },
       isUserid: true,
     };
   },
@@ -61,21 +57,24 @@ export default {
     type: { type: String },
   },
   created() {
-    if (this.type === "modify") {
-      getArticle(this.$route.params.articleNo,
-        ({ data }) => {
-          this.article = data;
-        },
-        (error) => {
-          console.log(error);
-        });
-    } else {
-      let data = sessionStorage.getItem("userinfo");
-      data = JSON.parse(data);
-      this.article.userId = data.userId;
+    if (this.type === "register"){
+      this.article.userId = this.userinfo.userId;
+    }
+  },
+  computed:{
+    ...mapState(["ok","userinfo","article"]),
+  },
+  watch:{
+    ok:function(){
+      if(this.ok==true){
+        this.CLEAR_OK();
+        this.moveList();
+      }
     }
   },
   methods: {
+    ...mapActions(["updateArticle","addArticle"]),
+    ...mapMutations(["CLEAR_OK"]),
     onSubmit(event) {
       event.preventDefault();
 
@@ -100,19 +99,7 @@ export default {
           subject: this.article.subject,
           content: this.article.content,
       };
-      writeArticle(
-        param,
-        ({ data }) => {
-          let msg = "등록 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "등록이 완료되었습니다.";
-          }
-          alert(msg);
-          this.moveList();
-        },
-        (error) => {
-          console.log(error);
-        });
+      this.addArticle(param);
     },
     modify() {
       let param = {
@@ -121,19 +108,7 @@ export default {
         subject: this.article.subject,
         content: this.article.content,
       };
-      modifyArticle(
-        param,
-        ({ data }) => {
-          let msg = "수정 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "수정이 완료되었습니다.";
-          }
-          alert(msg);
-          this.moveList();
-        },
-        (error) => {
-          console.log(error);
-        });
+      this.updateArticle(param);
     },
     moveList() {
       this.$router.push({ name: "boardlist" });

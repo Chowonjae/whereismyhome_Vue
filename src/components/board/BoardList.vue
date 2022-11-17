@@ -2,7 +2,7 @@
   <b-container class="bv-example-row mt-3">
     <b-row class="mb-1">
       <b-input-group class="mt-3">
-        <b-button  class="text-left" variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
+        <b-button v-if="userinfo.userId == 'admin'" class="text-left" variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
         <b-form-select v-model="key">
           <b-form-select-option value="">검색기준</b-form-select-option>
           <b-form-select-option value="subject">제목</b-form-select-option>
@@ -43,13 +43,17 @@
 </template>
 
 <script>
-import { listArticle, searchListArticle } from "@/api/board";
-
+import { mapState, mapActions } from "vuex";
 export default {
   name: "BoardList",
+  computed:{
+    ...mapState(["userinfo","articles"]),
+    rows() {
+      return this.articles.length;
+    },
+  },
   data() {
     return {
-      articles: [],
       fields: [
         { key: "articleNo", label: "글번호", tdClass: "tdClass" },
         { key: "subject", label: "제목", tdClass: "tdSubject" },
@@ -70,25 +74,16 @@ export default {
       key: null,
       word: null,
     };
-    listArticle(
-      param,
-      ({ data }) => {
-        this.articles = data;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.getArticleList(param);
+
   },
   methods: {
+    ...mapActions(["getArticleList","searchArticleList"]),
     searchList() {
-      searchListArticle(this.key, this.word, 
-      ({ data }) => {
-          this.articles = data;
-        },
-        (error) => {
-          console.log(error);
-      });
+      if(this.key!=null){
+        let param = {key:this.key, word: this.word};
+        this.searchArticleList(param);
+      }
     },
     moveWrite() {
       this.$router.push({ name: "boardwrite" });
@@ -98,11 +93,6 @@ export default {
         name: "boardview",
         params: { articleNo: article.articleNo },
       });
-    },
-  },
-  computed: {
-    rows() {
-      return this.articles.length;
     },
   },
 };

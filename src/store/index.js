@@ -3,14 +3,12 @@ import Vuex from "vuex";
 import http from "@/api/http";
 import createPersistedState from "vuex-persistedstate";
 
+import { listArticle, searchListArticle, writeArticle, getArticle, modifyArticle, deleteArticle } from "@/api/board";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    userinfo: {
-      userName: "가나다",
-      userId: "ssafy",
-    },
+    userinfo: null,
     sidos: [{ value: null, text: "시도 선택" }],
     guguns: [{ value: null, text: "구군 선택" }],
     dongs: [{ value: null, text: "동 선택" }],
@@ -22,11 +20,18 @@ export default new Vuex.Store({
     deals: [],
     ok: false,
     error: false,
+
+    /////////////////////Board start ///////////////////////
+    articles: [],
+    article: null,
   },
   getters: {},
   mutations: {
     SET_USER_INFO(state, userinfo) {
       state.userinfo = userinfo;
+    },
+    CLEAR_USER_INFO(state) {
+      state.userinfo = null;
     },
     /////////////////////////////// House start /////////////////////////////////////
     SET_INTER_LIST(state, inters) {
@@ -104,8 +109,37 @@ export default new Vuex.Store({
       state.error = null;
     },
     /////////////////////////////// House end /////////////////////////////////////
+
+    /////////////////////////////// Board start ///////////////////////////////////
+    SET_ARTICLE_LIST(state, articles) {
+      state.articles = articles;
+    },
+    SET_ARTICLE(state, article) {
+      state.article = article;
+    },
   },
   actions: {
+    userlogin({ commit }, user) {
+      http
+        .post(`/rmember/user/login`, user)
+        .then(({ data }) => {
+          commit("SET_USER_INFO", data);
+        })
+        .catch(() => {
+          commit("SET_ERROR", true);
+        });
+    },
+    userlogout({ commit }) {
+      // http
+      //   .post(`/rmember/user/login`, user)
+      //   .then(({ data }) => {
+      //     commit("SET_USER", data);
+      //   })
+      //   .catch(() => {
+      //     commit("SET_ERROR", true);
+      //   });
+      commit("CLEAR_USER_INFO");
+    },
     /////////////////////////////// House start /////////////////////////////////////
     addInter({ commit }, params) {
       http
@@ -253,6 +287,85 @@ export default new Vuex.Store({
     },
 
     /////////////////////////////// Corona end /////////////////////////////////////
+    /////////////////////////////// Board start /////////////////////////////////////
+    getArticleList({ commit }, param) {
+      listArticle(
+        param,
+        ({ data }) => {
+          commit("SET_ARTICLE_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    searchArticleList({ commit }, param) {
+      searchListArticle(
+        param.key,
+        param.word,
+        ({ data }) => {
+          commit("SET_ARTICLE_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    updateArticle({ commit }, param) {
+      let msg = "수정이 완료되었습니다.";
+      modifyArticle(
+        param,
+        () => {
+          commit("SET_OK", true);
+        },
+        (error) => {
+          msg = "수정 과정에 문제가 발생했습니다.";
+          console.log(error);
+        }
+      );
+      alert(msg);
+    },
+
+    addArticle({ commit }, param) {
+      let msg = "등록이 완료되었습니다.";
+      writeArticle(
+        param,
+        () => {
+          commit("SET_OK", true);
+        },
+        (error) => {
+          msg = "등록 과정에 문제가 발생했습니다.";
+          console.log(error);
+        }
+      );
+      alert(msg);
+    },
+
+    searchArticle({ commit }, articleno) {
+      getArticle(
+        articleno,
+        ({ data }) => {
+          commit("SET_ARTICLE", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    removeArticle({ commit }, articleno) {
+      deleteArticle(
+        articleno,
+        ({ data }) => {
+          commit("SET_ARTICLE_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
   },
   modules: {},
   plugins: [

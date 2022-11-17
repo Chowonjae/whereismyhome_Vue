@@ -29,13 +29,11 @@
 
 <script>
 // import moment from "moment";
-import { getArticle } from "@/api/board";
-
+import {mapState,mapActions} from "vuex";
 export default {
   name: "BoardDetail",
   data() {
     return {
-      article: {},
     };
   },
   computed: {
@@ -43,23 +41,20 @@ export default {
       if (this.article.content) return this.article.content.split("\n").join("<br>");
       return "";
     },
+    ...mapState(["userinfo","article"]),
   },
   created() {
     let articleno = this.$route.params.articleNo;
-    getArticle(articleno,
-      ({ data }) => {
-      this.article = data;
-      },
-      (error) => {
-        console.log(error);
-    });
+    this.searchArticle(articleno);
+    console.log(this.article); 
   },
   methods: {
+    ...mapActions(["searchArticle"]),
     check(){
-      let data = sessionStorage.getItem("userinfo");
-      data = JSON.parse(data);
-      let aricleId = this.article.userId;
-      if (data.userId === aricleId) return true;
+      let articleId = this.article.userId;
+      console.log(articleId, this.userinfo.userId);
+      console.log(this.userinfo);
+      if (this.userinfo.userId === articleId) return true;
       else return false;
     },
     moveModifyArticle() {

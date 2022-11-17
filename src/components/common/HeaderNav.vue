@@ -5,7 +5,7 @@
         <div class="logo justify-content-start ms-5">
           <router-link class="text-decoration-none display-5 font-weight-bold" to="/">FIND HOME</router-link>
         </div>
-        <div v-if="userinfo.userName != ''" class="nav justify-content-end logined">
+        <div v-if="userinfo!=null" class="nav justify-content-end logined">
           <div class="logined-info me-3 align-middle">
             <strong>{{ userinfo.userName }}</strong> ({{ userinfo.userId }})님 안녕하세요.
           </div>
@@ -15,7 +15,7 @@
           <router-link class="notice-btn btn me-3" id="btn-notice" to="/board">Notice</router-link>
           <router-link class="notice-btn btn me-3" id="btn-notice" to="/qna">QnA</router-link>
           <router-link class="mypage-btn btn me-3" id="btn-mypage" to="/mypage">MyPage</router-link>
-          <b-button class="logout-btn btn me-3" id="btn-logout" @click="logout">Logout</b-button>
+          <b-button class="logout-btn btn me-3" id="btn-logout" @click.prevent="logout">Logout</b-button>
         </div>
 
         <div v-else class="nav justify-content-end">
@@ -58,45 +58,41 @@
 </template>
 
 <script>
-import http from "@/api/http";
+import {mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
       users: [],
       id: "",
       pwd: "",
-      userinfo: {
-        userName: "",
-        userId: "",
-      },
       msg: "ssssss",
       idck: "",
     };
   },
+  computed:{
+    ...mapState(["userinfo"]),
+  },
   methods: {
+    ...mapActions(["userlogin","userlogout"]),
     logout() {
-      sessionStorage.removeItem("userinfo");
-      this.$router.go();
+      this.userlogout();
     },
     login() {
       let msg = "";
       let flag = true;
       !this.id && ((msg = "id를 입력해주세요"), (flag = false));
       !this.pwd && ((msg = "pwd를 입력해주세요"), (flag = false));
-      http.post(`/rmember/user/login`, {
-        userId: this.id,
-        userPwd: this.pwd,
-      }).then(({ data }) => {
-        sessionStorage.setItem("userinfo", JSON.stringify(data));
-        console.log(data.userId);
-        console.log(data.userName);
-        this.userinfo.userId = data.userId;
-        this.userinfo.userName = data.userName;
-      });
+
       if (!flag) {
         alert(msg);
         this.$router.push("/");
       }
+      let user ={
+        userId: this.id,
+        userPwd: this.pwd,
+      };
+      this.userlogin(user);
+
     },
     getUserList() {
       let userList = JSON.parse(localStorage.getItem("userList"));

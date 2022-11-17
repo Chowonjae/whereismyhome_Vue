@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import http from "@/api/http";
+import { getArticle, writeArticle, modifyArticle } from "@/api/board";
 
 export default {
   name: "BoardInputItem",
@@ -62,10 +62,14 @@ export default {
   },
   created() {
     if (this.type === "modify") {
-      http.get(`/board/${this.$route.params.articleNo}`).then(({ data }) => {
-        this.article = data;
-      });
-    }else{
+      getArticle(this.$route.params.articleNo,
+        ({ data }) => {
+          this.article = data;
+        },
+        (error) => {
+          console.log(error);
+        });
+    } else {
       let data = sessionStorage.getItem("userinfo");
       data = JSON.parse(data);
       this.article.userId = data.userId;
@@ -82,7 +86,7 @@ export default {
       err && !this.article.content && ((msg = "내용 입력해주세요"), (err = false), this.$refs.content.focus());
 
       if (!err) alert(msg);
-      else this.type === "register" ? this.registArticle() : this.modifyArticle();
+      else this.type === "register" ? this.regist() : this.modify();
     },
     onReset(event) {
       event.preventDefault();
@@ -90,38 +94,45 @@ export default {
       this.article.subject = "";
       this.article.content = "";
     },
-    registArticle() {
-      http
-        .post(`/board`, {
-          userId: this.article.userId,
+    regist() {
+      let param = {
+        userId: this.article.userId,
           subject: this.article.subject,
           content: this.article.content,
-        })
-        .then(({ data }) => {
+      };
+      writeArticle(
+        param,
+        ({ data }) => {
           let msg = "등록 처리시 문제가 발생했습니다.";
           if (data === "success") {
             msg = "등록이 완료되었습니다.";
           }
           alert(msg);
           this.moveList();
+        },
+        (error) => {
+          console.log(error);
         });
     },
-    modifyArticle() {
-      http
-        .put(`/board`, {
-          articleNo: this.article.articleNo,
-          userId: this.article.userId,
-          subject: this.article.subject,
-          content: this.article.content,
-        })
-        .then(({ data }) => {
+    modify() {
+      let param = {
+        articleNo: this.article.articleNo,
+        userId: this.article.userId,
+        subject: this.article.subject,
+        content: this.article.content,
+      };
+      modifyArticle(
+        param,
+        ({ data }) => {
           let msg = "수정 처리시 문제가 발생했습니다.";
           if (data === "success") {
             msg = "수정이 완료되었습니다.";
           }
           alert(msg);
-          // 현재 route를 /list로 변경.
           this.moveList();
+        },
+        (error) => {
+          console.log(error);
         });
     },
     moveList() {

@@ -29,7 +29,7 @@
 
 <script>
 // import moment from "moment";
-import http from "@/api/http";
+import { getArticle } from "@/api/board";
 
 export default {
   name: "BoardDetail",
@@ -45,8 +45,13 @@ export default {
     },
   },
   created() {
-    http.get(`/board/${this.$route.params.articleNo}`).then(({ data }) => {
+    let articleno = this.$route.params.articleNo;
+    getArticle(articleno,
+      ({ data }) => {
       this.article = data;
+      },
+      (error) => {
+        console.log(error);
     });
   },
   methods: {

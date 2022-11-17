@@ -7,19 +7,23 @@
 </template>
 
 <script>
-import http from "@/api/http";
+import { deleteArticle } from "@/api/qna";
 
 export default {
   name: "QnaDelete",
   created() {
-    http.delete(`/qna/${this.$route.params.articleNo}`).then(({ data }) => {
-      let msg = "삭제 처리시 문제가 발생했습니다.";
+    deleteArticle(
+      this.$rout.params.articleNo,
+      ({ data }) => {
+        let msg = "삭제 처리시 문제가 발생했습니다.";
       if (data === "success") {
         msg = "삭제가 완료되었습니다.";
       }
-      alert(msg);
-      // 현재 route를 /list로 변경.
-      this.$router.push({ name: "qnalist" });
+        alert(msg);
+        this.$router.push({ name: "boardlist" });
+      },
+      (error) => {
+        console.log(error);
     });
   },
 };

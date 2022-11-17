@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import http from "@/api/http";
+import { listArticle, searchListArticle } from "@/api/qna";
 
 export default {
   name: "QnaList",
@@ -64,14 +64,30 @@ export default {
     };
   },
   created() {
-    http.get(`/qna`).then(({ data }) => {
-      this.articles = data;
-    });
+    let param = {
+      pg: 1,
+      spp: 20,
+      key: null,
+      word: null,
+    };
+    listArticle(
+      param,
+      ({ data }) => {
+        this.articles = data;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   },
   methods: {
     searchList() {
-      http.get(`/qna/${this.key}/${this.word}`).then(({ data }) => {
-        this.articles = data;
+      searchListArticle(this.key, this.word, 
+      ({ data }) => {
+          this.articles = data;
+        },
+        (error) => {
+          console.log(error);
       });
     },
     moveWrite() {

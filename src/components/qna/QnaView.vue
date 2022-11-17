@@ -60,7 +60,7 @@
 
 <script>
 // import moment from "moment";
-import http from "@/api/http";
+import { getArticle, getReply, writeReply } from "@/api/qna";
 // import QnaReplyItem from "./item/QnaReplyItem.vue";
 
 export default {
@@ -92,11 +92,20 @@ export default {
     },
   },
   created() {
-    http.get(`/qna/${this.$route.params.articleNo}`).then(({ data }) => {
+    let articleno = this.$route.params.articleNo;
+    getArticle(articleno,
+      ({ data }) => {
       this.article = data;
+      },
+      (error) => {
+        console.log(error);
     });
-    http.get(`/qna/repl/${this.$route.params.articleNo}`).then(({ data }) => {
+    getReply(articleno,
+      ({ data }) => {
       this.articles = data;
+      },
+      (error) => {
+        console.log(error);
     });
   },
   methods: {
@@ -119,26 +128,33 @@ export default {
       else return false;
     },
     deleteReply() {
-      http.delete()
+      console.log("삭제 기능 준비중")
+    //   // http.delete()
+    //   deleteReply(
+
+    //   );
     },
     registReply() {
       let data = sessionStorage.getItem("userinfo");
       data = JSON.parse(data);
       console.log(data);
-      http
-        .post(`/qna/repl`, {
-          user_id: data.userId,
-          comment: this.replyComment,
-          article_no: this.article.articleNo,
-        })
-        .then(({ data }) => {
-          console.log(data);
+      let param = {
+        user_id: data.userId,
+        comment: this.replyComment,
+        article_no: this.article.articleNo,
+      }
+      writeReply(
+        param,
+        ({ data }) => {
           if (data === "fail") {
             let msg = "등록 처리시 문제가 발생했습니다..";
             alert(msg);
           }
           this.reload();
-        });
+        },
+        (error) => {
+        console.log(error);
+      });
     },
     moveModifyArticle() {
       this.$router.push({ path: `/qna/modify/${this.article.articleNo}` });

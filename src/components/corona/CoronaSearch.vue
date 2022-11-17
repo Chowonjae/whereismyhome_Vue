@@ -38,7 +38,7 @@
         <option value="11">11</option>
         <option value="12">12</option>
       </b-form-select>
-      <b-form-select v-model="query.min"  @change="checkValue"  ref="min">
+      <b-form-select v-model="query.min" ref="min">
         <option value=null>분선택</option>
         <option value="0">00</option>
         <option value="10">10</option>
@@ -47,6 +47,7 @@
         <option value="40">40</option>
         <option value="50">50</option>
       </b-form-select>
+      <b-button @click="checkValue">검색</b-button>
       </b-input-group>
   </b-row>
 </template>

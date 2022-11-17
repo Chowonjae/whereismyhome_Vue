@@ -8,7 +8,6 @@ export default {
   name: "HouseMap",
   data() {
     return {
-      markerPositions: [],
       markers: [],
     };
   },

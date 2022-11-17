@@ -76,7 +76,7 @@ export default {
     ...mapActions(["userlogin","userlogout"]),
     logout() {
       this.userlogout();
-      this.$router.push("/");
+      this.$router.push("");
     },
     login() {
       let msg = "";
@@ -86,7 +86,7 @@ export default {
 
       if (!flag) {
         alert(msg);
-        this.$router.push("/");
+        this.$router.push("");
       }
       let user ={
         userId: this.id,

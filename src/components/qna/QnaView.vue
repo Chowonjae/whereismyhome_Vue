@@ -41,6 +41,8 @@
 // import moment from "moment";
 import QnaReplyList from "./QnaReplyList";
 import { mapState, mapActions, mapMutations } from "vuex";
+const memberStore = "memberStore";
+
 export default {
   name: "QnaDetail",
   components: {
@@ -52,8 +54,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userinfo", "qna", "replies", "ok"]),
-
+    ...mapState(["qna", "replies", "ok"]),
+    ...mapState(memberStore, ["userInfo"]),
     message() {
       if (this.qna.content) return this.qna.content.split("\n").join("<br>");
       return "";
@@ -79,14 +81,14 @@ export default {
     checkqna() {
       let replyId = this.qna.userId;
 
-      if (this.userinfo.userId === replyId || this.userinfo.userId === "admin") return true;
+      if (this.userInfo.userId === replyId || this.userInfo.userId === "admin") return true;
       else return false;
     },
     registReply() {
       if (this.replyComment == "") alert("댓글을 입력해주세요.");
       else {
         let param = {
-          user_id: this.userinfo.userId,
+          user_id: this.userInfo.userId,
           comment: this.replyComment,
           article_no: this.qna.articleNo,
         };

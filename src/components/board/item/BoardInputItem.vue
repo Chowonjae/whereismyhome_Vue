@@ -58,6 +58,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
+const memberStore = "memberStore";
 export default {
   name: "BoardInputItem",
   data() {
@@ -77,8 +78,8 @@ export default {
   created() {
     console.log(this.type);
     if (this.type != "modify") {
-      console.log(this.userinfo.userId);
-      this.notice.userId = this.userinfo.userId;
+      console.log(this.userInfo.userId);
+      this.notice.userId = this.userInfo.userId;
     } else {
       this.notice.articleNo = this.article.articleNo;
       this.notice.userId = this.article.userId;
@@ -87,7 +88,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(["ok", "userinfo", "article"]),
+    ...mapState(["ok", "article"]),
+    ...mapState(memberStore, ["userInfo"]),
   },
   watch: {
     ok: function () {

@@ -8,20 +8,20 @@ import memberStore from "@/store/module/memberStore";
 import { listArticle, searchListArticle, writeArticle, getArticle, modifyArticle, deleteArticle } from "@/api/board";
 import {
   listQnA,
-  // getReply,
-  // writeReply,
   searchListQnA,
   writeQnA,
   getQnA,
   modifyQnA,
-  //deleteReply,
   deleteQnA,
+  getReply,
+  writeReply,
+  modifyReply,
+  deleteReply,
 } from "@/api/qna";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    userinfo: null,
     sidos: [{ value: null, text: "시도 선택" }],
     guguns: [{ value: null, text: "구군 선택" }],
     dongs: [{ value: null, text: "동 선택" }],
@@ -42,17 +42,11 @@ export default new Vuex.Store({
     /////////////////////Qna start ///////////////////////
     qnas: [],
     qna: null,
-    reples: [],
+    replies: [],
     /////////////////// Qna end ////////////////////////
   },
   getters: {},
   mutations: {
-    SET_USER_INFO(state, userinfo) {
-      state.userinfo = userinfo;
-    },
-    CLEAR_USER_INFO(state) {
-      state.userinfo = null;
-    },
     /////////////////////////////// House start /////////////////////////////////////
     SET_INTER_LIST(state, inters) {
       state.inters = inters;
@@ -152,6 +146,9 @@ export default new Vuex.Store({
     SET_QNA(state, qna) {
       state.qna = qna;
     },
+    SET_REPLIES(state, replies) {
+      state.replies = replies;
+    },
     CLEAR_QNA(state) {
       state.qna = null;
     },
@@ -161,27 +158,6 @@ export default new Vuex.Store({
     /////////////////////////////// QnA end //////////////////////////////////////
   },
   actions: {
-    userlogin({ commit }, user) {
-      http
-        .post(`/rmember/user/login`, user)
-        .then(({ data }) => {
-          commit("SET_USER_INFO", data);
-        })
-        .catch(() => {
-          commit("SET_ERROR", true);
-        });
-    },
-    userlogout({ commit }) {
-      // http
-      //   .post(`/rmember/user/login`, user)
-      //   .then(({ data }) => {
-      //     commit("SET_USER", data);
-      //   })
-      //   .catch(() => {
-      //     commit("SET_ERROR", true);
-      //   });
-      commit("CLEAR_USER_INFO");
-    },
     /////////////////////////////// House start /////////////////////////////////////
     addInter({ commit }, params) {
       http
@@ -399,15 +375,18 @@ export default new Vuex.Store({
     },
 
     removeArticle({ commit }, articleno) {
+      let msg = "공지사항이 삭제되었습니다.";
       deleteArticle(
         articleno,
         () => {
           commit("SET_OK", true);
         },
         (error) => {
+          msg = "삭제 과정에 문제가 발생했습니다.";
           console.log(error);
         }
       );
+      alert(msg);
     },
 
     //////////////////////////////////Board end//////////////////////////////////
@@ -479,12 +458,63 @@ export default new Vuex.Store({
         }
       );
     },
-
+    
     removeQnA({ commit }, QnAno) {
+      let msg = "QnA 게시물이 삭제되었습니다.";
       deleteQnA(
         QnAno,
+        () => {
+          commit("SET_OK", true);
+        },
+        (error) => {
+          msg = "삭제 과정에 문제가 발생했습니다.";
+          console.log(error);
+        }
+      );
+      alert(msg);
+    },
+
+    searchReplies({ commit }, QnAno) {
+      getReply(
+        QnAno,
         ({ data }) => {
-          commit("SET_QNA_LIST", data);
+          commit("SET_REPLIES", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    addReply({ commit }, param) {
+      writeReply(
+        param,
+        ({ data }) => {
+          commit("SET_REPLIES", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    updateReply({ commit }, param) {
+      let msg = "수정이 완료되었습니다.";
+      modifyReply(
+        param,
+        ({data}) => {
+          commit("SET_REPLIES", data);
+        },
+        (error) => {
+          msg = "수정 과정에 문제가 발생했습니다.";
+          console.log(error);
+        }
+      );
+      alert(msg);
+    },
+    removeReply({ commit }, param) {
+      deleteReply(
+        param,
+        ({data}) => {
+          commit("SET_REPLIES", data);
         },
         (error) => {
           console.log(error);

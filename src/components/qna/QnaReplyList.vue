@@ -50,7 +50,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["replies", "userinfo"]),
+    ...mapState(["replies"]),
     rows() {
       return this.replies.length;
     },

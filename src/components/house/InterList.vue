@@ -1,18 +1,21 @@
 <template>
   <b-container v-if="inters && inters.length != 0" class="bv-example-row mt-3 mb-3">
     <b-container>
-      <b-button-toolbar  key-nav justify aria-label="Toolbar with button groups">
+      <b-button-toolbar key-nav justify aria-label="Toolbar with button groups">
         <b-button-group class="mx-1">
           <b-button @click="currentPage = 1">&laquo;</b-button>
           <b-button @click="currentPage -= 1">&lsaquo;</b-button>
         </b-button-group>
         <b-button-group class="mx-1" size="3">
           <b-button
-            v-for="(inter, index) in inters.slice((currentPage - 1) * perPage, currentPage * perPage)"
+            v-for="(inter, index) in inters.slice(
+              (currentPage - 1) * perPage,
+              currentPage * perPage
+            )"
             :key="index"
-            @mousedown.right.once="deleteInter(inter.userId,inter.dongCode)"
+            @mousedown.right.once="deleteInter(inter.userId, inter.dongCode)"
             @mousedown.left="getApt(inter.dongCode)"
-            @contextmenu.prevent="deleteInter(inter.userId,inter.dongCode)"
+            @contextmenu.prevent="deleteInter(inter.userId, inter.dongCode)"
             >{{ inter.dongName }}</b-button
           >
         </b-button-group>
@@ -32,7 +35,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-
+const memberStore = "memberStore";
 export default {
   name: "InterList",
   components: {},
@@ -43,7 +46,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userinfo", "inters"]),
+    ...mapState(["inters"]),
+    ...mapState(memberStore, ["userInfo"]),
     rows() {
       return this.inters.length;
     },
@@ -60,28 +64,27 @@ export default {
   },
   created() {
     this.CLEAR_INTER_LIST();
-    this.getInter(this.userinfo.userId);
+    this.getInter(this.userInfo.userId);
   },
   methods: {
     getApt(dongCode) {
       this.getHouseList(dongCode);
     },
-    deleteInter(userId,dongCode) {
+    deleteInter(userId, dongCode) {
       console.log(dongCode);
       let query = {
         userId,
-        dongCode:dongCode
-      }
+        dongCode: dongCode,
+      };
       this.delInter(query);
     },
     ctxStop: function () {
       console.log("우클릭방지");
     },
     ...mapMutations(["CLEAR_INTER_LIST"]),
-    ...mapActions(["getInter","delInter", "getHouseList"]),
+    ...mapActions(["getInter", "delInter", "getHouseList"]),
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-row class="mt-4 mb-4 text-center">
-      <b-input-group size="lg" style="justify-content:center;">
+      <b-input-group size="lg" style="justify-content: center">
         <b-form-select v-model="sidoCode" :options="sidos" @change="gugunList"></b-form-select>
         <b-form-select v-model="gugunCode" :options="guguns" @change="dongList"></b-form-select>
         <b-form-select v-model="dongCode" :options="dongs" @change="searchArea"></b-form-select>
@@ -29,7 +29,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-
+const memberStore = "memberStore";
 export default {
   name: "HouseSearch",
   data() {
@@ -43,8 +43,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["ok", "error", "userinfo", "sidos", "guguns", "dongs", "houses"]),
-
+    ...mapState(["ok", "error", "sidos", "guguns", "dongs", "houses"]),
+    ...mapState(memberStore, ["userInfo"]),
     // sidos() {
     //   return this.$store.state.sidos;
     // },
@@ -117,7 +117,7 @@ export default {
     checkInter() {
       if (this.dongCode != null) {
         let query = {
-          userId: this.userinfo.userId,
+          userId: this.userInfo.userId,
           dongCode: this.dongCode,
         };
         this.interDupCheck(query);

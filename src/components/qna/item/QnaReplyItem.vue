@@ -6,7 +6,7 @@
     <b-td
       colspan="1"
       class="align-middle"
-      v-if="userinfo.userId == reply.user_id || userinfo.userId === 'admin'"
+      v-if="userInfo.userId == reply.user_id || userInfo.userId === 'admin'"
     >
       <b-button
         size="sm"
@@ -14,7 +14,7 @@
         variant="outline-warning"
         class="me-2"
         @click="mvModify"
-        v-if="userinfo.userId == reply.user_id"
+        v-if="userInfo.userId == reply.user_id"
         >수정</b-button
       >
       <b-button size="sm" pill variant="outline-danger" @click="deleteReply">삭제</b-button>
@@ -27,7 +27,7 @@
       ><b-form-textarea v-model="modifyReply.comment"></b-form-textarea
     ></b-td>
     <b-td colspan="2" class="align-middle">{{ reply.memo_time }}</b-td>
-    <b-td colspan="1" class="align-middle" v-if="userinfo.userId == reply.user_id">
+    <b-td colspan="1" class="align-middle" v-if="userInfo.userId == reply.user_id">
       <b-button size="sm" pill variant="outline-warning" class="me-2" @click="replyModify"
         >수정</b-button
       >
@@ -40,6 +40,7 @@
 <script>
 // import moment from "moment";
 import { mapState, mapActions } from "vuex";
+const memberStore = "memberStore";
 export default {
   name: "QnaReplyItem",
   data() {
@@ -52,7 +53,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userinfo"]),
+    ...mapState(memberStore, ["userInfo"]),
   },
   props: {
     reply: Object,

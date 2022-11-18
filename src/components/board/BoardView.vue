@@ -32,6 +32,7 @@
 <script>
 // import moment from "moment";
 import { mapState, mapActions, mapMutations } from "vuex";
+const memberStore = "memberStore";
 export default {
   name: "BoardDetail",
   data() {
@@ -44,14 +45,15 @@ export default {
       if (this.article.content) return this.article.content.split("\n").join("<br>");
       return "";
     },
-    ...mapState(["ok", "userinfo", "article"]),
+    ...mapState(["ok", "article"]),
+    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
   },
   watch: {
     article: function () {
       let articleId = this.article.userId;
-      console.log(articleId, this.userinfo.userId);
-      console.log(this.userinfo);
-      if (this.userinfo.userId === articleId) this.isok = true;
+      console.log(articleId, this.userInfo.userId);
+      console.log(this.userInfo);
+      if (this.userInfo.userId === articleId) this.isok = true;
       else this.isok = false;
     },
     ok: function () {

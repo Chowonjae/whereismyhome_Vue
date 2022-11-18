@@ -22,8 +22,15 @@ function getReply(QnAno, success, fail) {
 function writeReply(replyParam, success, fail) {
   api.post(`/qna/repl`, JSON.stringify(replyParam)).then(success).catch(fail);
 }
+//QnaReplyModify
+function modifyReply(replyParam, success, fail) {
+  api.put(`/qna/repl`, JSON.stringify(replyParam)).then(success).catch(fail);
+}
+
 // QnaReplyDelete
-// function deleteReply() {}
+function deleteReply(param, success, fail) {
+  api.delete(`/qna/repl/${param.QnAno}/${param.Replyno}`).then(success).catch(fail);
+}
 // QnaInputItem-write
 function writeQnA(QnAParam, success, fail) {
   api.post(`/qna`, JSON.stringify(QnAParam)).then(success).catch(fail);
@@ -44,6 +51,7 @@ export {
   writeQnA,
   getQnA,
   modifyQnA,
-  //deleteReply,
+  modifyReply,
+  deleteReply,
   deleteQnA,
 };

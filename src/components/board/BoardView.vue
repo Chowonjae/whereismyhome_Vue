@@ -5,7 +5,9 @@
         <b-button variant="outline-primary" @click="moveList">목록</b-button>
       </b-col>
       <b-col class="text-right" v-if="isok">
-        <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2">글수정</b-button>
+        <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2"
+          >글수정</b-button
+        >
         <b-button variant="outline-danger" size="sm" @click="deleteArticle">글삭제</b-button>
       </b-col>
     </b-row>
@@ -29,12 +31,12 @@
 
 <script>
 // import moment from "moment";
-import {mapState,mapActions} from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   name: "BoardDetail",
   data() {
     return {
-      isok:false
+      isok: false,
     };
   },
   computed: {
@@ -42,29 +44,31 @@ export default {
       if (this.article.content) return this.article.content.split("\n").join("<br>");
       return "";
     },
-    ...mapState(["userinfo","article"]),
-
+    ...mapState(["ok", "userinfo", "article"]),
   },
-  watch:{
-      article :function(){
-      console.log(1);
+  watch: {
+    article: function () {
       let articleId = this.article.userId;
-      console.log(2);
       console.log(articleId, this.userinfo.userId);
-      console.log(3);
       console.log(this.userinfo);
-      console.log(4);
-      if (this.userinfo.userId === articleId) this.isok= true;
-      else this.isok= false;      
-    }
+      if (this.userinfo.userId === articleId) this.isok = true;
+      else this.isok = false;
+    },
+    ok: function () {
+      if (this.ok) {
+        this.CLEAR_OK();
+        this.moveList();
+      }
+    },
   },
   created() {
     let articleno = this.$route.params.articleNo;
-    console.log("게시글번호",articleno);
+    console.log("게시글번호", articleno);
     this.searchArticle(articleno);
   },
   methods: {
-    ...mapActions(["searchArticle"]),
+    ...mapActions(["searchArticle", "removeArticle"]),
+    ...mapMutations(["CLEAR_OK"]),
     moveModifyArticle() {
       this.$router.replace({
         name: "boardmodify",
@@ -74,10 +78,7 @@ export default {
     },
     deleteArticle() {
       if (confirm("정말로 삭제?")) {
-        this.$router.replace({
-          name: "boarddelete",
-          params: { articleNo: this.article.articleNo },
-        });
+        this.removeArticle(this.article.articleNo);
       }
     },
     moveList() {

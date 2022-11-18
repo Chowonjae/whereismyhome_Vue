@@ -19,7 +19,7 @@
       </b-input-group>
     </b-row>
     <b-row>
-      <b-col>
+      <b-col v-if="articles.length > 0">
         <b-table
           striped
           hover
@@ -44,6 +44,7 @@
           aria-controls="my-table"
         ></b-pagination>
       </b-col>
+      <b-col v-else align-self="center" class="mt-2">게시글이 존재하지 않습니다.</b-col>
     </b-row>
   </b-container>
 </template>
@@ -82,8 +83,8 @@ export default {
       key: null,
       word: null,
     };
-    this.getArticleList(param);
     this.CLEAR_ARTICLE();
+    this.getArticleList(param);
   },
   methods: {
     ...mapActions(["getArticleList", "searchArticleList"]),

@@ -27,7 +27,11 @@
       </b-col>
     </b-row>
     <b-input-group class="mt-3">
-      <b-form-textarea v-model="replyComment" placeholder="내용 입력..."></b-form-textarea>
+      <b-form-textarea
+        v-model="replyComment"
+        placeholder="내용 입력...(100자 이내)"
+        maxlength="100"
+      ></b-form-textarea>
       <b-input-group-append>
         <b-button variant="info" @click="registReply">댓글 작성</b-button>
       </b-input-group-append>

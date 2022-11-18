@@ -1,10 +1,10 @@
 <template>
   <b-tr style="height: 50px; border-bottom: 1px solid whitesmoke" v-if="isShow">
     <b-td colspan="2" class="align-middle">{{ reply.user_id }}</b-td>
-    <b-td colspan="7" class="align-middle" v-html="enterToBr(reply.comment)"></b-td>
-    <b-td colspan="2" class="align-middle">{{ reply.memo_time }}</b-td>
+    <b-td colspan="5" class="align-middle" v-html="enterToBr(reply.comment)"></b-td>
+    <b-td colspan="3" class="align-middle">{{ reply.memo_time }}</b-td>
     <b-td
-      colspan="1"
+      colspan="2"
       class="align-middle"
       v-if="userInfo.userId == reply.user_id || userInfo.userId === 'admin'"
     >
@@ -19,21 +19,21 @@
       >
       <b-button size="sm" pill variant="outline-danger" @click="deleteReply">삭제</b-button>
     </b-td>
-    <b-td cols="1" v-else> </b-td>
+    <b-td cols="2" v-else> </b-td>
   </b-tr>
   <b-tr style="height: 50px; border-bottom: 1px solid whitesmoke" v-else>
     <b-td colspan="2" class="align-middle">{{ reply.user_id }}</b-td>
-    <b-td colspan="7" class="align-middle text-left"
+    <b-td colspan="5" class="align-middle text-left"
       ><b-form-textarea v-model="modifyReply.comment"></b-form-textarea
     ></b-td>
-    <b-td colspan="2" class="align-middle">{{ reply.memo_time }}</b-td>
-    <b-td colspan="1" class="align-middle" v-if="userInfo.userId == reply.user_id">
+    <b-td colspan="3" class="align-middle">{{ reply.memo_time }}</b-td>
+    <b-td colspan="2" class="align-middle" v-if="userInfo.userId == reply.user_id">
       <b-button size="sm" pill variant="outline-warning" class="me-2" @click="replyModify"
         >수정</b-button
       >
       <b-button size="sm" pill variant="outline-danger" @click="cancel">취소</b-button>
     </b-td>
-    <b-td cols="1" v-else> </b-td>
+    <b-td cols="2" v-else> </b-td>
   </b-tr>
 </template>
 

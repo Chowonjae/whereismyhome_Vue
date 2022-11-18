@@ -1,12 +1,12 @@
 <template>
-  <b-container>
+  <b-container v-if="rows > 0">
     <b-table-simple responsive>
       <b-thead>
         <b-tr>
           <b-th colspan="2">작성자</b-th>
-          <b-th colspan="7">내용</b-th>
-          <b-th colspan="2">작성시간</b-th>
-          <b-th colspan="1"> </b-th>
+          <b-th colspan="5">내용</b-th>
+          <b-th colspan="3">작성시간</b-th>
+          <b-th colspan="2"> </b-th>
         </b-tr>
       </b-thead>
       <b-tbody>
@@ -28,6 +28,7 @@
       aria-controls="my-table"
     ></b-pagination>
   </b-container>
+  <b-container v-else class="mt-3"> 댓글이 존재하지 않습니다. </b-container>
 </template>
 
 <script>

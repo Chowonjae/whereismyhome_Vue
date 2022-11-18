@@ -2,22 +2,22 @@
   <b-container class="bv-example-row mt-3">
     <b-row class="mb-1">
       <b-input-group class="mt-3">
-        <b-button  class="text-left" variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
+        <b-button class="text-left" variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
         <b-form-select v-model="key">
-          <b-form-select-option value="" >검색기준</b-form-select-option>
-          <b-form-select-option value="subject" >제목</b-form-select-option>
+          <b-form-select-option value="">검색기준</b-form-select-option>
+          <b-form-select-option value="subject">제목</b-form-select-option>
           <b-form-select-option value="userId">작성자</b-form-select-option>
         </b-form-select>
-        <b-form-input type="text" v-model="word" size="sm" style="width:10px;"></b-form-input>
+        <b-form-input type="text" v-model="word" size="sm" style="width: 10px"></b-form-input>
         <b-button variant="outline-primary" @click="searchList">검색</b-button>
       </b-input-group>
     </b-row>
     <b-row>
-      <b-col>
+      <b-col v-if="rows > 0">
         <b-table
           striped
           hover
-          :items="articles"
+          :items="qnas"
           :per-page="perPage"
           :current-page="currentPage"
           id="my-table"
@@ -38,18 +38,18 @@
           aria-controls="my-table"
         ></b-pagination>
       </b-col>
+      <b-col v-else align-self="center" class="mt-2">게시글이 존재하지 않습니다.</b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-import { listQnA, searchListQnA } from "@/api/qna";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "QnaList",
   data() {
     return {
-      articles: [],
       fields: [
         { key: "articleNo", label: "글번호", tdClass: "tdClass" },
         { key: "subject", label: "제목", tdClass: "tdSubject" },
@@ -70,25 +70,17 @@ export default {
       key: null,
       word: null,
     };
-    listQnA(
-      param,
-      ({ data }) => {
-        this.articles = data;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.CLEAR_QNA();
+    this.getQnAList(param);
   },
   methods: {
+    ...mapActions(["getQnAList", "searchQnAList"]),
+    ...mapMutations(["CLEAR_QNA"]),
     searchList() {
-      searchListQnA(this.key, this.word, 
-      ({ data }) => {
-          this.articles = data;
-        },
-        (error) => {
-          console.log(error);
-      });
+      if (this.key != null) {
+        let param = { key: this.key, word: this.word };
+        this.searchQnAList(param);
+      }
     },
     moveWrite() {
       this.$router.push({ name: "qnawrite" });
@@ -101,8 +93,9 @@ export default {
     },
   },
   computed: {
+    ...mapState(["qnas"]),
     rows() {
-      return this.articles.length;
+      return this.qnas.length;
     },
   },
 };

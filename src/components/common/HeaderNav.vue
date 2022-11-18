@@ -5,9 +5,9 @@
         <div class="logo justify-content-start ms-5">
           <router-link class="text-decoration-none display-5 font-weight-bold" to="/">FIND HOME</router-link>
         </div>
-        <div v-if="userinfo!=null" class="nav justify-content-end logined">
+        <div v-if="userInfo" class="nav justify-content-end logined">
           <div class="logined-info me-3 align-middle">
-            <strong>{{ userinfo.userName }}</strong> ({{ userinfo.userId }})님 안녕하세요.
+            <strong>{{ userInfo.userName }}</strong> ({{ userInfo.userId }})님 안녕하세요.
           </div>
           <router-link class="hospital-btn btn me-3" id="btn-hospital" to="/hospital"> Hospital </router-link>
           <router-link class="corona-btn btn me-3" id="btn-corona" to="/corona">Corona</router-link>
@@ -22,11 +22,11 @@
           <div class="login-area me-3">
             <div class="dropdown login-pop">
               <router-link id="btn-mv-join" class="join-btn btn me-3" to="/user/regist">Join</router-link>
-
+              <b-alert show variant="danger" v-if="isLoginError">아이디 또는 비밀번호를 확인하세요.</b-alert>
               <b-dropdown id="dropdownMenu" text="Login" right>
                 <b-dropdown-form style="width: 250px">
                   <b-form-group label="ID" label-for="dropdown-form-id" @submit.stop.prevent>
-                    <b-form-input id="dropdown-form-id" size="sm" placeholder="ID..." v-model="id"></b-form-input>
+                    <b-form-input id="dropdown-form-id" size="sm" placeholder="ID..." v-model="user.userId" @keyup.enter="login"></b-form-input>
                   </b-form-group>
 
                   <b-form-group label="PW" label-for="dropdown-form-password">
@@ -35,7 +35,8 @@
                       type="password"
                       size="sm"
                       placeholder="PW..."
-                      v-model="pwd"
+                      v-model="user.userPwd"
+                      @keyup.enter="login"
                     ></b-form-input>
                   </b-form-group>
 
@@ -58,62 +59,55 @@
 </template>
 
 <script>
-import {mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
+
+const memberStore = "memberStore";
+
 export default {
   data() {
     return {
       users: [],
-      id: "",
-      pwd: "",
+      user:{
+        userId: null,
+        userPwd: null,
+      },
       msg: "",
       idck: "",
     };
   },
   computed:{
-    ...mapState(["error","userinfo"]),
+    // ...mapState(["error"]),
+    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
+    ...mapGetters(["checkUserInfo"]),
   },
   methods: {
-    ...mapActions(["userlogin","userlogout"]),
+    // ...mapActions(["userlogin","userlogout"]),
+    ...mapActions(memberStore, ["userConfirm", "getUserInfo", "userLogout"]),
     logout() {
-      this.userlogout();
-      this.$router.push("/");
+      this.userLogout(this.userInfo.userId);
+      sessionStorage.removeItem("access-token")
+      sessionStorage.removeItem("refresh-token");
+      if (this.$route.path != "/") this.$router.push({ name: "home" });
     },
-    login() {
-      let msg = "";
-      let flag = true;
-      !this.id && ((msg = "id를 입력해주세요"), (flag = false));
-      !this.pwd && ((msg = "pwd를 입력해주세요"), (flag = false));
-
-      if (!flag) {
-        alert(msg);
-        this.$router.push("/");
-      }
-      let user ={
-        userId: this.id,
-        userPwd: this.pwd,
-      };
-      this.userlogin(user);
-
-    },
-    getUserList() {
-      let userList = JSON.parse(localStorage.getItem("userList"));
-
-      if (userList) {
-        this.users = userList;
+    async login() {
+      await this.userConfirm(this.user);
+      let token = sessionStorage.getItem("access-token");
+      if(this.isLogin){
+        await this.getUserInfo(token);
+        console.log(this.userInfo);
+        if (this.$route.path != "/") this.$router.push({ name: "home" });
       }
     },
+    // getUserList() {
+    //   let userList = JSON.parse(localStorage.getItem("userList"));
+
+    //   if (userList) {
+    //     this.users = userList;
+    //   }
+    // },
     findpwd() {
       this.$router.push("/user/findpwd");
     },
-  },
-  created() {
-    let data = sessionStorage.getItem("userinfo");
-    data = JSON.parse(data);
-    if (data != null) {
-      this.userinfo.userId = data.userId;
-      this.userinfo.userName = data.userName;
-    }
-    this.getUserList();
   },
 };
 </script>

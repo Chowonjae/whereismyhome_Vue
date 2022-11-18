@@ -3,6 +3,8 @@ import Vuex from "vuex";
 import http from "@/api/http";
 import createPersistedState from "vuex-persistedstate";
 
+import memberStore from "@/store/module/memberStore";
+
 import { listArticle, searchListArticle, writeArticle, getArticle, modifyArticle, deleteArticle } from "@/api/board";
 import {
   listQnA,
@@ -492,7 +494,9 @@ export default new Vuex.Store({
 
     //////////////////////////////////Board end//////////////////////////////////
   },
-  modules: {},
+  modules: {
+    memberStore,
+  },
   plugins: [
     createPersistedState({
       // 브라우저 종료시 제거하기 위해 localStorage가 아닌 sessionStorage로 변경. (default: localStorage)

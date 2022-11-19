@@ -1,10 +1,5 @@
 <template>
-  <b-row
-    class="m-2 apt"
-    @mouseover="colorChange(true)"
-    @mouseout="colorChange(false)"
-    :class="{ 'mouse-over-bgcolor': isColor }"
-  >
+  <b-list-group-item>
     <b-col class="apt">
       <div class="apt-name">
         <a>{{ corona.name }}</a>
@@ -15,7 +10,7 @@
       <div class="apt-price text-danger">일요일 : {{ corona.sunday }}</div>
       <div class="apt-phone">전화번호 : {{ corona.phonenumber }}</div>
     </b-col>
-  </b-row>
+  </b-list-group-item>
 </template>
 
 <script>
@@ -38,13 +33,8 @@ export default {
 </script>
 
 <style scoped>
-
-.apt {
-  border-block-end: 1px solid whitesmoke;
-}
 .mouse-over-bgcolor {
   background-color: lightblue;
-
 }
 .apt-name {
   font-weight: bold;
@@ -52,10 +42,10 @@ export default {
 .apt-space,
 .apt-price,
 .apt-type {
-  font-size: 14px;
+  font-size: 13px;
 }
-.apt-date {
-  font-size: 14px;
+.apt-phone {
+  font-size: 12px;
   color: gray;
 }
 </style>

@@ -1,16 +1,5 @@
 <template>
-<b-container>
-
-  <b-row
-    class="m-2 apt"
-    @mouseover="colorChange(true)"
-    @mouseout="colorChange(false)"
-    @click="getAptDetail"
-    :class="{ 'mouse-over-bgcolor': isColor }"
-    align-v="stretch"
-    align-self="stretch"
-    style="height: 80px"
-  >
+  <b-list-group-item button>
     <b-col>
       <div class="apt-name">
         <a>{{ house.apartmentName }}</a>
@@ -31,12 +20,9 @@
           ><b-img :src="metroImg" width="20" height="20" class="icon"></b-img> 1km 이내에 없음</span
         >
       </div>
-      <div class="apt-date">
-      건축년도: {{ house.buildYear }}
-      </div>
+      <div class="apt-date">건축년도: {{ house.buildYear }}</div>
     </b-col>
-  </b-row>
-  </b-container>
+  </b-list-group-item>
 </template>
 
 <script>
@@ -56,17 +42,12 @@ export default {
     colorChange(flag) {
       this.isColor = flag;
     },
-    getAptDetail(){
-      
-    }
+    getAptDetail() {},
   },
 };
 </script>
 
 <style scoped>
-.apt {
-  border-bottom: 1px solid whitesmoke;
-}
 .mouse-over-bgcolor {
   background-color: lightblue;
 }

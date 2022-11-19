@@ -1,12 +1,12 @@
 <template>
   <b-container v-if="houses && houses.length != 0" class="bv-example-row mt-3">
-    <b-container>
+    <b-list-group>
       <house-list-item
         v-for="(house, index) in houses.slice((currentPage - 1) * perPage, currentPage * perPage)"
         :key="index"
         :house="house"
       />
-    </b-container>
+    </b-list-group>
     <b-pagination
       v-model="currentPage"
       :total-rows="rows"
@@ -17,7 +17,7 @@
   </b-container>
   <b-container v-else class="bv-example-row mt-3">
     <b-row>
-      <b-col ><b-alert show>이 지역의 거래내역이 없습니다.</b-alert></b-col>
+      <b-col><b-alert show>이 지역의 거래내역이 없습니다.</b-alert></b-col>
     </b-row>
   </b-container>
 </template>

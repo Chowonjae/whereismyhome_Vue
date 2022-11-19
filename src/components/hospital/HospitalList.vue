@@ -1,8 +1,15 @@
 <template>
   <b-container v-if="hospitals && hospitals.length != 0" class="bv-example-row mt-3">
-    <b-container>
-    <hospital-list-item v-for="(hospital, index) in hospitals.slice((currentPage - 1) * perPage, currentPage * perPage)" :key="index" :hospital="hospital" />
-    </b-container>
+    <b-list-group>
+      <hospital-list-item
+        v-for="(hospital, index) in hospitals.slice(
+          (currentPage - 1) * perPage,
+          currentPage * perPage
+        )"
+        :key="index"
+        :hospital="hospital"
+      />
+    </b-list-group>
     <b-pagination
       v-model="currentPage"
       :total-rows="rows"

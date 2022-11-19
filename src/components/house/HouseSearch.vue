@@ -8,22 +8,6 @@
         <b-button @click="checkInter" variant="warning">관심지역 등록</b-button>
       </b-input-group>
     </b-row>
-    <b-row>
-      <b-alert
-        variant="warning"
-        :show="dismissCountDown1"
-        @dismissed="dismissCountDown1 = 0"
-        @dismiss-count-down="countDownChanged1"
-        >이미 관심지역으로 등록된 지역입니다.</b-alert
-      >
-      <b-alert
-        variant="success"
-        :show="dismissCountDown2"
-        @dismissed="dismissCountDown2 = 0"
-        @dismiss-count-down="countDownChanged2"
-        >관심지역으로 등록되었습니다.</b-alert
-      >
-    </b-row>
   </b-container>
 </template>
 
@@ -37,9 +21,6 @@ export default {
       sidoCode: null,
       gugunCode: null,
       dongCode: null,
-      dismissSecs: 3,
-      dismissCountDown1: 0,
-      dismissCountDown2: 0,
     };
   },
   computed: {
@@ -53,15 +34,25 @@ export default {
     ok: function () {
       console.log(this.ok);
       if (this.ok) {
-        this.showAlert2();
         this.CLEAR_OK();
+        this.$root.$bvToast.toast("관심지역으로 등록되었습니다.", {
+          title: "알림",
+          variant: "success",
+          autoHideDelay: 3000,
+          solid: true,
+        });
       }
     },
     error: function () {
-      console.log(this.error + "1111111111111111111111111111111111");
       if (this.error) {
-        this.showAlert1();
         this.CLEAR_ERROR();
+
+        this.$root.$bvToast.toast("이미 관심지역으로 등록된 지역입니다.", {
+          title: "알림",
+          variant: "warning",
+          autoHideDelay: 3000,
+          solid: true,
+        });
       }
     },
   },
@@ -87,18 +78,6 @@ export default {
     // sidoList() {
     //   this.getSido();
     // },
-    countDownChanged1(dismissCountDown1) {
-      this.dismissCountDown1 = dismissCountDown1;
-    },
-    countDownChanged2(dismissCountDown2) {
-      this.dismissCountDown2 = dismissCountDown2;
-    },
-    showAlert1() {
-      this.dismissCountDown1 = this.dismissSecs;
-    },
-    showAlert2() {
-      this.dismissCountDown2 = this.dismissSecs;
-    },
     gugunList() {
       // console.log(this.sidoCode);
       this.CLEAR_GUGUN_LIST();

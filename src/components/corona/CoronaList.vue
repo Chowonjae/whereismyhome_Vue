@@ -1,15 +1,20 @@
 <template>
   <b-container v-if="coronas && coronas.length != 0" class="bv-example-row mt-3">
-    <b-container>
-    <corona-list-item v-for="(corona, index) in coronas.slice((currentPage - 1) * perPage, currentPage * perPage)" :key="index" :corona="corona" />
-  </b-container>
+    <b-list-group>
+      <corona-list-item
+        v-for="(corona, index) in coronas.slice((currentPage - 1) * perPage, currentPage * perPage)"
+        :key="index"
+        :corona="corona"
+      />
+    </b-list-group>
     <b-pagination
       v-model="currentPage"
       :total-rows="rows"
       :per-page="perPage"
       align="fill"
       limit="3"
-    ></b-pagination>  
+      align-self="end"
+    ></b-pagination>
   </b-container>
   <b-container v-else class="bv-example-row mt-3">
     <b-row>

@@ -4,7 +4,7 @@ import HomeView from "../views/HomeView.vue";
 import HospitalView from "../views/HospitalView.vue";
 import CoronaView from "../views/CoronaView.vue";
 import HouseView from "../views/HouseView.vue";
-// import MemberView from "../views/MemberView.vue";
+//  import MemberView from "../views/MemberView.vue";
 // import LoginForm from "@/components/LoginForm.vue";
 import AppBoard from "@/views/AppBoard";
 
@@ -37,6 +37,11 @@ const routes = [
     name: "house",
     component: HouseView,
   },
+  {
+    path: "/mypage",
+    name: "mypage",
+    component: ()=>import("@/components/member/MyPage")
+  },      
   {
     path: "/board",
     component: AppBoard,

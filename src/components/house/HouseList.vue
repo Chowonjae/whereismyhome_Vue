@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      perPage: 4,
+      perPage: 9,
       currentPage: 1,
     };
   },

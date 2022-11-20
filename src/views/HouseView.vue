@@ -11,24 +11,42 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="4" align="left">
-        <house-list></house-list>
-      </b-col>
-      <b-col cols="8">
-        <house-map></house-map>
+      <b-col>
+        <house-map @houseDetail="houseDetail"></house-map>
+        <b-sidebar v-model="isShow">
+          <house-info></house-info>
+        </b-sidebar>
       </b-col>
     </b-row>
-
   </b-container>
 </template>
 
 <script>
-import HouseList from "@/components/house/HouseList.vue";
+import HouseInfo from "@/components/house/HouseInfo.vue";
 import InterList from "@/components/house/InterList.vue";
 import HouseMap from "@/components/house/HouseMap.vue";
 import HouseSearch from "@/components/house/HouseSearch.vue";
+import { mapMutations } from "vuex";
 export default {
-  components: { HouseMap, HouseSearch, HouseList,InterList },
+  components: { HouseMap, HouseSearch, InterList, HouseInfo },
+  data() {
+    return {
+      house: null,
+      isShow: false,
+    };
+  },
+  methods: {
+    ...mapMutations(["SET_HOUSE", "CLEAR_HOUSE"]),
+    houseDetail(h) {
+      if (this.$store.house == h) {
+        this.isShow = false;
+        this.CLEAR_HOUSE();
+      } else {
+        this.SET_HOUSE(h);
+        this.isShow = true;
+      }
+    },
+  },
 };
 </script>
 

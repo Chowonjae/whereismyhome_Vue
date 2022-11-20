@@ -30,7 +30,11 @@ export default new Vuex.Store({
     house: null,
     hospitals: [],
     coronas: [],
-    deals: [],
+    deals: { labels: [], datasets: [{ label:"거래금액", backgroundColor: '#f87979',data: [] }]},
+    starbucks: [],
+    metros: [],
+    starbuck: null,
+    metro:null,
     ok: false,
     error: false,
 
@@ -72,13 +76,15 @@ export default new Vuex.Store({
     },
     CLEAR_HOUSE_LIST(state) {
       state.houses = [];
+    },
+    CLEAR_HOUSE(state) {
       state.house = null;
     },
     CLEAR_INTER_LIST(state) {
       state.inters = [];
     },
     CLEAR_DEAL_LIST(state) {
-      state.deals = [];
+      state.deals = { labels: [], datasets: [{ label:"거래금액", backgroundColor: '#f87979',data: [] }]};
     },
     CLEAR_HOSPITAL_LIST(state) {
       state.hospitals = [];
@@ -95,8 +101,15 @@ export default new Vuex.Store({
     SET_HOUSE_LIST(state, houses) {
       state.houses = houses;
     },
+    SET_HOUSE(state, house) {
+      state.house = house;
+    },
     SET_DEAL_LIST(state, deals) {
-      state.deals = deals;
+      deals.forEach((d) => {
+        state.deals.labels.unshift(d.dealYear + "." + d.dealMonth + "." + d.dealDay);
+        state.deals.datasets[0].data.unshift(d.dealAmount.replace(',','')*1);
+      });
+      console.log(state.deals.datasets[0]);
     },
     SET_HOSPITAL_LIST(state, hospitals) {
       state.hospitals = hospitals;
@@ -104,7 +117,18 @@ export default new Vuex.Store({
     SET_CORONA_LIST(state, coronas) {
       state.coronas = coronas;
     },
-
+    SET_STARBUCKS_LIST(state, starbucks) {
+      state.starbucks = starbucks;
+    },
+    SET_METRO_LIST(state, metros) {
+      state.metros = metros;
+    },
+    SET_STARBUCK(state, starbuck) {
+      state.starbuck = starbuck;
+    },
+    SET_METRO(state, metro) {
+      state.metro = metro;
+    },
     SET_DETAIL_HOUSE(state, house) {
       // console.log("Mutations", house);
       state.house = house;
@@ -263,10 +287,60 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    detailHouse({ commit }, house) {
-      // 나중에 house.일련번호를 이용하여 API 호출
-      // console.log(commit, house);
-      commit("SET_DETAIL_HOUSE", house);
+    detailHouse({ commit }, aptCode) {
+      http
+        .get(`map/search/apt/${aptCode}`)
+        .then(({ data }) => {
+          //  console.log(data);
+          commit("SET_DEAL_LIST", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });      
+    },
+    getStarbucks({ commit }) {
+      http
+        .get(`map/search/coffee`)
+        .then(({ data }) => {
+          //  console.log(data);
+          commit("SET_STARBUCKS_LIST", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });       
+    },
+    getMetros({ commit }) {
+      http
+        .get(`map/search/metro`)
+        .then(({ data }) => {
+          //  console.log(data);
+          commit("SET_METRO_LIST", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });       
+    },
+    getStarbuck({ commit },param) {
+      http
+        .get(`map/coffee/${param.lat}/${param.lng}`)
+        .then(({ data }) => {
+          //  console.log(data);
+          commit("SET_STARBUCK", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });       
+    },
+    getMetro({ commit },param) {
+      http
+        .get(`map/metro/${param.lat}/${param.lng}`)
+        .then(({ data }) => {
+          //  console.log(data);
+          commit("SET_METRO", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });       
     },
     /////////////////////////////// House end /////////////////////////////////////
 

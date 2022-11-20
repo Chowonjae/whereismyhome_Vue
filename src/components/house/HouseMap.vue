@@ -9,6 +9,7 @@ export default {
   data() {
     return {
       markers: [],
+      customs: [],
     };
   },
   computed: {
@@ -27,6 +28,9 @@ export default {
     }
   },
   methods: {
+    showDetail(h) {
+      this.$emit("houseDetail", h);
+    },
     initMap() {
       const container = document.getElementById("map");
       const options = {
@@ -43,7 +47,7 @@ export default {
       }
       if (this.houses.length > 0) {
         const imageSrc = require("@/assets/home.png"); // 마커이미지의 주소입니다
-        let imageSize = new kakao.maps.Size(30, 32); // 마커이미지의 크기입니다
+        let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
         let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
         var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
         // 주소-좌표 변환 객체를 생성합니다
@@ -55,7 +59,22 @@ export default {
             map: this.map,
             position: coords,
             image: markerImage,
+            clickable: true,
           });
+          var infoWindow = new kakao.maps.InfoWindow({
+            content: `<div style="width:100%; padding:5px;font-size:12px;">${house.apartmentName}</div>`,
+            position: coords,
+          });
+          kakao.maps.event.addListener(marker, "mouseover", () => {
+            infoWindow.open(this.map, marker);
+          });
+          kakao.maps.event.addListener(marker, "mouseout", () => {
+            infoWindow.close();
+          });
+          kakao.maps.event.addListener(marker, "click", () => {
+            this.showDetail(house);
+          });
+
           this.markers.push(marker);
           bounds.extend(coords);
           this.map.setBounds(bounds);

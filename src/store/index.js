@@ -268,7 +268,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getHouseList({ commit }, dongCode) {
+    async getHouseList({ commit }, dongCode) {
       // vue cli enviroment variables 검색
       //.env.local file 생성.
       // 반드시 VUE_APP으로 시작해야 한다.
@@ -277,7 +277,7 @@ export default new Vuex.Store({
       //   DEAL_YMD: "202207",
       //   serviceKey: decodeURIComponent(SERVICE_KEY),
       // };
-      http
+      await http
         .get(`map/search/${dongCode}`)
         .then(({ data }) => {
           //  console.log(data);
@@ -287,8 +287,8 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    detailHouse({ commit }, aptCode) {
-      http
+    async detailHouse({ commit }, aptCode) {
+      await http
         .get(`map/search/apt/${aptCode}`)
         .then(({ data }) => {
           //  console.log(data);

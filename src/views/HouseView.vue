@@ -26,7 +26,7 @@ import HouseInfo from "@/components/house/HouseInfo.vue";
 import InterList from "@/components/house/InterList.vue";
 import HouseMap from "@/components/house/HouseMap.vue";
 import HouseSearch from "@/components/house/HouseSearch.vue";
-import { mapState, mapMutations } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 export default {
   components: { HouseMap, HouseSearch, InterList, HouseInfo },
   created() {
@@ -42,13 +42,25 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["SET_HOUSE", "CLEAR_HOUSE"]),
+    ...mapMutations(["SET_HOUSE", "CLEAR_HOUSE", "CLEAR_DEAL_LIST"]),
+    ...mapActions(["detailHouse", "getStarbuck", "getMetro"]),
     houseDetail(h) {
-      if (this.house == h) {
+      console.log(this.house);
+      console.log(h);
+      if (this.house != null && this.house.aptCode === h.aptCode) {
         this.isShow = false;
         this.CLEAR_HOUSE();
+        this.CLEAR_DEAL_LIST();
       } else {
         this.SET_HOUSE(h);
+        let param = {
+          lat: this.house.lat,
+          lng: this.house.lng,
+        };
+        this.detailHouse(this.house.aptCode);
+        this.getStarbuck(param);
+        this.getMetro(param);
+
         this.isShow = true;
       }
     },

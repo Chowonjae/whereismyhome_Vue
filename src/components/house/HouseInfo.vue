@@ -18,20 +18,18 @@
         ><b-img :src="metroImg" width="20" height="20" class="icon"></b-img> 1km 이내에 없음</span
       >
     </div>
-    <div class="apt-date text-left">건축년도 {{ house.buildYear }}</div>
-    <label for="chart">최근거래내역(최대 8건)</label><br />
+    <div class="apt-date text-left">건축년도: {{ house.buildYear }}</div>
     <LineChartGenerator
       :chart-options="chartOptions"
       :chart-data="deals"
       :plugins="plugins"
       style="height: 250px"
-      id="chart"
     />
   </b-container>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { Line as LineChartGenerator } from "vue-chartjs/legacy";
 
 import {
@@ -188,29 +186,22 @@ export default {
   watch: {
     house: function () {
       console.log(this.house);
-      var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
-      var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
-      var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+      if (this.house != null) {
+        console.log("inside");
+        var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
+        var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+        var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
 
-      var position = new kakao.maps.LatLng(this.house.lat, this.house.lng);
+        var position = new kakao.maps.LatLng(this.house.lat, this.house.lng);
 
-      // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
-      roadviewClient.getNearestPanoId(position, 50, function (panoId) {
-        roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
-      });
-
-      let param = {
-        lat: this.house.lat,
-        lng: this.house.lng,
-      };
-      this.CLEAR_DEAL_LIST();
-      this.detailHouse(this.house.aptCode);
-      this.getStarbuck(param);
-      this.getMetro(param);
+        // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+        roadviewClient.getNearestPanoId(position, 50, function (panoId) {
+          roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+        });
+      }
     },
   },
   methods: {
-    ...mapActions(["detailHouse", "getStarbuck", "getMetro"]),
     ...mapMutations(["CLEAR_DEAL_LIST"]),
   },
   computed: {

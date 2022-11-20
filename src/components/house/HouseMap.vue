@@ -2,7 +2,7 @@
   <b-container>
     <b-form-checkbox-group
       id="checkbox-group-1"
-      v-model="selected"
+      v-model="sel"
       :options="options"
       :aria-describedby="ariaDescribedby"
       name="flavour-1"
@@ -17,7 +17,7 @@ export default {
   name: "HouseMap",
   data() {
     return {
-      selected: [],
+      sel: [],
       options: [
         { text: "Starbucks", value: "coffee" },
         { text: "지하철", value: "metro" },
@@ -29,7 +29,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["houses"]),
+    ...mapState(["houses", "starbucks", "metros"]),
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
@@ -62,7 +62,7 @@ export default {
         this.markers.forEach((marker) => marker.setMap(null));
       }
       if (this.houses != null && this.houses.length > 0) {
-        const imageSrc = require("@/assets/home.png"); // 마커이미지의 주소입니다
+        let imageSrc = require("@/assets/home.png"); // 마커이미지의 주소입니다
         let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
         let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
         var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -94,6 +94,74 @@ export default {
           this.markers.push(marker);
           bounds.extend(coords);
           this.map.setBounds(bounds);
+        });
+      }
+    },
+    sel: function () {
+      console.log(this.sel);
+      console.log(this.starbucks);
+      if (this.sel.includes("coffee")) {
+        let imageSrc = require("@/assets/coffee.png"); // 마커이미지의 주소입니다
+        let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
+        let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+        let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+        this.starbucks.forEach((star) => {
+          var coords;
+          coords = new kakao.maps.LatLng(star.lat, star.lng);
+          const marker = new kakao.maps.Marker({
+            map: this.map,
+            position: coords,
+            image: markerImage,
+            clickable: true,
+          });
+          var infoWindow = new kakao.maps.InfoWindow({
+            content: `<div style="width:100%; padding:5px;font-size:12px;">${star.name}점</div>`,
+            position: coords,
+          });
+          kakao.maps.event.addListener(marker, "mouseover", () => {
+            infoWindow.open(this.map, marker);
+          });
+          kakao.maps.event.addListener(marker, "mouseout", () => {
+            infoWindow.close();
+          });
+
+          this.coffee.push(marker);
+        });
+      } else {
+        this.coffee.forEach((c) => {
+          c.setMap(null);
+        });
+      }
+      if (this.sel.includes("metro")) {
+        let imageSrc = require("@/assets/metro.png"); // 마커이미지의 주소입니다
+        let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
+        let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+        let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+        this.metros.forEach((sub) => {
+          var coords;
+          coords = new kakao.maps.LatLng(sub.lat, sub.lng);
+          const marker = new kakao.maps.Marker({
+            map: this.map,
+            position: coords,
+            image: markerImage,
+            clickable: true,
+          });
+          var infoWindow = new kakao.maps.InfoWindow({
+            content: `<div style="width:100%; padding:5px;font-size:12px;">${sub.name}</div>`,
+            position: coords,
+          });
+          kakao.maps.event.addListener(marker, "mouseover", () => {
+            infoWindow.open(this.map, marker);
+          });
+          kakao.maps.event.addListener(marker, "mouseout", () => {
+            infoWindow.close();
+          });
+
+          this.subway.push(marker);
+        });
+      } else {
+        this.subway.forEach((s) => {
+          s.setMap(null);
         });
       }
     },

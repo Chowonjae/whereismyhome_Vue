@@ -300,7 +300,7 @@ export default new Vuex.Store({
     },
     getStarbucks({ commit }) {
       http
-        .get(`map/search/coffee`)
+        .get(`map/coffee`)
         .then(({ data }) => {
           //  console.log(data);
           commit("SET_STARBUCKS_LIST", data);
@@ -311,7 +311,7 @@ export default new Vuex.Store({
     },
     getMetros({ commit }) {
       http
-        .get(`map/search/metro`)
+        .get(`map/metro`)
         .then(({ data }) => {
           //  console.log(data);
           commit("SET_METRO_LIST", data);

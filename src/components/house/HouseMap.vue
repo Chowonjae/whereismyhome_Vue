@@ -1,5 +1,14 @@
 <template>
-  <b-container id="map"> </b-container>
+  <b-container>
+    <b-form-checkbox-group
+      id="checkbox-group-1"
+      v-model="selected"
+      :options="options"
+      :aria-describedby="ariaDescribedby"
+      name="flavour-1"
+    ></b-form-checkbox-group>
+    <b-container id="map"> </b-container>
+  </b-container>
 </template>
 
 <script>
@@ -8,7 +17,14 @@ export default {
   name: "HouseMap",
   data() {
     return {
+      selected: [],
+      options: [
+        { text: "Starbucks", value: "coffee" },
+        { text: "지하철", value: "metro" },
+      ],
       markers: [],
+      coffee: [],
+      subway: [],
       customs: [],
     };
   },
@@ -45,7 +61,7 @@ export default {
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null));
       }
-      if (this.houses.length > 0) {
+      if (this.houses != null && this.houses.length > 0) {
         const imageSrc = require("@/assets/home.png"); // 마커이미지의 주소입니다
         let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
         let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.

@@ -26,19 +26,25 @@ import HouseInfo from "@/components/house/HouseInfo.vue";
 import InterList from "@/components/house/InterList.vue";
 import HouseMap from "@/components/house/HouseMap.vue";
 import HouseSearch from "@/components/house/HouseSearch.vue";
-import { mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   components: { HouseMap, HouseSearch, InterList, HouseInfo },
+  created() {
+    this.CLEAR_HOUSE();
+    this.isShow = false;
+  },
+  computed: {
+    ...mapState(["house"]),
+  },
   data() {
     return {
-      house: null,
       isShow: false,
     };
   },
   methods: {
     ...mapMutations(["SET_HOUSE", "CLEAR_HOUSE"]),
     houseDetail(h) {
-      if (this.$store.house == h) {
+      if (this.house == h) {
         this.isShow = false;
         this.CLEAR_HOUSE();
       } else {

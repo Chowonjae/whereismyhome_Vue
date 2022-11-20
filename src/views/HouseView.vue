@@ -49,7 +49,6 @@ export default {
       console.log(h);
       if (this.house != null && this.house.aptCode === h.aptCode) {
         this.isShow = false;
-        this.CLEAR_HOUSE();
         this.CLEAR_DEAL_LIST();
       } else {
         this.SET_HOUSE(h);

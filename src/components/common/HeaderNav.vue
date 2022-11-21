@@ -3,30 +3,47 @@
     <header>
       <div class="nav d-flex justify-content-between align-items-center mt-2 mb-2">
         <div class="logo justify-content-start ms-5">
-          <router-link class="text-decoration-none display-5 font-weight-bold" to="/">FIND HOME</router-link>
+          <router-link class="text-decoration-none display-5 font-weight-bold" to="/"
+            >FIND HOME</router-link
+          >
         </div>
         <div v-if="userInfo" class="nav justify-content-end logined">
           <div class="logined-info me-3 align-middle">
             <strong>{{ userInfo.userName }}</strong> ({{ userInfo.userId }})님 안녕하세요.
           </div>
-          <router-link class="hospital-btn btn me-3" id="btn-hospital" to="/hospital"> Hospital </router-link>
+          <router-link class="hospital-btn btn me-3" id="btn-hospital" to="/hospital">
+            Hospital
+          </router-link>
           <router-link class="corona-btn btn me-3" id="btn-corona" to="/corona">Corona</router-link>
-          <router-link class="mvsearch-btn btn me-3" id="btn-homesearch" to="/house"> HomeSearch </router-link>
+          <router-link class="mvsearch-btn btn me-3" id="btn-homesearch" to="/house">
+            HomeSearch
+          </router-link>
           <router-link class="notice-btn btn me-3" id="btn-notice" to="/board">Notice</router-link>
-          <router-link class="notice-btn btn me-3" id="btn-notice" to="/qna">QnA</router-link>
+          <router-link class="notice-btn btn me-3" id="btn-qna" to="/qna">QnA</router-link>
+          <router-link class="news-btn btn me-3" id="btn-news" to="/news">News</router-link>
           <router-link class="mypage-btn btn me-3" id="btn-mypage" to="/mypage">MyPage</router-link>
-          <b-button class="logout-btn btn me-3" id="btn-logout" @click.prevent="logout">Logout</b-button>
+          <b-button class="logout-btn btn me-3" id="btn-logout" @click.prevent="logout"
+            >Logout</b-button
+          >
         </div>
 
         <div v-else class="nav justify-content-end">
           <div class="login-area me-3">
             <div class="dropdown login-pop">
               <router-link id="btn-mv-join" class="join-btn btn me-3" to="/join">Join</router-link>
-              <b-alert show variant="danger" v-if="isLoginError">아이디 또는 비밀번호를 확인하세요.</b-alert>
+              <b-alert show variant="danger" v-if="isLoginError"
+                >아이디 또는 비밀번호를 확인하세요.</b-alert
+              >
               <b-dropdown id="dropdownMenu" text="Login" right>
                 <b-dropdown-form style="width: 250px">
                   <b-form-group label="ID" label-for="dropdown-form-id" @submit.stop.prevent>
-                    <b-form-input id="dropdown-form-id" size="sm" placeholder="ID..." v-model="user.userId" @keyup.enter="login"></b-form-input>
+                    <b-form-input
+                      id="dropdown-form-id"
+                      size="sm"
+                      placeholder="ID..."
+                      v-model="user.userId"
+                      @keyup.enter="login"
+                    ></b-form-input>
                   </b-form-group>
 
                   <b-form-group label="PW" label-for="dropdown-form-password">
@@ -67,7 +84,7 @@ export default {
   data() {
     return {
       users: [],
-      user:{
+      user: {
         userId: null,
         userPwd: null,
       },
@@ -75,7 +92,7 @@ export default {
       idck: "",
     };
   },
-  computed:{
+  computed: {
     // ...mapState(["error"]),
     ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
     ...mapGetters(["checkUserInfo"]),
@@ -85,14 +102,14 @@ export default {
     ...mapActions(memberStore, ["userConfirm", "getUserInfo", "userLogout"]),
     logout() {
       this.userLogout(this.userInfo.userId);
-      sessionStorage.removeItem("access-token")
+      sessionStorage.removeItem("access-token");
       sessionStorage.removeItem("refresh-token");
       if (this.$route.path != "/") this.$router.push({ name: "home" });
     },
     async login() {
       await this.userConfirm(this.user);
       let token = sessionStorage.getItem("access-token");
-      if(this.isLogin){
+      if (this.isLogin) {
         await this.getUserInfo(token);
         console.log(this.userInfo);
         if (this.$route.path != "/") this.$router.push({ name: "home" });
@@ -113,9 +130,9 @@ export default {
 </script>
 
 <style>
-.logined-info{
+.logined-info {
   height: 40px;
   line-height: 40px;
   text-align: center;
 }
-  </style>
+</style>

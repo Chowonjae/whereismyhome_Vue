@@ -39,6 +39,7 @@ export default new Vuex.Store({
     ok: false,
     error: false,
 
+    news:[],
     /////////////////////Board start ///////////////////////
     articles: [],
     article: null,
@@ -154,6 +155,19 @@ export default new Vuex.Store({
       state.error = null;
     },
     /////////////////////////////// House end /////////////////////////////////////
+
+    /////////////////////////////// News start /////////////////////////////////////
+
+    SET_NEWS_LIST(state, news) {
+      state.news = news;
+    },
+    CLEAR_NEWS_LIST(state) {
+      state.news = [];
+    },
+
+    /////////////////////////////// News end ///////////////////////////////////
+
+
 
     /////////////////////////////// Board start ///////////////////////////////////
     SET_ARTICLE_LIST(state, articles) {
@@ -397,6 +411,25 @@ export default new Vuex.Store({
     },
 
     /////////////////////////////// Corona end /////////////////////////////////////
+
+    /////////////////////////////// News start /////////////////////////////////////
+    getNewsList({ commit }, gugunCode) {
+      // vue cli enviroment variables 검색
+      //.env.local file 생성.
+      // 반드시 VUE_APP으로 시작해야 한다.
+      http
+        .get(`/news/${gugunCode}`)
+        .then(({ data }) => {
+          // console.log(data);
+          commit("SET_NEWS_LIST", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    /////////////////////////////// News end /////////////////////////////////////
+
 
     /////////////////////////////// Board start /////////////////////////////////////
     getArticleList({ commit }, param) {

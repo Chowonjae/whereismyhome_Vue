@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import NewsView from "../views/NewsView.vue";
 import HospitalView from "../views/HospitalView.vue";
 import CoronaView from "../views/CoronaView.vue";
 import HouseView from "../views/HouseView.vue";
@@ -40,6 +41,11 @@ const routes = [
     path: "/mypage",
     name: "mypage",
     component: () => import("@/components/member/MyPage"),
+  },
+  {
+    path: "/news",
+    name: "news",
+    component: NewsView,
   },
   {
     path: "/board",

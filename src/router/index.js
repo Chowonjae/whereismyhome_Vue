@@ -8,7 +8,6 @@ import HouseView from "../views/HouseView.vue";
 // import LoginForm from "@/components/LoginForm.vue";
 import AppBoard from "@/views/AppBoard";
 
-
 Vue.use(VueRouter);
 
 const routes = [
@@ -17,11 +16,11 @@ const routes = [
     name: "home",
     component: HomeView,
   },
-  // {
-  //   path: "/login",
-  //   name: "Login",
-  //   component: LoginForm,
-  // },
+  {
+    path: "/join",
+    name: "Join",
+    component: () => import("@/components/member/JoinPage"),
+  },
   {
     path: "/hospital",
     name: "hospital",
@@ -40,8 +39,8 @@ const routes = [
   {
     path: "/mypage",
     name: "mypage",
-    component: ()=>import("@/components/member/MyPage")
-  },      
+    component: () => import("@/components/member/MyPage"),
+  },
   {
     path: "/board",
     component: AppBoard,

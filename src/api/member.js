@@ -21,19 +21,19 @@ async function logout(userid, success, fail) {
 }
 
 function registMember(user, success, fail) {
-    api.post(`/rmember`, JSON.stringify(user)).then(success).catch(fail);
+  api.post(`/rmember`, JSON.stringify(user)).then(success).catch(fail);
 }
 
 function findPassword(user, success, fail) {
-    api.post(`/rmember/findpw`, JSON.stringify(user)).then(success).catch(fail);
+  api.post(`/rmember/findpw`, JSON.stringify(user)).then(success).catch(fail);
 }
 
 function searchId(userid, success, fail) {
-    api.get(`/rmember/${userid}`).then(success).catch(fail);
+  api.get(`/rmember/${userid}`).then(success).catch(fail);
 }
 
 function deleteMember(userid, success, fail) {
-    api.get(`/rmember/${userid}`).then(success).catch(fail);
+  api.get(`/rmember/${userid}`).then(success).catch(fail);
 }
 
 export { login, findById, tokenRegeneration, logout, registMember, findPassword, searchId, deleteMember };

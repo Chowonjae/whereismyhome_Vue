@@ -9,19 +9,18 @@
       <div class="col-lg-8 col-md-10 col-sm-12">
         <form id="form-join" method="POST" action="">
           <div class="mb-3">
-            <label for="userid" class="form-label">아이디 : </label>
-            <b-button size="sm" class="text-right" @click="idcheck">중복확인</b-button>
-            <input
+            <label for="userid" class="form-label">아이디</label>
+            <b-button size="sm" pill variant="outline-primary" class="text-right" @click="idcheck">중복확인</b-button>            <input
               type="text"
               class="form-control"
               id="userid"
               name="userid"
               v-model="userid"
             />
-            <label for="userid" class="form-label" v-if="idCheck != null">{{checkMsg}}</label>
-          </div>
+
+            <label for="userid" class="form-label" v-if="idCheck != null" :class="{'text-success':idCheck, 'text-danger':!idCheck}">{{checkMsg}}</label>          </div>
           <div class="mb-3">
-            <label for="username" class="form-label">이름 : </label>
+            <label for="username" class="form-label">이름</label>
             <input
               type="text"
               class="form-control"
@@ -31,7 +30,7 @@
             />
           </div>
           <div class="mb-3">
-            <label for="userpwd" class="form-label">비밀번호 : </label>
+            <label for="userpwd" class="form-label">비밀번호</label>
             <input
               type="password"
               class="form-control"
@@ -41,7 +40,7 @@
             />
           </div>
           <div class="mb-3">
-            <label for="reuserpwd" class="form-label">비밀번호 확인 : </label>
+            <label for="reuserpwd" class="form-label">비밀번호 확인</label>
             <input
               type="password"
               class="form-control"
@@ -50,9 +49,9 @@
               v-model="reuserPwd"
             />
           </div>
-          <label for="userid" class="form-label" v-if="pwdCheck != null">{{pwdMsg}}</label>
+          <label for="userid" class="form-label" v-if="pwdCheck != null"  :class="{'text-success':pwdCheck, 'text-danger':!pwdCheck}">{{pwdMsg}}</label>
           <div class="mb-3">
-            <label for="emailid" class="form-label">이메일 : </label>
+            <label for="emailid" class="form-label">이메일</label>
             <div class="input-group">
               <input
                 type="text"
@@ -73,7 +72,7 @@
           </div>
           <!-- 회원가입으로 변경 111 -->
           <div class="col-auto text-center">
-            <b-button pill @click="regist"> 회원가입 </b-button>
+            <b-button pill variant="outline-primary" @click="regist"> 회원가입 </b-button>
           </div>
         </form>
       </div>

@@ -33,6 +33,7 @@ export default new Vuex.Store({
     deals: { labels: [], datasets: [{ label: "거래금액", backgroundColor: "#f87979", data: [] }] },
     starbucks: [],
     metros: [],
+    schools: [],
     starbuck: null,
     metro: null,
     ok: false,
@@ -92,6 +93,9 @@ export default new Vuex.Store({
     CLEAR_CORONA_LIST(state) {
       state.coronas = [];
     },
+    CLEAR_SCHOOL_LIST(state) {
+      state.schools = [];
+    },
     CLEAR_GUGUN_LIST(state) {
       state.guguns = [{ value: null, text: "구군 선택" }];
     },
@@ -122,6 +126,9 @@ export default new Vuex.Store({
     },
     SET_METRO_LIST(state, metros) {
       state.metros = metros;
+    },
+    SET_SCHOOL_LIST(state, schools) {
+      state.schools = schools;
     },
     SET_STARBUCK(state, starbuck) {
       state.starbuck = starbuck;
@@ -315,6 +322,17 @@ export default new Vuex.Store({
         .then(({ data }) => {
           //  console.log(data);
           commit("SET_METRO_LIST", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getSchoolList({ commit }) {
+      http
+        .get(`map/school`)
+        .then(({ data }) => {
+          //  console.log(data);
+          commit("SET_SCHOOL_LIST", data);
         })
         .catch((error) => {
           console.log(error);

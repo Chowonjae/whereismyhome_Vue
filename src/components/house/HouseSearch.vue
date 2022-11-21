@@ -66,7 +66,7 @@ export default {
     this.getSido();
   },
   methods: {
-    ...mapActions(["getSido", "getGugun", "getDong", "getHouseList", "interDupCheck"]),
+    ...mapActions(["getSido", "getGugun", "getDong", "getHouseList", "getSchoolList", "interDupCheck"]),
     ...mapMutations([
       "CLEAR_OK",
       "CLEAR_ERROR",
@@ -91,7 +91,10 @@ export default {
       if (this.gugunCode) this.getDong(this.gugunCode);
     },
     searchArea() {
-      if (this.dongCode) this.getHouseList(this.dongCode);
+      if (this.dongCode) {
+        this.getHouseList(this.dongCode);
+        this.getSchoolList(this.dongCode);
+      }
     },
     checkInter() {
       if (this.dongCode != null) {

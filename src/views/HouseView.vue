@@ -45,8 +45,6 @@ export default {
     ...mapMutations(["SET_HOUSE", "CLEAR_HOUSE", "CLEAR_DEAL_LIST"]),
     ...mapActions(["detailHouse", "getStarbuck", "getMetro"]),
     houseDetail(h) {
-      console.log(this.house);
-      console.log(h);
       if (this.house != null && this.house.aptCode === h.aptCode) {
         this.isShow = false;
         this.CLEAR_DEAL_LIST();

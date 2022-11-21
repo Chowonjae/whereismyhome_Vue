@@ -25,6 +25,10 @@
       :plugins="plugins"
       style="height: 250px"
     />
+    <b-button-group>
+    <b-button variant="outline-primary" @click="rangeDown">&#60;</b-button>
+    <b-button variant="outline-primary" @click="rangeUp">&#62;</b-button>
+    </b-button-group>
   </b-container>
 </template>
 
@@ -43,78 +47,6 @@ import {
   PointElement,
 } from "chart.js";
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement);
-// const moveChart = {
-//   id: "moveChart",
-
-//   afterEvent(chart, args) {
-//     const {
-//       ctx,
-//       canvas,
-//       chartArea: { left, right, top, bottom, width, height },
-//     } = chart;
-
-//     canvas.addEventListener("mousemove", (event) => {
-//       const x = args.event.x;
-//       const y = args.event.y;
-
-//       if (
-//         x >= left - 15 &&
-//         x <= left + 15 &&
-//         y >= height / 2 + top - 15 &&
-//         y <= height / 2 + top + 15
-//       ) {
-//         canvas.style.cursor = "pointer";
-//       } else if (
-//         x >= right - 15 &&
-//         x <= right + 15 &&
-//         y >= height / 2 + top - 15 &&
-//         y <= height / 2 + top + 15
-//       ) {
-//         canvas.style.cursor = "pointer";
-//       } else {
-//         canvas.style.cursor = "default";
-//       }
-//     });
-//   },
-//   afterDraw(chart, args, pluginOptions) {
-//     const {
-//       ctx,
-//       chartArea: { left, right, top, bottom, width, height },
-//     } = chart;
-
-//     const angle = Math.PI / 180;
-
-//     class CircleChevron {
-//       draw(ctx, x1, pixel) {
-//         ctx.beginPath();
-//         ctx.lineWidth = 3;
-//         ctx.strokeStyle = "rgba(102,102,102,0.5)";
-//         ctx.fillStyle = "white";
-//         ctx.arc(x1, height / 2 + top, 15, angle * 0, angle * 360, false);
-//         ctx.stroke();
-//         ctx.fill();
-//         ctx.closePath();
-
-//         ctx.startPath();
-//         ctx.lineWidth = 3;
-//         ctx.strokeStyle = "rgba(255,26,104,1)";
-//         ctx.moveTo(x1 + pixel, height / 2 + top - 7.5);
-//         ctx.lineTo(x1 - pixel, height / 2 + top);
-//         ctx.moveTo(x1 + pixel, height / 2 + top + 7.5);
-//         ctx.stroke();
-//         ctx.closePath();
-//       }
-//     }
-
-//     let drawCircleLeft = new CircleChevron();
-//     drawCircleLeft.draw(ctx, left, 5);
-
-//     let drawCircleRight = new CircleChevron();
-//     drawCircleRight.draw(ctx, right, -5);
-
-//     console.log(chart);
-//   },
-// };
 
 export default {
   name: "HouseInfo",
@@ -124,6 +56,7 @@ export default {
       coffeeImg: require("@/assets/coffee.png"),
       metroImg: require("@/assets/metro.png"),
       chartOptions: {
+
         layout: {
           padding: {
             right: 18,
@@ -132,7 +65,7 @@ export default {
         scales: {
           x: {
             min: 0,
-            max: 8,
+            max: 7,
           },
           y: {
             beginAtZero: true,
@@ -164,7 +97,7 @@ export default {
     },
     width: {
       type: Number,
-      default: 400,
+      default: 100,
     },
     height: {
       type: Number,
@@ -198,59 +131,37 @@ export default {
         roadviewClient.getNearestPanoId(position, 50, function (panoId) {
           roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
         });
+        this.chartOptions.scales.x.min = 0;
+        this.chartOptions.scales.x.max = 7;
+
       }
     },
   },
   methods: {
     ...mapMutations(["CLEAR_DEAL_LIST"]),
+    rangeUp(){
+      this.chartOptions.scales.x.min+=8;
+      this.chartOptions.scales.x.max+=8;
+      if(this.chartOptions.scales.x.max>=this.deals.labels.length){
+        this.chartOptions.scales.x.min = this.deals.labels.length-8;
+        this.chartOptions.scales.x.max = this.deals.labels.length-1;
+      }
+    },
+    rangeDown(){
+      this.chartOptions.scales.x.min-=8;
+      this.chartOptions.scales.x.max-=8;
+      if(this.chartOptions.scales.x.min<0){
+        this.chartOptions.scales.x.min = 0;
+        this.chartOptions.scales.x.max = 7
+      }
+
+    }
   },
   computed: {
     ...mapState(["deals", "starbuck", "metro", "house"]),
   },
 };
 
-// function moveScroll() {
-//   const {
-//     ctx,
-//     canvas,
-//     chartArea: { left, right, top, bottom, width, height },
-//   } = myChart;
-//   canvas.addEventListener("click", (event) => {
-//     const rect = canvas.getBoundingClientRect();
-
-//     const x = event.clientX - rect.left;
-//     const y = event.clientY - rect.top;
-
-//     if (
-//       x >= left - 15 &&
-//       x <= left + 15 &&
-//       y >= height / 2 + top - 15 &&
-//       y <= height / 2 + top + 15
-//     ) {
-//       myChart.options.scales.x.min = myChart.options.scales.x.min + 8;
-//       myChart.options.scales.x.max = myChart.options.scales.x.max + 8;
-//       if (myChart.options.scales.x.min <= 0) {
-//         mychart.options.scales.x.min = 0;
-//         mychart.options.scales.x.max = 7;
-//       }
-//     }
-//     if (
-//       x >= right - 15 &&
-//       x <= right + 15 &&
-//       y >= height / 2 + top - 15 &&
-//       y <= height / 2 + top + 15
-//     ) {
-//       myChart.options.scales.x.min = myChart.options.scales.x.min + 8;
-//       myChart.options.scales.x.max = myChart.options.scales.x.max + 8;
-//       if (myChart.options.scales.x.max >= this.deals.datasets[0].data.length) {
-//         mychart.options.scales.x.min = this.deals.datasets[0].data.length - 8;
-//         mychart.options.scales.x.max = this.deals.datasets[0].data.length;
-//       }
-//     }
-//     myChart.update();
-//   });
-// }
-// myChart.ctx.onclick = moveScroll();
 </script>
 
 <style></style>

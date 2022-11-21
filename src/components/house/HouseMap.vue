@@ -1,12 +1,18 @@
 <template>
   <b-container>
-    <b-form-checkbox-group
-      id="checkbox-group-1"
-      v-model="sel"
-      :options="options"
-      :aria-describedby="ariaDescribedby"
-      name="flavour-1"
-    ></b-form-checkbox-group>
+    <b-input-group class="mt-3">
+      <b-form-checkbox-group
+        id="checkbox-group-1"
+        v-model="sel"
+        :options="options"
+        :aria-describedby="ariaDescribedby"
+        name="flavour-1"
+      ></b-form-checkbox-group>
+      <b-form-input v-model="keyword"></b-form-input>
+      <b-input-group-append>
+        <b-button variant="outline-primary" @click="searchByKeyword">search</b-button>
+      </b-input-group-append>
+    </b-input-group>
     <b-container id="map"> </b-container>
   </b-container>
 </template>
@@ -17,11 +23,13 @@ export default {
   name: "HouseMap",
   data() {
     return {
+      keyword:"",
       sel: [],
       options: [
         { text: "Starbucks", value: "coffee" },
         { text: "지하철", value: "metro" },
       ],
+      keymarkers: [],
       markers: [],
       coffee: [],
       subway: [],
@@ -44,6 +52,51 @@ export default {
     }
   },
   methods: {
+    searchByKeyword() {
+      this.keymarkers.forEach((m) => {
+        m.setMap(null);
+      });
+      if (this.keyword != "") {
+        var ps = new kakao.maps.services.Places();
+
+        // 키워드로 장소를 검색합니다
+        ps.keywordSearch(this.keyword, this.placesSearchCB);
+      }
+    },
+    placesSearchCB(data, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        for (var i = 0; i < data.length; i++) {
+          this.displayMarker(data[i]);
+        }
+      }
+    },
+    displayMarker(place) {
+      let coords = new kakao.maps.LatLng(place.y, place.x);
+      // 마커를 생성하고 지도에 표시합니다
+        let imageSrc = require("@/assets/keyword.png"); // 마커이미지의 주소입니다
+        let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
+        let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
+var marker = new kakao.maps.Marker({
+        map: this.map,
+        position: coords,
+        image: markerImage,
+      });
+      this.keymarkers.push(marker);
+      let infowindow = new kakao.maps.InfoWindow({
+        content: `<div style="padding:5px;font-size:12px;">${place.place_name}</div>`,
+        position: coords,
+      });
+      kakao.maps.event.addListener(marker, "mouseover", () => {
+        infowindow.open(this.map, marker);
+      });
+      kakao.maps.event.addListener(marker, "mouseout", () => {
+        infowindow.close();
+      });
+    },
     showDetail(h) {
       this.$emit("houseDetail", h);
     },
@@ -51,7 +104,8 @@ export default {
       const container = document.getElementById("map");
       const options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 5,
+        level: 3,
+        draggable:true
       };
       this.map = new kakao.maps.Map(container, options);
     },
@@ -102,7 +156,7 @@ export default {
       console.log(this.starbucks);
       if (this.sel.includes("coffee")) {
         let imageSrc = require("@/assets/coffee.png"); // 마커이미지의 주소입니다
-        let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
+        let imageSize = new kakao.maps.Size(15, 16); // 마커이미지의 크기입니다
         let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
         let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
         this.starbucks.forEach((star) => {
@@ -133,7 +187,7 @@ export default {
         });
       }
       if (this.sel.includes("metro")) {
-        let imageSrc = require("@/assets/metro.png"); // 마커이미지의 주소입니다
+        let imageSrc = require("@/assets/subway.png"); // 마커이미지의 주소입니다
         let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
         let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
         let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);

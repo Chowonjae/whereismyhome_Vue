@@ -33,7 +33,11 @@ function searchId(userid, success, fail) {
 }
 
 function deleteMember(userid, success, fail) {
-  api.get(`/rmember/${userid}`).then(success).catch(fail);
+  api.delete(`/rmember/${userid}`).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout, registMember, findPassword, searchId, deleteMember };
+function userModify(user, success, fail) {
+  api.put(`/rmember/mypage`, user).then(success).catch(fail);
+}
+
+export { login, findById, tokenRegeneration, logout, registMember, findPassword, searchId, deleteMember, userModify };

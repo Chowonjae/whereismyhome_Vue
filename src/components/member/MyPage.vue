@@ -110,7 +110,7 @@
             <b-button pill variant="outline-warning" class="me-2" @click="modify = !modify">
               수정
             </b-button>
-            <b-button pill variant="outline-danger"> 회원탈퇴 </b-button>
+            <b-button pill variant="outline-danger" @click="deleteInfo"> 회원탈퇴 </b-button>
           </div>
           <div class="col-auto text-center" v-else>
             <b-button pill variant="outline-primary" class="me-2" @click="modifyUser">
@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 const memberStore = "memberStore";
 export default {
   computed: {
@@ -135,7 +135,10 @@ export default {
     return {
       modify: false,
       email: "",
+      checkEmail: null,
+      checkPwd: null,
       info: {
+        userId: "",
         userPwd: "",
         emailId: "",
         emailDomain: null,
@@ -152,13 +155,80 @@ export default {
     this.email = this.userInfo.emailId + "@" + this.userInfo.emailDomail;
   },
   methods: {
-    ...mapActions(memberStore, ["userModify"]),
+    ...mapActions(memberStore, ["modifyMember", "userLogout", "deleteUser"]),
+    ...mapMutations(memberStore, ["IS_RELOAD"]),
     modifyUser() {
       if (this.info.userPwd === "" && this.info.userPwd === null) {
+        this.checkPwd = false;
         alert("비밀번호를 입력해 주세요");
         return;
+      } else {
+        this.checkPwd = true;
+      }
+      if (this.info.emailId === "" || this.info.emailDomain === null) {
+        this.checkEmail = false;
+        alert("이메일을 확인해 주세요.");
+        return;
+      } else {
+        this.checkEmail = true;
+      }
+      if (this.checkEmail && this.checkPwd) {
+        this.$swal({
+          title: "정말 수정 하시겠습니까?",
+          icon: "warning",
+          buttons: true,
+        }).then(value => {
+          if (value) {
+            this.info.userId = this.userInfo.userId;
+            this.modifyMember(this.info);
+            this.userLogout(this.info.userId);
+            sessionStorage.removeItem("vuex");
+            this.$router.push({ path: "/" });
+            window.location.reload();
+          }
+        }).catch(error => {
+          this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: 'error' });
+          console.log(error);
+        })
+        // if (confirm("정말 수정 하시겠습니까?")) {
+        //   this.info.userId = this.userInfo.userId;
+        //   this.modifyMember(this.info);
+        //   this.userLogout(this.info.userId);
+        //   sessionStorage.removeItem("vuex");
+        //   this.$router.push({ path: "/" });
+        //   window.location.reload();
+        // }
       }
     },
+    deleteInfo() {
+      this.$swal({
+        title: "정말 탈퇴하시겠습니까?",
+        icon: 'warning',
+        dangerMode: true,
+        buttons: true,
+      }).then(value => {
+        if (value) {
+          this.deleteUser(this.userInfo.userId);
+          sessionStorage.removeItem("access-token");
+          sessionStorage.removeItem("refresh-token");
+          sessionStorage.removeItem("vuex");
+          this.$router.push({ path: "/" });
+          window.location.reload();
+        }
+      }).catch(error => {
+        this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: 'error' });
+        console.log(error);
+      })
+      // console.log(this.info.userId);
+      // if (confirm("정말루 ? ..ㅜ")) {
+      //   this.deleteUser(this.userInfo.userId);
+      //   sessionStorage.removeItem("access-token");
+      //   sessionStorage.removeItem("refresh-token");
+      //   sessionStorage.removeItem("vuex");
+      //   this.$router.push({ path: "/" });
+      //   window.location.reload();
+      // }
+    }
   },
 };
 </script>

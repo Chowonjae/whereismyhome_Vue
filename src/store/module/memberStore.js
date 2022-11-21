@@ -1,6 +1,15 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
-import { login, findById, tokenRegeneration, logout, searchId, registMember } from "@/api/member";
+import {
+  login,
+  findById,
+  tokenRegeneration,
+  logout,
+  searchId,
+  registMember,
+  deleteMember,
+  userModify,
+} from "@/api/member";
 
 const memberStore = {
   namespaced: true,
@@ -11,6 +20,8 @@ const memberStore = {
     isValidToken: false,
     idCheck: null,
     registCheck: null,
+    modifyCheck: null,
+    isReload: null,
   },
   mutations: {
     SET_IS_LOGIN: (state, isLogin) => {
@@ -37,6 +48,12 @@ const memberStore = {
     },
     CLEAR_REGIST: (state) => {
       state.registCheck = null;
+    },
+    MODIFY_USER: (state) => {
+      state.modifyCheck = state;
+    },
+    IS_RELOAD: (state) => {
+      state.isReload = true;
     },
   },
   actions: {
@@ -167,6 +184,39 @@ const memberStore = {
             commit("SET_REGIST", true);
           } else {
             console.log("회원가입 실패");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async modifyMember({ commit }, user) {
+      userModify(
+        user,
+        ({ data }) => {
+          if (data == "success") {
+            commit("MODIFY_USER", true);
+          } else {
+            commit("MODIFY_USER", false);
+            console.log("수정 실패");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async deleteUser({ commit }, userid) {
+      deleteMember(
+        userid,
+        ({ data }) => {
+          if (data.message == "success") {
+            commit("SET_IS_LOGIN", false);
+            commit("SET_USER_INFO", null);
+            commit("SET_IS_VALID_TOKEN", false);
+          } else {
+            console.log("삭제 실패");
           }
         },
         (error) => {

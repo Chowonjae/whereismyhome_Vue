@@ -17,8 +17,7 @@
               name="userid"
               v-model="userid"
             />
-
-            <label for="userid" class="form-label" v-if="idCheck != null" :class="{'text-success':idCheck, 'text-danger':!idCheck}">{{checkMsg}}</label>          </div>
+            <label for="userid" id="info" class="form-label" v-if="idCheck != null" :class="{'text-success':idCheck, 'text-danger':!idCheck}">{{checkMsg}}</label>          </div>
           <div class="mb-3">
             <label for="username" class="form-label">이름</label>
             <input
@@ -49,7 +48,7 @@
               v-model="reuserPwd"
             />
           </div>
-          <label for="userid" class="form-label" v-if="pwdCheck != null"  :class="{'text-success':pwdCheck, 'text-danger':!pwdCheck}">{{pwdMsg}}</label>
+          <label for="userid" id="info" class="form-label" v-if="pwdCheck != null"  :class="{'text-success':pwdCheck, 'text-danger':!pwdCheck}">{{pwdMsg}}</label>
           <div class="mb-3">
             <label for="emailid" class="form-label">이메일</label>
             <div class="input-group">
@@ -205,6 +204,8 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+  #info{
+    font-size: x-small;
+  }
 </style>

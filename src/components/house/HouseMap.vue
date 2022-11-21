@@ -5,7 +5,6 @@
         id="checkbox-group-1"
         v-model="sel"
         :options="options"
-        :aria-describedby="ariaDescribedby"
         name="flavour-1"
       ></b-form-checkbox-group>
       <b-form-input v-model="keyword"></b-form-input>
@@ -23,22 +22,23 @@ export default {
   name: "HouseMap",
   data() {
     return {
-      keyword:"",
+      keyword: "",
       sel: [],
       options: [
         { text: "Starbucks", value: "coffee" },
         { text: "지하철", value: "metro" },
+        { text: "학교", value: "edu" },
       ],
       keymarkers: [],
       markers: [],
       coffee: [],
       subway: [],
-      edu:[],
+      edu: [],
       customs: [],
     };
   },
   computed: {
-    ...mapState(["houses", "starbucks", "metros","schools"]),
+    ...mapState(["houses", "starbucks", "metros", "schools"]),
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
@@ -76,12 +76,12 @@ export default {
     displayMarker(place) {
       let coords = new kakao.maps.LatLng(place.y, place.x);
       // 마커를 생성하고 지도에 표시합니다
-        let imageSrc = require("@/assets/keyword.png"); // 마커이미지의 주소입니다
-        let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
-        let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+      let imageSrc = require("@/assets/keyword.png"); // 마커이미지의 주소입니다
+      let imageSize = new kakao.maps.Size(20, 21); // 마커이미지의 크기입니다
+      let imageOption = { offset: new kakao.maps.Point(0, 0) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+      var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 
-var marker = new kakao.maps.Marker({
+      var marker = new kakao.maps.Marker({
         map: this.map,
         position: coords,
         image: markerImage,
@@ -106,13 +106,21 @@ var marker = new kakao.maps.Marker({
       const options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
         level: 3,
-        draggable:true
+        draggable: true,
       };
       this.map = new kakao.maps.Map(container, options);
     },
   },
   watch: {
     houses: function () {
+      if(this.houses.length==0){
+        this.$root.$bvToast.toast("검색 지역에 아파트가 없습니다.", {
+          title: "알림",
+          variant: "info",
+          autoHideDelay: 3000,
+          solid: true,
+        });
+      }
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null));
       }
@@ -153,8 +161,6 @@ var marker = new kakao.maps.Marker({
       }
     },
     sel: function () {
-      console.log(this.sel);
-      console.log(this.starbucks);
       if (this.sel.includes("coffee")) {
         let imageSrc = require("@/assets/coffee.png"); // 마커이미지의 주소입니다
         let imageSize = new kakao.maps.Size(15, 16); // 마커이미지의 크기입니다

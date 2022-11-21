@@ -1,8 +1,8 @@
 <template>
   <b-row class="mt-4 mb-4 text-center">
-    <b-input-group size="lg" style="justify-content:center;">
-      <b-form-select v-model="sidoCode" :options="sidos" @change="gugunList"></b-form-select>
-      <b-form-select v-model="gugunCode" :options="guguns"></b-form-select>
+    <b-input-group size="lg" style="justify-content: center">
+      <b-form-select v-model="sidoCode" :options="sidos" @change="gugunList" ref="sido"></b-form-select>
+      <b-form-select v-model="gugunCode" :options="guguns" ref="gugun"></b-form-select>
       <b-button @click="searchHospital">검색</b-button>
     </b-input-group>
   </b-row>
@@ -46,7 +46,19 @@ export default {
       if (this.sidoCode) this.getGugun(this.sidoCode);
     },
     searchHospital() {
-      if (this.gugunCode) this.getHospitalList(this.gugunCode);
+      let err = true;
+      let msg = "";
+      !this.sidoCode && ((msg = "시도를 선택해주세요"), (err = false), this.$refs.sido.focus());
+      err && !this.gugunCode && ((msg = "구군을 선택해주세요"), (err = false), this.$refs.gugun.focus());
+
+      if (!err) {
+        this.$root.$bvToast.toast(msg, {
+          title: "알림",
+          variant: "warning",
+          autoHideDelay: 1000,
+          solid: true,
+        });
+      } else this.getHospitalList(this.gugunCode);
     },
   },
 };

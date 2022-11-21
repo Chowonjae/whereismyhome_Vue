@@ -4,7 +4,8 @@
       <b-input-group size="lg" style="justify-content: center">
         <b-form-select v-model="sidoCode" :options="sidos" @change="gugunList"></b-form-select>
         <b-form-select v-model="gugunCode" :options="guguns" @change="dongList"></b-form-select>
-        <b-form-select v-model="dongCode" :options="dongs" @change="searchArea"></b-form-select>
+        <b-form-select v-model="dongCode" :options="dongs"></b-form-select>
+        <b-button @click="searchArea" variant="primary">검색</b-button>
         <b-button @click="checkInter" variant="warning">관심지역 등록</b-button>
       </b-input-group>
     </b-row>
@@ -91,11 +92,36 @@ export default {
       if (this.gugunCode) this.getDong(this.gugunCode);
     },
     searchArea() {
-      if (this.dongCode) {
+      if(this.sidoCode==null){
+        this.$root.$bvToast.toast("시도를 선택해주세요", {
+          title: "알림",
+          variant: "warning",
+          autoHideDelay: 1000,
+          solid: true,
+        });
+      }
+      else if(this.gugunCode==null){
+        this.$root.$bvToast.toast("구군을 선택해주세요", {
+          title: "알림",
+          variant: "warning",
+          autoHideDelay:1000,
+          solid: true,
+        });        
+      }
+      else if(this.dongCode==null){
+        this.$root.$bvToast.toast("동을 선택해주세요", {
+          title: "알림",
+          variant: "warning",
+          autoHideDelay: 1000,
+          solid: true,
+        });        
+      }
+      else {
         this.getHouseList(this.dongCode);
         this.getSchoolList(this.dongCode);
       }
     },
+
     checkInter() {
       if (this.dongCode != null) {
         let query = {

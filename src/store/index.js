@@ -25,7 +25,7 @@ export default new Vuex.Store({
     sidos: [{ value: null, text: "시도 선택" }],
     guguns: [{ value: null, text: "구군 선택" }],
     dongs: [{ value: null, text: "동 선택" }],
-    houses: [],
+    houses: null,
     inters: [],
     house: null,
     hospitals: [],
@@ -76,7 +76,7 @@ export default new Vuex.Store({
       state.sidos = [{ value: null, text: "시도 선택" }];
     },
     CLEAR_HOUSE_LIST(state) {
-      state.houses = [];
+      state.houses = null;
     },
     CLEAR_HOUSE(state) {
       state.house = null;
@@ -327,9 +327,9 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getSchoolList({ commit }) {
+    getSchoolList({ commit }, dongCode) {
       http
-        .get(`map/school`)
+        .get(`map/school/${dongCode}`)
         .then(({ data }) => {
           //  console.log(data);
           commit("SET_SCHOOL_LIST", data);

@@ -10,21 +10,21 @@
     <b-col class="sm-3" align="left">
       <b-button variant="outline-primary" @click="sendKeyword">검색</b-button>
     </b-col> -->
-      <b-input-group size="lg" style="justify-content:center;">
+    <b-input-group size="lg" style="justify-content: center">
       <b-form-select v-model="query.sidoCode" :options="sidos" @change="gugunList" ref="sido"></b-form-select>
       <b-form-select v-model="query.gugunCode" :options="guguns" ref="gugun"></b-form-select>
-      <b-form-select v-model="query.day"  ref="day">
-        <option value=null>요일선택</option>
+      <b-form-select v-model="query.day" ref="day">
+        <option value="null">요일선택</option>
         <option value="WKD">평일</option>
         <option value="SAT">토요일</option>
         <option value="SUN">일요일</option>
       </b-form-select>
-      <b-form-select v-model="query.night"  ref="night">
+      <b-form-select v-model="query.night" ref="night">
         <option value="AM">오전</option>
         <option value="PM">오후</option>
       </b-form-select>
-      <b-form-select v-model="query.hour"  ref="hour">
-        <option value=null>시간선택</option>
+      <b-form-select v-model="query.hour" ref="hour">
+        <option value="null">시간선택</option>
         <option value="1">01</option>
         <option value="2">02</option>
         <option value="3">03</option>
@@ -39,7 +39,7 @@
         <option value="12">12</option>
       </b-form-select>
       <b-form-select v-model="query.min" ref="min">
-        <option value=null>분선택</option>
+        <option value="null">분선택</option>
         <option value="0">00</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -48,7 +48,7 @@
         <option value="50">50</option>
       </b-form-select>
       <b-button @click="checkValue">검색</b-button>
-      </b-input-group>
+    </b-input-group>
   </b-row>
 </template>
 
@@ -59,14 +59,14 @@ export default {
   name: "CoronaSearch",
   data() {
     return {
-      query:{
+      query: {
         sidoCode: null,
         gugunCode: null,
         day: null,
         night: "AM",
         hour: null,
         min: null,
-      }
+      },
     };
   },
   computed: {
@@ -95,22 +95,30 @@ export default {
       this.query.gugunCode = null;
       if (this.query.sidoCode) this.getGugun(this.query.sidoCode);
     },
-    checkValue(){
+    checkValue() {
       // 사용자 입력값 체크하기
-      let err=true;
-      let msg="";
-      !this.query.sidoCode && ((msg="시도를 선택해주세요"), (err=false), this.$refs.sido.focus());
-      err && !this.query.gugunCode && ((msg="구군을 선택해주세요"), (err=false), this.$refs.gugun.focus());
-      err && !this.query.day && ((msg="요일을 선택해주세요"), (err=false), this.$refs.day.focus());
-      err && !this.query.night && ((msg="오전/오후를 선택해주세요"), (err=false), this.$refs.night.focus());
-      err && !this.query.hour && ((msg="시간을 선택해주세요"), (err=false), this.$refs.hour.focus());
-      err && !this.query.min && ((msg="분을 선택해주세요"), (err=false), this.$refs.min.focus());
+      let err = true;
+      let msg = "";
+      !this.query.sidoCode && ((msg = "시도를 선택해주세요"), (err = false), this.$refs.sido.focus());
+      err && !this.query.gugunCode && ((msg = "구군을 선택해주세요"), (err = false), this.$refs.gugun.focus());
+      err && !this.query.day && ((msg = "요일을 선택해주세요"), (err = false), this.$refs.day.focus());
+      err && !this.query.night && ((msg = "오전/오후를 선택해주세요"), (err = false), this.$refs.night.focus());
+      err && !this.query.hour && ((msg = "시간을 선택해주세요"), (err = false), this.$refs.hour.focus());
+      err && !this.query.min && ((msg = "분을 선택해주세요"), (err = false), this.$refs.min.focus());
 
-      if (!err) { // 에러발생
-        alert(msg);
-      } else { // 모두 입력 완료
+      if (!err) {
+        // 에러발생
+
+        this.$root.$bvToast.toast(msg, {
+          title: "알림",
+          variant: "warning",
+          autoHideDelay: 1000,
+          solid: true,
+        });
+      } else {
+        // 모두 입력 완료
         this.searchCorona();
-      }  
+      }
     },
     searchCorona() {
       if (this.query.gugunCode) this.getCoronaList(this.query);
@@ -119,5 +127,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

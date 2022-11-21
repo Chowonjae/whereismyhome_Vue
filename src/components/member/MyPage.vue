@@ -51,7 +51,7 @@
               id="userpwd"
               name="userpwd"
               placeholder="********"
-              v-model="info.userpwd"
+              v-model="info.userPwd"
             />
           </div>
           <div class="mb-3" v-if="modify == false">
@@ -136,7 +136,7 @@ export default {
       modify: false,
       email: "",
       info: {
-        userpwd: "",
+        userPwd: "",
         emailId: "",
         emailDomain: null,
       },
@@ -153,7 +153,12 @@ export default {
   },
   methods: {
     ...mapActions(memberStore, ["userModify"]),
-    modifyUser() {},
+    modifyUser() {
+      if (this.info.userPwd === "" && this.info.userPwd === null) {
+        alert("비밀번호를 입력해 주세요");
+        return;
+      }
+    },
   },
 };
 </script>

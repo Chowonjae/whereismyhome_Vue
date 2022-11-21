@@ -16,7 +16,7 @@
               class="form-control"
               id="userid"
               name="userid"
-              v-model="info.userId"
+              v-model="userid"
             />
             <label for="userid" class="form-label" v-if="idCheck != null">{{checkMsg}}</label>
           </div>
@@ -37,7 +37,7 @@
               class="form-control"
               id="userpwd"
               name="userpwd"
-              v-model="info.userPwd"
+              v-model="userpwd"
             />
           </div>
           <div class="mb-3">
@@ -97,6 +97,8 @@ export default {
       isGood: false,
       checkMsg: "",
       reuserPwd: "",
+      userpwd: "",
+      userid: "",
       pwdMsg: "",
       pwdCheck: null,
       checkEmail: null,
@@ -120,9 +122,13 @@ export default {
     ...mapMutations(memberStore, ["CLEAR_ID_CHECK", "CLEAR_REGIST"]),
     idcheck() {
       this.btnIdChecked = true; 
-      this.searchUserId(this.info.userId);
+      this.searchUserId(this.userid);
     },
     regist() {
+      if (this.userid === null || this.userid === "") {
+        alert("아이디를 입력해 주세요!");
+        return;
+      }
       if (this.isGood === null || this.isGood === false) {
         alert("아이디 중복확인을 해주세요!");
         return;
@@ -143,6 +149,8 @@ export default {
         this.checkEmail = true;
       }
       if (this.isGood && this.pwdCheck && this.checkEmail) {
+        this.info.userId = this.userid;
+        this.info.userPwd = this.userpwd;
         this.registUser(this.info);
       }
     },
@@ -157,13 +165,32 @@ export default {
         this.isGood = this.idCheck;
       }      
     },
+    userid: {
+      handler: function (newVal, oldVal) {
+        if (newVal != oldVal) {
+          this.isGood = null;
+        }
+      }
+    },
     reuserPwd: {
       handler: function (newVal) {
-        if (this.info.userPwd === newVal) {
+        if (this.userpwd === newVal) {
           this.pwdCheck = true;
           this.pwdMsg = "비밀번호가 맞습니다.";
         } else {
           this.pwdCheck = false;
+          this.pwdMsg = "비밀번호가 맞지 않습니다.";
+        }
+      }
+    },
+    userpwd: {
+      handler: function (newVal, oldVal) {
+        if (newVal === oldVal) {
+          this.pwdCheck = true;
+          this.pwdMsg = "비밀번호가 맞습니다.";
+        } else {
+          this.pwdCheck = false;
+          this.reuserPwd = null;
           this.pwdMsg = "비밀번호가 맞지 않습니다.";
         }
       }

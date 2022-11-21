@@ -30,11 +30,11 @@ export default new Vuex.Store({
     house: null,
     hospitals: [],
     coronas: [],
-    deals: { labels: [], datasets: [{ label:"거래금액", backgroundColor: '#f87979',data: [] }]},
+    deals: { labels: [], datasets: [{ label: "거래금액", backgroundColor: "#f87979", data: [] }] },
     starbucks: [],
     metros: [],
     starbuck: null,
-    metro:null,
+    metro: null,
     ok: false,
     error: false,
 
@@ -84,7 +84,7 @@ export default new Vuex.Store({
       state.inters = [];
     },
     CLEAR_DEAL_LIST(state) {
-      state.deals = { labels: [], datasets: [{ label:"거래금액", backgroundColor: '#f87979',data: [] }]};
+      state.deals = { labels: [], datasets: [{ label: "거래금액", backgroundColor: "#f87979", data: [] }] };
     },
     CLEAR_HOSPITAL_LIST(state) {
       state.hospitals = [];
@@ -106,8 +106,8 @@ export default new Vuex.Store({
     },
     SET_DEAL_LIST(state, deals) {
       deals.forEach((d) => {
-        state.deals.labels.unshift(d.dealYear + "." + d.dealMonth + "." + d.dealDay);
-        state.deals.datasets[0].data.unshift(d.dealAmount.replace(',','')*1);
+        state.deals.labels.push(d.dealYear + "." + d.dealMonth + "." + d.dealDay);
+        state.deals.datasets[0].data.push(d.dealAmount.replace(",", "") * 1);
       });
       console.log(state.deals.datasets[0]);
     },
@@ -296,7 +296,7 @@ export default new Vuex.Store({
         })
         .catch((error) => {
           console.log(error);
-        });      
+        });
     },
     getStarbucks({ commit }) {
       http
@@ -307,7 +307,7 @@ export default new Vuex.Store({
         })
         .catch((error) => {
           console.log(error);
-        });       
+        });
     },
     getMetros({ commit }) {
       http
@@ -318,9 +318,9 @@ export default new Vuex.Store({
         })
         .catch((error) => {
           console.log(error);
-        });       
+        });
     },
-    getStarbuck({ commit },param) {
+    getStarbuck({ commit }, param) {
       http
         .get(`map/coffee/${param.lat}/${param.lng}`)
         .then(({ data }) => {
@@ -329,9 +329,9 @@ export default new Vuex.Store({
         })
         .catch((error) => {
           console.log(error);
-        });       
+        });
     },
-    getMetro({ commit },param) {
+    getMetro({ commit }, param) {
       http
         .get(`map/metro/${param.lat}/${param.lng}`)
         .then(({ data }) => {
@@ -340,7 +340,7 @@ export default new Vuex.Store({
         })
         .catch((error) => {
           console.log(error);
-        });       
+        });
     },
     /////////////////////////////// House end /////////////////////////////////////
 
@@ -532,7 +532,7 @@ export default new Vuex.Store({
         }
       );
     },
-    
+
     removeQnA({ commit }, QnAno) {
       let msg = "QnA 게시물이 삭제되었습니다.";
       deleteQnA(
@@ -574,7 +574,7 @@ export default new Vuex.Store({
       let msg = "수정이 완료되었습니다.";
       modifyReply(
         param,
-        ({data}) => {
+        ({ data }) => {
           commit("SET_REPLIES", data);
         },
         (error) => {
@@ -587,7 +587,7 @@ export default new Vuex.Store({
     removeReply({ commit }, param) {
       deleteReply(
         param,
-        ({data}) => {
+        ({ data }) => {
           commit("SET_REPLIES", data);
         },
         (error) => {

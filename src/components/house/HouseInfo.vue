@@ -25,9 +25,9 @@
       :plugins="plugins"
       style="height: 250px"
     />
-    <b-button-group>
-    <b-button variant="outline-primary" @click="rangeDown">&#60;</b-button>
-    <b-button variant="outline-primary" @click="rangeUp">&#62;</b-button>
+    <b-button-group size="sm" class="btn-block">
+    <b-button variant="outline-info" @click="rangeDown">&#60;</b-button>
+    <b-button variant="outline-info" @click="rangeUp">&#62;</b-button>
     </b-button-group>
   </b-container>
 </template>

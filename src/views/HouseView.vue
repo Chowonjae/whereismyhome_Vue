@@ -45,7 +45,7 @@ export default {
     ...mapMutations(["SET_HOUSE", "CLEAR_HOUSE", "CLEAR_DEAL_LIST"]),
     ...mapActions(["detailHouse", "getStarbuck", "getMetro"]),
     houseDetail(h) {
-      if (this.house != null && this.house.aptCode === h.aptCode) {
+      if (this.isShow&&this.house != null && this.house.aptCode === h.aptCode) {
         this.isShow = false;
         this.CLEAR_DEAL_LIST();
       } else {
@@ -54,6 +54,7 @@ export default {
           lat: this.house.lat,
           lng: this.house.lng,
         };
+        this.CLEAR_DEAL_LIST();
         this.detailHouse(this.house.aptCode);
         this.getStarbuck(param);
         this.getMetro(param);

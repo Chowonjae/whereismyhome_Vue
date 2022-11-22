@@ -69,6 +69,7 @@ export default {
   methods: {
     getApt(dongCode) {
       this.getHouseList(dongCode);
+      this.getSchoolList(dongCode);
     },
     deleteInter(userId, dongCode) {
       console.log(dongCode);
@@ -82,7 +83,7 @@ export default {
       console.log("우클릭방지");
     },
     ...mapMutations(["CLEAR_INTER_LIST"]),
-    ...mapActions(["getInter", "delInter", "getHouseList"]),
+    ...mapActions(["getInter", "delInter", "getHouseList","getSchoolList"]),
   },
 };
 </script>

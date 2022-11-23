@@ -3,129 +3,99 @@
     <header>
       <div class="nav d-flex justify-content-between align-items-center mt-2 mb-2">
         <div class="logo justify-content-start ms-5">
-          <router-link class="text-decoration-none display-5 font-weight-bold" to="/"
-            >FIND HOME</router-link
-          >
+          <router-link class="text-decoration-none display-5 font-weight-bold" to="/">FIND HOME</router-link>
         </div>
-        <div v-if="userInfo" class="nav justify-content-end logined">
-          <div class="logined-info me-3 align-middle">
-            <strong>{{ userInfo.userName }}</strong> ({{ userInfo.userId }})님 안녕하세요.
-          </div>
-          <router-link class="hospital-btn btn me-3" id="btn-hospital" to="/hospital">
-            Hospital
-          </router-link>
+        <div v-if="userInfo != null" class="nav justify-content-end logined">
+          <router-link class="hospital-btn btn me-3" id="btn-hospital" to="/hospital"> Hospital </router-link>
           <router-link class="corona-btn btn me-3" id="btn-corona" to="/corona">Corona</router-link>
-          <router-link class="mvsearch-btn btn me-3" id="btn-homesearch" to="/house">
-            HomeSearch
-          </router-link>
+          <router-link class="mvsearch-btn btn me-3" id="btn-homesearch" to="/house"> HomeSearch </router-link>
           <router-link class="notice-btn btn me-3" id="btn-notice" to="/board">Notice</router-link>
           <router-link class="notice-btn btn me-3" id="btn-qna" to="/qna">QnA</router-link>
           <router-link class="news-btn btn me-3" id="btn-news" to="/news">News</router-link>
-          <router-link class="mypage-btn btn me-3" id="btn-mypage" to="/mypage">MyPage</router-link>
-          <b-button class="logout-btn btn me-3" id="btn-logout" @click.prevent="logout"
-            >Logout</b-button
-          >
-        </div>
-
-        <div v-else class="nav justify-content-end">
-          <div class="login-area me-3">
-            <div class="dropdown login-pop">
-              <router-link id="btn-mv-join" class="join-btn btn me-3" to="/join">Join</router-link>
-              <b-alert show variant="danger" v-if="isLoginError"
-                >아이디 또는 비밀번호를 확인하세요.</b-alert
-              >
-              <b-dropdown id="dropdownMenu" text="Login" right>
-                <b-dropdown-form style="width: 250px">
-                  <b-form-group label="ID" label-for="dropdown-form-id" @submit.stop.prevent>
-                    <b-form-input
-                      id="dropdown-form-id"
-                      size="sm"
-                      placeholder="ID..."
-                      v-model="user.userId"
-                      @keyup.enter="login"
-                    ></b-form-input>
-                  </b-form-group>
-
-                  <b-form-group label="PW" label-for="dropdown-form-password">
-                    <b-form-input
-                      id="dropdown-form-password"
-                      type="password"
-                      size="sm"
-                      placeholder="PW..."
-                      v-model="user.userPwd"
-                      @keyup.enter="login"
-                    ></b-form-input>
-                  </b-form-group>
-
-                  <b-form-checkbox class="mb-3">아이디 저장</b-form-checkbox>
-                  <b-button variant="primary" @click="login">Login</b-button>
-                  <b-button @click="findpwd">비밀번호 찾기</b-button>
-                  <div v-if="msg.length">
-                    <b-alert v-model="msg" variant="danger" dismissible>
-                      {{ msg }}
-                    </b-alert>
-                  </div>
-                </b-dropdown-form>
-              </b-dropdown>
+          <b-navbar-nav variant="light" right v-if="isLogin == true">
+          <b-avatar variant="primary" v-if="isLogin == true"></b-avatar>
+          </b-navbar-nav>
+          <b-dropdown right variant="light">
+            <div class="text-center">
+              <strong>{{ userInfo.userName }}</strong> ({{ userInfo.userId }})님
             </div>
-          </div>
+            <hr>
+            <b-dropdown-item href="/mypage">MyPage</b-dropdown-item>
+            <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
+          </b-dropdown>
         </div>
+
+        <b-navbar-nav v-else class="nav justify-content-end" @click="loginOpen">
+          <b-avatar variant="secondary" ></b-avatar>
+        </b-navbar-nav>
+          <b-modal centered ref="myModal" hide-footer hide-header>
+            <login-page v-on:close="close" v-if="'login' === modalName"></login-page>
+            <join-page v-on:close="close" v-else-if="'join' === modalName"></join-page>
+            <find-pwd-page v-on:close="close" v-else-if="'findpwd' === modalName"></find-pwd-page>
+          </b-modal>
       </div>
     </header>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import JoinPage from "@/components/member/JoinPage.vue";
+import FindPwdPage from "@/components/member/FindPwdPage.vue";
+import LoginPage from "@/components/member/LoginPage.vue";
 
+import { mapState,mapMutations,mapActions } from "vuex";
 const memberStore = "memberStore";
 
 export default {
   data() {
     return {
-      users: [],
-      user: {
-        userId: null,
-        userPwd: null,
-      },
-      msg: "",
-      idck: "",
+      showDrop: false,
     };
+  },
+  components: {
+    JoinPage,
+    FindPwdPage,
+    LoginPage,
   },
   computed: {
     // ...mapState(["error"]),
-    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
-    ...mapGetters(["checkUserInfo"]),
+  
+    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo", "modalName"]),
   },
   methods: {
-    // ...mapActions(["userlogin","userlogout"]),
     ...mapActions(memberStore, ["userConfirm", "getUserInfo", "userLogout"]),
+    ...mapMutations(memberStore, ["SET_MODAL_NAME"]),
+    moveMyPage() {
+      console.log("clicked");
+      this.$router.go("/mypage");
+    },
+    makeToast(msg) {
+      this.$bvToast.toast(msg, {
+        title: "알림",
+        autoHideDelay: 1000,
+        appendToast: true,
+        variant: "warning",
+      });
+    },
     logout() {
       this.userLogout(this.userInfo.userId);
       sessionStorage.removeItem("access-token");
       sessionStorage.removeItem("refresh-token");
       if (this.$route.path != "/") this.$router.push({ name: "home" });
     },
-    async login() {
-      await this.userConfirm(this.user);
-      let token = sessionStorage.getItem("access-token");
-      if (this.isLogin) {
-        await this.getUserInfo(token);
-        console.log(this.userInfo);
-        if (this.$route.path != "/") this.$router.push({ name: "home" });
-      }
-    },
-    // getUserList() {
-    //   let userList = JSON.parse(localStorage.getItem("userList"));
 
-    //   if (userList) {
-    //     this.users = userList;
-    //   }
-    // },
-    findpwd() {
-      this.$router.push("/user/findpwd");
+    loginOpen(){
+      this.SET_MODAL_NAME("login");
+      this.$refs["myModal"].show();
+    },
+    close() {
+      this.$refs["myModal"].hide();
+    },
+    changeModal(name) {
+      this.SET_MODAL_NAME(name);
     },
   },
+
 };
 </script>
 

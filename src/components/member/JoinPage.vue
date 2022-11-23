@@ -2,63 +2,44 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8 col-md-10 col-sm-12">
-        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-          <mark class="orange">회원가입</mark>
-        </h2>
-      </div>
-      <div class="col-lg-8 col-md-10 col-sm-12">
-        <form id="form-join" method="POST" action="">
+        <b-form id="form-join">
           <div class="mb-3">
             <label for="userid" class="form-label">아이디</label>
-            <b-button size="sm" pill variant="outline-primary" class="text-right" @click="idcheck">중복확인</b-button>            <input
-              type="text"
-              class="form-control"
-              id="userid"
-              name="userid"
-              v-model="userid"
-            />
-            <label for="userid" id="info" class="form-label" v-if="idCheck != null" :class="{'text-success':idCheck, 'text-danger':!idCheck}">{{checkMsg}}</label>          </div>
+            <b-button size="sm" pill variant="outline-primary" class="text-right" @click="idcheck">중복확인</b-button>
+            <input type="text" class="form-control" id="userid" name="userid" v-model="userid" />
+            <label
+              for="userid"
+              id="info"
+              class="form-label"
+              v-if="idCheck != null"
+              :class="{ 'text-success': idCheck, 'text-danger': !idCheck }"
+              >{{ checkMsg }}</label
+            >
+          </div>
           <div class="mb-3">
             <label for="username" class="form-label">이름</label>
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              name="username"
-              v-model="info.userName"
-            />
+            <input type="text" class="form-control" id="username" name="username" v-model="info.userName" />
           </div>
           <div class="mb-3">
             <label for="userpwd" class="form-label">비밀번호</label>
-            <input
-              type="password"
-              class="form-control"
-              id="userpwd"
-              name="userpwd"
-              v-model="userpwd"
-            />
+            <input type="password" class="form-control" id="userpwd" name="userpwd" v-model="userpwd" />
           </div>
           <div class="mb-3">
             <label for="reuserpwd" class="form-label">비밀번호 확인</label>
-            <input
-              type="password"
-              class="form-control"
-              id="userpwd"
-              name="userpwd"
-              v-model="reuserPwd"
-            />
+            <input type="password" class="form-control" id="userpwd" name="userpwd" v-model="reuserPwd" />
           </div>
-          <label for="userid" id="info" class="form-label" v-if="pwdCheck != null"  :class="{'text-success':pwdCheck, 'text-danger':!pwdCheck}">{{pwdMsg}}</label>
+          <label
+            for="userid"
+            id="info"
+            class="form-label"
+            v-if="pwdCheck != null"
+            :class="{ 'text-success': pwdCheck, 'text-danger': !pwdCheck }"
+            >{{ pwdMsg }}</label
+          >
           <div class="mb-3">
             <label for="emailid" class="form-label">이메일</label>
             <div class="input-group">
-              <input
-                type="text"
-                class="form-control"
-                id="emailid"
-                name="emailid"
-                v-model="info.emailId"                
-              />
+              <input type="text" class="form-control" id="emailid" name="emailid" v-model="info.emailId" />
               <span class="input-group-text">@</span>
               <b-select
                 :options="domain"
@@ -69,11 +50,13 @@
               />
             </div>
           </div>
+
           <!-- 회원가입으로 변경 111 -->
-          <div class="col-auto text-center">
+          <b-container class="col-auto text-center">
             <b-button pill variant="outline-primary" @click="regist"> 회원가입 </b-button>
-          </div>
-        </form>
+            <b-button pill variant="outline-danger" @click="close"> 취소 </b-button>
+          </b-container>
+        </b-form>
       </div>
     </div>
   </div>
@@ -83,7 +66,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 const memberStore = "memberStore";
 export default {
-  created(){
+  created() {
     this.CLEAR_ID_CHECK();
   },
   computed: {
@@ -119,56 +102,73 @@ export default {
     ...mapActions(memberStore, ["searchUserId", "registUser"]),
     ...mapMutations(memberStore, ["CLEAR_ID_CHECK", "CLEAR_REGIST"]),
     idcheck() {
-      this.btnIdChecked = true; 
+      this.btnIdChecked = true;
       this.searchUserId(this.userid);
     },
     regist() {
+      let msg= ""
+      let err = true;
       if (this.userid === null || this.userid === "") {
-        alert("아이디를 입력해 주세요!");
-        return;
+        msg="아이디를 입력해 주세요!";
+        err = false;
       }
-      if (this.isGood === null || this.isGood === false) {
-        alert("아이디 중복확인을 해주세요!");
-        return;
+      else if (err && (this.isGood === null || this.isGood === false)) {
+        msg="아이디 중복확인을 해주세요!"
+        err = false;
       }
-      if (this.info.userName === "") {
+      else if (err && this.info.userName === "") {
         alert("이름을 입력해 주세요!");
-        return;
+        err = false;
       }
-      if (this.pwdCheck === null || this.pwdCheck === false) {
-        alert("비밀번호를 확인해 주세요!");
-        return;
+      else if (err && (this.pwdCheck === null || this.pwdCheck === false)) {
+        msg="비밀번호를 확인해 주세요!";
+        err = false;
       }
-      if (this.info.emailId === "" || this.info.emailDomain === null) {
+      else if (err && (this.info.emailId === "" || this.info.emailDomain === null)) {
         this.checkEmail = false;
-        alert("이메일을 확인해 주세요.");
-        return;
+        msg="이메일을 확인해 주세요.";
+        err = false;
       } else {
         this.checkEmail = true;
       }
-      if (this.isGood && this.pwdCheck && this.checkEmail) {
+      if(!err){
+        this.makeToast(msg);
+      }
+      else if (this.isGood && this.pwdCheck && this.checkEmail) {
         this.info.userId = this.userid;
         this.info.userPwd = this.userpwd;
         this.registUser(this.info);
+        // this.$emit("joinModal");
       }
+    },
+    close() {
+      this.$emit("close");
+    },
+        makeToast(msg) {
+      this.$bvToast.toast(msg, {
+        title: "알림",
+        autoHideDelay: 1000,
+        appendToast: true,
+        variant: "danger",
+      });
     },
   },
   watch: {
-    idCheck : function () {
+    idCheck: function () {
       if (this.idCheck) {
-        this.checkMsg = "사용 가능한 아이디입니다."
+        this.checkMsg = "사용 가능한 아이디입니다.";
         this.isGood = this.idCheck;
       } else {
-        this.checkMsg = "해당 아이디는 이미 사용중입니다."
+        this.checkMsg = "해당 아이디는 이미 사용중입니다.";
         this.isGood = this.idCheck;
-      }      
+      }
     },
     userid: {
       handler: function (newVal, oldVal) {
         if (newVal != oldVal) {
           this.isGood = null;
         }
-      }
+      },
     },
     reuserPwd: {
       handler: function (newVal) {
@@ -179,7 +179,7 @@ export default {
           this.pwdCheck = false;
           this.pwdMsg = "비밀번호가 맞지 않습니다.";
         }
-      }
+      },
     },
     userpwd: {
       handler: function (newVal, oldVal) {
@@ -191,21 +191,22 @@ export default {
           this.reuserPwd = null;
           this.pwdMsg = "비밀번호가 맞지 않습니다.";
         }
-      }
+      },
     },
     registCheck: function () {
       if (this.registCheck) {
         alert("회원가입이 되었습니다.");
         this.CLEAR_REGIST();
-        this.$router.push({ name: "home" });
+        // if (this.$route.path != "/") this.$router.push({ name: "home" });
+        this.$router.go();
       }
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
-  #info{
-    font-size: x-small;
-  }
+#info {
+  font-size: x-small;
+}
 </style>

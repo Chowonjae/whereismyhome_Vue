@@ -14,6 +14,7 @@ import {
 const memberStore = {
   namespaced: true,
   state: {
+    modalName: "",
     isLogin: false,
     isLoginError: false,
     userInfo: null,
@@ -24,11 +25,20 @@ const memberStore = {
     isReload: null,
   },
   mutations: {
+    SET_MODAL_NAME(state, name) {
+      state.modalName = name;
+    },
     SET_IS_LOGIN: (state, isLogin) => {
       state.isLogin = isLogin;
     },
     SET_IS_LOGIN_ERROR: (state, isLoginError) => {
       state.isLoginError = isLoginError;
+    },
+    CLEAR_IS_LOGIN: (state) => {
+      state.isLogin = false;
+    },
+    CLEAR_IS_LOGIN_ERROR: (state) => {
+      state.isLoginError = false;
     },
     SET_IS_VALID_TOKEN: (state, isValidToken) => {
       state.isValidToken = isValidToken;
@@ -71,7 +81,7 @@ const memberStore = {
             sessionStorage.setItem("access-token", accessToken);
             sessionStorage.setItem("refresh-token", refreshToken);
           } else {
-            commit("SET_IS_LOGIN", false);
+            commit("CLEAR_IS_LOGIN");
             commit("SET_IS_LOGIN_ERROR", true);
             commit("SET_IS_VALID_TOKEN", false);
           }
@@ -127,7 +137,7 @@ const memberStore = {
                   console.log("리프레시 토큰 제거 실패");
                 }
                 alert("RefreshToken 기간 만료!!! 다시 로그인해 주세요.");
-                commit("SET_IS_LOGIN", false);
+                commit("CLEAR_IS_LOGIN");
                 commit("SET_USER_INFO", null);
                 commit("SET_IS_VALID_TOKEN", false);
                 router.push({ name: "login" });

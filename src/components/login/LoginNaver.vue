@@ -1,6 +1,6 @@
 <template>
   <img
-    class="kakao_btn"
+    class="naver_btn"
     src="@/assets/login/naver_logo.png"
     href="https://nid.naver.com/oauth2.0/authorize?response_type=code"
     style="width: 50px; cursor: pointer"
@@ -9,14 +9,14 @@
 
 <script>
 export default {
-  name: "LoginKakao",
+  name: "LoginNaver",
   data() {
     return {
       CLIENT_ID: "xo1knK4MoTJOuWkbnS5C",
     };
   },
   methods: {
-    loginWithKakao() {
+    loginWithNaver() {
       const params = {
         redirectUri: "http://localhost:8080",
       };

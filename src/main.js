@@ -13,6 +13,7 @@ Vue.use(swal);
 Vue.use(VueCookies);
 
 Vue.$cookies.config("1d");
+window.Kakao.init(process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY);
 
 new Vue({
   router,

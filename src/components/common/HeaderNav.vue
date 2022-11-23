@@ -3,27 +3,46 @@
     <header style="">
       <div class="nav d-flex justify-content-between align-items-center mt-2 mb-2">
         <div class="logo justify-content-start ms-5">
-          <router-link class="text-decoration-none display-5 font-weight-bold ml-5" to="/">FIND HOME</router-link>
+          <router-link class="text-decoration-none display-5 font-weight-bold ml-5" to="/"
+            >FIND HOME</router-link
+          >
         </div>
         <b-nav v-if="userInfo != null" class="nav justify-content-end logined">
-          <router-link class="hospital-btn btn me-3" id="btn-hospital" to="/hospital"> Hospital </router-link>
+          <router-link class="hospital-btn btn me-3" id="btn-hospital" to="/hospital">
+            Hospital
+          </router-link>
           <router-link class="corona-btn btn me-3" id="btn-corona" to="/corona">Corona</router-link>
-          <router-link class="mvsearch-btn btn me-3" id="btn-homesearch" to="/house"> HomeSearch </router-link>
+          <router-link class="mvsearch-btn btn me-3" id="btn-homesearch" to="/house">
+            HomeSearch
+          </router-link>
           <router-link class="notice-btn btn me-3" id="btn-notice" to="/board">Notice</router-link>
           <router-link class="notice-btn btn me-3" id="btn-qna" to="/qna">QnA</router-link>
           <router-link class="news-btn btn me-3" id="btn-news" to="/news">News</router-link>
         </b-nav>
-          <b-dropdown v-if="userInfo != null"  right variant="link" no-caret toggle-class="text-decoration-none">
-            <template #button-content>
-              <b-avatar class="mr-4" variant="primary" v-if="isLogin == true"></b-avatar>
-            </template>
-            <div class="text-center">
-              <strong>{{ userInfo.userName }}</strong> ({{ userInfo.userId }})님
-            </div>
-            <hr />
-            <b-dropdown-item href="/mypage">MyPage</b-dropdown-item>
-            <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
-          </b-dropdown>
+        <b-dropdown
+          v-if="userInfo != null"
+          right
+          variant="link"
+          no-caret
+          toggle-class="text-decoration-none"
+        >
+          <template #button-content>
+            <b-avatar class="mr-4" v-if="userInfo.type == 'kakao'" :src="kakaoImg"></b-avatar>
+            <b-avatar
+              class="mr-4"
+              v-else-if="userInfo.type == 'google'"
+              :src="googleImg"
+            ></b-avatar>
+            <b-avatar class="mr-4" v-else-if="userInfo.type == 'naver'" :src="naverImg"></b-avatar>
+            <b-avatar v-else class="mr-4" variant="primary"></b-avatar>
+          </template>
+          <b-dropdown-item class="text-center">
+            <strong>{{ userInfo.userName }}</strong> ({{ userInfo.userId }})님
+          </b-dropdown-item>
+          <hr />
+          <b-dropdown-item href="/mypage">MyPage</b-dropdown-item>
+          <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
+        </b-dropdown>
 
         <b-navbar-nav v-else class="nav justify-content-end mr-4" @click="loginOpen">
           <b-avatar variant="secondary"></b-avatar>
@@ -49,6 +68,9 @@ const memberStore = "memberStore";
 export default {
   data() {
     return {
+      kakaoImg: require("@/assets/login/kakaotalk_logo.png"),
+      googleImg: require("@/assets/login/google_logo.png"),
+      naverImg: require("@/assets/login/naver_logo.png"),
       showDrop: false,
     };
   },
@@ -63,7 +85,7 @@ export default {
     ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo", "modalName"]),
   },
   methods: {
-    ...mapActions(memberStore, ["userConfirm", "getUserInfo", "userLogout"]),
+    ...mapActions(memberStore, ["userConfirm", "getUserInfo", "userLogout", "socialLogout"]),
     ...mapMutations(memberStore, ["SET_MODAL_NAME"]),
     moveMyPage() {
       console.log("clicked");
@@ -78,9 +100,22 @@ export default {
       });
     },
     logout() {
-      this.userLogout(this.userInfo.userId);
-      sessionStorage.removeItem("access-token");
-      sessionStorage.removeItem("refresh-token");
+      if (this.userInfo.type == "default") {
+        this.userLogout(this.userInfo.userId);
+        sessionStorage.removeItem("access-token");
+        sessionStorage.removeItem("refresh-token");
+      } else {
+        if (this.userInfo.type == "kakao") {
+          window.Kakao.Auth.logout((res) => {
+            if (!res) console.log("kakao logout");
+          });
+        } else if (this.userInfo.type == "google") {
+          console.log("google logout");
+        } else {
+          console.log("naver logout");
+        }
+        this.socialLogout();
+      }
       if (this.$route.path != "/") this.$router.push({ name: "home" });
     },
 

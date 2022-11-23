@@ -5,6 +5,9 @@ const api = localServer();
 async function login(user, success, fail) {
   await api.post(`/rmember/login`, JSON.stringify(user)).then(success).catch(fail);
 }
+async function social_login(user, success, fail) {
+  await api.post(`/rmember/kakao`, JSON.stringify(user)).then(success).catch(fail);
+}
 // 회원 인증
 async function findById(userid, success, fail) {
   api.defaults.headers["access-token"] = sessionStorage.getItem("access-token");
@@ -40,4 +43,4 @@ function userModify(user, success, fail) {
   api.put(`/rmember/mypage`, user).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout, registMember, findPassword, searchId, deleteMember, userModify };
+export { login,social_login, findById, tokenRegeneration, logout, registMember, findPassword, searchId, deleteMember, userModify };

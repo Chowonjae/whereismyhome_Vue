@@ -47,8 +47,7 @@ export default {
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src =
-        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0&libraries=services";
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY}&libraries=services`;
       document.head.appendChild(script);
     }
   },
@@ -113,7 +112,7 @@ export default {
   },
   watch: {
     houses: function () {
-      if(this.houses.length==0){
+      if (this.houses.length == 0) {
         this.$root.$bvToast.toast("검색 지역에 아파트가 없습니다.", {
           title: "알림",
           variant: "info",

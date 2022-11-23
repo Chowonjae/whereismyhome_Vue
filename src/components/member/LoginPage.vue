@@ -3,30 +3,36 @@
     <div class="mb-3">
       <label for="userid" class="form-label">아이디</label>
       <!-- <b-form-group label="ID" label-for="dropdown-form-id" @submit.stop.prevent> -->
-        <b-form-input
-          id="dropdown-form-id"
-          size="sm"
-          placeholder="ID..."
-          v-model="user.userId"
-          @keyup.enter="login"
-        ></b-form-input>
+      <b-form-input
+        id="dropdown-form-id"
+        size="sm"
+        placeholder="ID..."
+        v-model="user.userId"
+        @keyup.enter="login"
+      ></b-form-input>
       <!-- </b-form-group> -->
     </div>
 
     <!-- <b-form-group label="PW" label-for="dropdown-form-password"> -->
-      <div class="mb-3">
-        <label for="userpwd" class="form-label">비밀번호</label>
-        <b-form-input
-          id="dropdown-form-password"
-          type="password"
-          size="sm"
-          placeholder="PW..."
-          v-model="user.userPwd"
-          @keyup.enter="login"
-        ></b-form-input>
-      </div>
+    <div class="mb-3">
+      <label for="userpwd" class="form-label">비밀번호</label>
+      <b-form-input
+        id="dropdown-form-password"
+        type="password"
+        size="sm"
+        placeholder="PW..."
+        v-model="user.userPwd"
+        @keyup.enter="login"
+      ></b-form-input>
+    </div>
     <!-- </b-form-group> -->
-    <b-form-checkbox class="mb-3 idck" v-model="idck" value="remember" unchecked-value="not_remember">아이디 저장</b-form-checkbox>
+    <b-form-checkbox
+      class="mb-3 idck"
+      v-model="idck"
+      value="remember"
+      unchecked-value="not_remember"
+      >아이디 저장</b-form-checkbox
+    >
     <div class="mb-3">
       <b-button class="loginbtn" size="sm" variant="primary" @click="login">로그인</b-button>
     </div>
@@ -37,14 +43,29 @@
     <div class="mb-3">
       <label class="findpw-label" @click="changeModal('findpwd')">비밀번호 찾기</label>
     </div>
+    <hr />
+    <b-container>
+      <login-kakao :close="close"></login-kakao>
+      <login-naver :close="close"></login-naver>
+      <login-google :close="close"></login-google>
+    </b-container>
   </b-form>
 </template>
 
 <script>
-import { mapMutations,mapState,mapActions } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
+import LoginKakao from "@/components/login/LoginKakao.vue";
+import LoginNaver from "@/components/login/LoginNaver.vue";
+import LoginGoogle from "@/components/login/LoginGoogle.vue";
+
 const memberStore = "memberStore";
 export default {
   name: "LoginPage",
+  components: {
+    LoginKakao,
+    LoginNaver,
+    LoginGoogle,
+  },
 
   data() {
     return {
@@ -54,7 +75,7 @@ export default {
       },
       msg: "",
       idck: "not_remember",
-    }
+    };
   },
   created() {
     if (this.$cookies.get("useridcookie")) {
@@ -87,7 +108,7 @@ export default {
     changeModal(name) {
       this.SET_MODAL_NAME(name);
     },
-    loginOpen(){
+    loginOpen() {
       this.SET_MODAL_NAME("login");
       this.$refs["myModal"].show();
     },
@@ -110,7 +131,7 @@ export default {
       }
     },
     close() {
-      this.$refs["myModal"].hide();
+      this.$emit("close");
     },
   },
   watch: {
@@ -120,31 +141,31 @@ export default {
         this.SET_IS_LOGIN_ERROR(false);
       }
     },
-    userInfo:function(){
-      if(this.userInfo != null){
+    userInfo: function () {
+      if (this.userInfo != null) {
         this.$emit("close");
       }
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
-  .idck{
-    float: left;
-    left: 0;
-    margin-right: 55%;
-  }
-  .loginbtn{
-    right: 0;
-    width: 21%;
-  }
-  .join-label{
-    float: left;
-    left: 0;
-    padding-right: 295px;
-  }
-  .findpw-label{
-    right: 0;
-  }
+.idck {
+  float: left;
+  left: 0;
+  margin-right: 55%;
+}
+.loginbtn {
+  right: 0;
+  width: 21%;
+}
+.join-label {
+  float: left;
+  left: 0;
+  padding-right: 295px;
+}
+.findpw-label {
+  right: 0;
+}
 </style>

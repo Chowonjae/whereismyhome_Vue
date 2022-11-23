@@ -2,6 +2,7 @@ import jwtDecode from "jwt-decode";
 import router from "@/router";
 import {
   login,
+  social_login,
   findById,
   tokenRegeneration,
   logout,
@@ -99,15 +100,31 @@ const memberStore = {
         }
       );
     },
+    async socialLogin({ commit }, req_body) {
+      await social_login(
+        req_body,
+        ({ data }) => {
+            // console.log("login success token created!!!! >> ", accessToken, refreshToken);
+            commit("SET_IS_LOGIN", true);
+            commit("SET_IS_LOGIN_ERROR", false);
+          commit("SET_IS_VALID_TOKEN", true);
+          commit("SET_USER_INFO", data);
+        },
+        (error) => {
+          console.log(error);
+          commit("CLEAR_IS_LOGIN");
+          commit("SET_IS_LOGIN_ERROR", true);
+          commit("SET_IS_VALID_TOKEN", false);
+        }
+      );
+    },
     async getUserInfo({ commit, dispatch }, token) {
       let decodeToken = jwtDecode(token);
       await findById(
         decodeToken.userid,
         ({ data }) => {
           if (data.message === "success") {
-            console.log(data);
             commit("SET_USER_INFO", data.userInfo);
-            console.log(data.userInfo);
             // console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
@@ -176,6 +193,11 @@ const memberStore = {
           console.log(error);
         }
       );
+    },
+    socialLogout({ commit }) {
+      commit("SET_IS_LOGIN", false);
+      commit("SET_USER_INFO", null);
+      commit("SET_IS_VALID_TOKEN", false);
     },
     async searchUserId({ commit }, userid) {
       searchId(

@@ -107,7 +107,13 @@
             />
           </div>
           <div class="col-auto text-center" v-if="modify == false">
-            <b-button pill variant="outline-warning" class="me-2" @click="modify = !modify">
+            <b-button
+              pill
+              variant="outline-warning"
+              v-if="userInfo.type == 'default'"
+              class="me-2"
+              @click="modify = !modify"
+            >
               수정
             </b-button>
             <b-button pill variant="outline-danger" @click="deleteInfo"> 회원탈퇴 </b-button>
@@ -177,22 +183,24 @@ export default {
           title: "정말 수정 하시겠습니까?",
           icon: "warning",
           buttons: true,
-        }).then(value => {
-          if (value) {
-            this.info.userId = this.userInfo.userId;
-            this.modifyMember(this.info);
-            this.userLogout(this.info.userId);
-            // sessionStorage.removeItem("access-token");
-            // sessionStorage.removeItem("refresh-token");
-            // sessionStorage.removeItem("vuex");
-            this.$swal("수정완료!", "수정에 성공했습니다.", "success");
-            this.$router.push({ path: "/" });
-            // window.location.reload();
-          }
-        }).catch(error => {
-          this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: 'error' });
-          console.log(error);
         })
+          .then((value) => {
+            if (value) {
+              this.info.userId = this.userInfo.userId;
+              this.modifyMember(this.info);
+              this.userLogout(this.info.userId);
+              // sessionStorage.removeItem("access-token");
+              // sessionStorage.removeItem("refresh-token");
+              // sessionStorage.removeItem("vuex");
+              this.$swal("수정완료!", "수정에 성공했습니다.", "success");
+              this.$router.push({ path: "/" });
+              // window.location.reload();
+            }
+          })
+          .catch((error) => {
+            this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: "error" });
+            console.log(error);
+          });
         // if (confirm("정말 수정 하시겠습니까?")) {
         //   this.info.userId = this.userInfo.userId;
         //   this.modifyMember(this.info);
@@ -206,24 +214,39 @@ export default {
     deleteInfo() {
       this.$swal({
         title: "정말 탈퇴하시겠습니까?",
-        icon: 'error',
+        icon: "error",
         dangerMode: true,
         buttons: true,
-      }).then(value => {
-        if (value) {
-          this.deleteUser(this.userInfo.userId);
-          sessionStorage.removeItem("access-token");
-          sessionStorage.removeItem("refresh-token");
-          sessionStorage.removeItem("vuex");
-          this.$swal("삭제완료!", "삭제에 성공했습니다.", "success");
-          this.$router.push({ path: "/" });
-          // window.location.reload();
-        }
-      }).catch(error => {
-        this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: 'error' });
-        console.log(error);
       })
-    }
+        .then((value) => {
+          if (value) {
+            if (this.userInfo.type == "kakao") {
+              // window.Kakao.Auth.logout();
+              window.Kakao.API.request({
+                url: "/v1/user/unlink",
+                success: function (response) {
+                  console.log(response);
+                },
+                fail: function (error) {
+                  alert("탈퇴처리가 미완료되었습니다. \n관리자에게 문의하시기 바랍니다.");
+                  console.log(error);
+                },
+              });
+            }
+            this.deleteUser(this.userInfo.userId);
+            sessionStorage.removeItem("access-token");
+            sessionStorage.removeItem("refresh-token");
+            sessionStorage.removeItem("vuex");
+            this.$swal("삭제완료!", "삭제에 성공했습니다.", "success");
+            this.$router.push({ path: "/" });
+            // window.location.reload();
+          }
+        })
+        .catch((error) => {
+          this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: "error" });
+          console.log(error);
+        });
+    },
   },
 };
 </script>

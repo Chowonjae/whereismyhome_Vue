@@ -26,8 +26,8 @@
       style="height: 250px"
     />
     <b-button-group size="sm" class="btn-block">
-    <b-button variant="outline-info" @click="rangeDown">&#60;</b-button>
-    <b-button variant="outline-info" @click="rangeUp">&#62;</b-button>
+      <b-button variant="outline-info" @click="rangeDown">&#60;</b-button>
+      <b-button variant="outline-info" @click="rangeUp">&#62;</b-button>
     </b-button-group>
   </b-container>
 </template>
@@ -56,7 +56,6 @@ export default {
       coffeeImg: require("@/assets/coffee.png"),
       metroImg: require("@/assets/metro.png"),
       chartOptions: {
-
         layout: {
           padding: {
             right: 18,
@@ -81,8 +80,7 @@ export default {
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src =
-        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0&libraries=services";
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY}&libraries=services`;
       document.head.appendChild(script);
     }
   },
@@ -133,35 +131,32 @@ export default {
         });
         this.chartOptions.scales.x.min = 0;
         this.chartOptions.scales.x.max = 7;
-
       }
     },
   },
   methods: {
     ...mapMutations(["CLEAR_DEAL_LIST"]),
-    rangeUp(){
-      this.chartOptions.scales.x.min+=8;
-      this.chartOptions.scales.x.max+=8;
-      if(this.chartOptions.scales.x.max>=this.deals.labels.length){
-        this.chartOptions.scales.x.min = this.deals.labels.length-8;
-        this.chartOptions.scales.x.max = this.deals.labels.length-1;
+    rangeUp() {
+      this.chartOptions.scales.x.min += 8;
+      this.chartOptions.scales.x.max += 8;
+      if (this.chartOptions.scales.x.max >= this.deals.labels.length) {
+        this.chartOptions.scales.x.min = this.deals.labels.length - 8;
+        this.chartOptions.scales.x.max = this.deals.labels.length - 1;
       }
     },
-    rangeDown(){
-      this.chartOptions.scales.x.min-=8;
-      this.chartOptions.scales.x.max-=8;
-      if(this.chartOptions.scales.x.min<0){
+    rangeDown() {
+      this.chartOptions.scales.x.min -= 8;
+      this.chartOptions.scales.x.max -= 8;
+      if (this.chartOptions.scales.x.min < 0) {
         this.chartOptions.scales.x.min = 0;
-        this.chartOptions.scales.x.max = 7
+        this.chartOptions.scales.x.max = 7;
       }
-
-    }
+    },
   },
   computed: {
     ...mapState(["deals", "starbuck", "metro", "house"]),
   },
 };
-
 </script>
 
 <style></style>

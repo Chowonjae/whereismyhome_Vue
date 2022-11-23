@@ -22,8 +22,7 @@ export default {
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src =
-        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0&libraries=services";
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY}&libraries=services`;
       document.head.appendChild(script);
     }
   },
@@ -52,19 +51,18 @@ export default {
         var geocoder = new kakao.maps.services.Geocoder();
         this.hospitals.forEach((hospital) => {
           var coords;
-          geocoder.addressSearch(hospital.address, (result, status) =>{
+          geocoder.addressSearch(hospital.address, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
               coords = new kakao.maps.LatLng(result[0].y, result[0].x);
               console.log(coords);
-              const marker = 
-                new kakao.maps.Marker({
-                  map: this.map,
-                  position: coords,
-                  image: markerImage,
-                });
-              this.markers.push(marker);              
-                  bounds.extend(coords);
-                this.map.setBounds(bounds);
+              const marker = new kakao.maps.Marker({
+                map: this.map,
+                position: coords,
+                image: markerImage,
+              });
+              this.markers.push(marker);
+              bounds.extend(coords);
+              this.map.setBounds(bounds);
             }
           });
         });

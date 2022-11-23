@@ -182,9 +182,12 @@ export default {
             this.info.userId = this.userInfo.userId;
             this.modifyMember(this.info);
             this.userLogout(this.info.userId);
-            sessionStorage.removeItem("vuex");
+            // sessionStorage.removeItem("access-token");
+            // sessionStorage.removeItem("refresh-token");
+            // sessionStorage.removeItem("vuex");
+            this.$swal("수정완료!", "수정에 성공했습니다.", "success");
             this.$router.push({ path: "/" });
-            window.location.reload();
+            // window.location.reload();
           }
         }).catch(error => {
           this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: 'error' });
@@ -203,7 +206,7 @@ export default {
     deleteInfo() {
       this.$swal({
         title: "정말 탈퇴하시겠습니까?",
-        icon: 'warning',
+        icon: 'error',
         dangerMode: true,
         buttons: true,
       }).then(value => {
@@ -212,22 +215,14 @@ export default {
           sessionStorage.removeItem("access-token");
           sessionStorage.removeItem("refresh-token");
           sessionStorage.removeItem("vuex");
+          this.$swal("삭제완료!", "삭제에 성공했습니다.", "success");
           this.$router.push({ path: "/" });
-          window.location.reload();
+          // window.location.reload();
         }
       }).catch(error => {
         this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: 'error' });
         console.log(error);
       })
-      // console.log(this.info.userId);
-      // if (confirm("정말루 ? ..ㅜ")) {
-      //   this.deleteUser(this.userInfo.userId);
-      //   sessionStorage.removeItem("access-token");
-      //   sessionStorage.removeItem("refresh-token");
-      //   sessionStorage.removeItem("vuex");
-      //   this.$router.push({ path: "/" });
-      //   window.location.reload();
-      // }
     }
   },
 };

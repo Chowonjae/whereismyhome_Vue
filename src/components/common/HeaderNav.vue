@@ -1,38 +1,38 @@
 <template>
   <div id="app">
-    <header>
+    <header style="">
       <div class="nav d-flex justify-content-between align-items-center mt-2 mb-2">
         <div class="logo justify-content-start ms-5">
-          <router-link class="text-decoration-none display-5 font-weight-bold" to="/">FIND HOME</router-link>
+          <router-link class="text-decoration-none display-5 font-weight-bold ml-5" to="/">FIND HOME</router-link>
         </div>
-        <div v-if="userInfo != null" class="nav justify-content-end logined">
+        <b-nav v-if="userInfo != null" class="nav justify-content-end logined">
           <router-link class="hospital-btn btn me-3" id="btn-hospital" to="/hospital"> Hospital </router-link>
           <router-link class="corona-btn btn me-3" id="btn-corona" to="/corona">Corona</router-link>
           <router-link class="mvsearch-btn btn me-3" id="btn-homesearch" to="/house"> HomeSearch </router-link>
           <router-link class="notice-btn btn me-3" id="btn-notice" to="/board">Notice</router-link>
           <router-link class="notice-btn btn me-3" id="btn-qna" to="/qna">QnA</router-link>
           <router-link class="news-btn btn me-3" id="btn-news" to="/news">News</router-link>
-          <b-navbar-nav variant="light" right v-if="isLogin == true">
-          <b-avatar variant="primary" v-if="isLogin == true"></b-avatar>
-          </b-navbar-nav>
-          <b-dropdown right variant="light">
+        </b-nav>
+          <b-dropdown v-if="userInfo != null"  right variant="link" no-caret toggle-class="text-decoration-none">
+            <template #button-content>
+              <b-avatar class="mr-4" variant="primary" v-if="isLogin == true"></b-avatar>
+            </template>
             <div class="text-center">
               <strong>{{ userInfo.userName }}</strong> ({{ userInfo.userId }})님
             </div>
-            <hr>
+            <hr />
             <b-dropdown-item href="/mypage">MyPage</b-dropdown-item>
             <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
           </b-dropdown>
-        </div>
 
-        <b-navbar-nav v-else class="nav justify-content-end" @click="loginOpen">
-          <b-avatar variant="secondary" ></b-avatar>
+        <b-navbar-nav v-else class="nav justify-content-end mr-4" @click="loginOpen">
+          <b-avatar variant="secondary"></b-avatar>
         </b-navbar-nav>
-          <b-modal centered ref="myModal" hide-footer hide-header>
-            <login-page v-on:close="close" v-if="'login' === modalName"></login-page>
-            <join-page v-on:close="close" v-else-if="'join' === modalName"></join-page>
-            <find-pwd-page v-on:close="close" v-else-if="'findpwd' === modalName"></find-pwd-page>
-          </b-modal>
+        <b-modal centered ref="myModal" hide-footer hide-header>
+          <login-page v-on:close="close" v-if="'login' === modalName"></login-page>
+          <join-page v-on:close="close" v-else-if="'join' === modalName"></join-page>
+          <find-pwd-page v-on:close="close" v-else-if="'findpwd' === modalName"></find-pwd-page>
+        </b-modal>
       </div>
     </header>
   </div>
@@ -43,7 +43,7 @@ import JoinPage from "@/components/member/JoinPage.vue";
 import FindPwdPage from "@/components/member/FindPwdPage.vue";
 import LoginPage from "@/components/member/LoginPage.vue";
 
-import { mapState,mapMutations,mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 const memberStore = "memberStore";
 
 export default {
@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     // ...mapState(["error"]),
-  
+
     ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo", "modalName"]),
   },
   methods: {
@@ -84,18 +84,18 @@ export default {
       if (this.$route.path != "/") this.$router.push({ name: "home" });
     },
 
-    loginOpen(){
+    loginOpen() {
       this.SET_MODAL_NAME("login");
       this.$refs["myModal"].show();
     },
     close() {
+      this.SET_MODAL_NAME("");
       this.$refs["myModal"].hide();
     },
     changeModal(name) {
       this.SET_MODAL_NAME(name);
     },
   },
-
 };
 </script>
 

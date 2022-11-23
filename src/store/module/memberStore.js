@@ -9,6 +9,7 @@ import {
   registMember,
   deleteMember,
   userModify,
+  findPassword,
 } from "@/api/member";
 
 const memberStore = {
@@ -23,6 +24,7 @@ const memberStore = {
     registCheck: null,
     modifyCheck: null,
     isReload: null,
+    isPostMail: null,
   },
   mutations: {
     SET_MODAL_NAME(state, name) {
@@ -53,17 +55,23 @@ const memberStore = {
     CLEAR_ID_CHECK: (state) => {
       state.idCheck = null;
     },
-    SET_REGIST: (state) => {
-      state.registCheck = state;
+    SET_REGIST: (state, is) => {
+      state.registCheck = is;
     },
     CLEAR_REGIST: (state) => {
       state.registCheck = null;
     },
-    MODIFY_USER: (state) => {
-      state.modifyCheck = state;
+    MODIFY_USER: (state, is) => {
+      state.modifyCheck = is;
     },
     IS_RELOAD: (state) => {
       state.isReload = true;
+    },
+    SET_POST_MAIL: (state, isPostMail) => {
+      state.isPostMail = isPostMail;
+    },
+    CLEAR_POST_MAIL: (state) => {
+      state.isPostMail = null;
     },
   },
   actions: {
@@ -227,6 +235,21 @@ const memberStore = {
             commit("SET_IS_VALID_TOKEN", false);
           } else {
             console.log("삭제 실패");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async findPw({ commit }, user) {
+      findPassword(
+        user,
+        ({ data }) => {
+          if ("success" === data) {
+            commit("SET_POST_MAIL", true);
+          } else {
+            commit("SET_POST_MAIL", false);
           }
         },
         (error) => {

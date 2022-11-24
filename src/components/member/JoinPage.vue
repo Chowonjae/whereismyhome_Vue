@@ -128,20 +128,25 @@ export default {
     ...mapActions(memberStore, ["searchUserId", "registUser"]),
     ...mapMutations(memberStore, ["CLEAR_ID_CHECK", "CLEAR_REGIST"]),
     idcheck() {
+      if (this.userid === null || this.userid === "") {
+        this.makeToast("아이디를 입력해 주세요!", "warning");
+        return;
+      }
       this.btnIdChecked = true;
       this.searchUserId(this.userid);
     },
     regist() {
       let msg = "";
       let err = true;
+
       if (this.userid === null || this.userid === "") {
         msg = "아이디를 입력해 주세요!";
         err = false;
       } else if (err && (this.isGood === null || this.isGood === false)) {
         msg = "아이디 중복확인을 해주세요!";
         err = false;
-      } else if (err && this.info.userName === "") {
-        alert("이름을 입력해 주세요!");
+      } else if (err && (this.info.userName === "" || this.info.userName === null)) {
+        msg = "이름을 입력해 주세요!";
         err = false;
       } else if (err && (this.pwdCheck === null || this.pwdCheck === false)) {
         msg = "비밀번호를 확인해 주세요!";
@@ -154,7 +159,7 @@ export default {
         this.checkEmail = true;
       }
       if (!err) {
-        this.makeToast(msg);
+        this.makeToast(msg, "warning");
       } else if (this.isGood && this.pwdCheck && this.checkEmail) {
         this.info.userId = this.userid;
         this.info.userPwd = this.userpwd;
@@ -165,12 +170,12 @@ export default {
     close() {
       this.$emit("close");
     },
-    makeToast(msg) {
+    makeToast(msg, st) {
       this.$bvToast.toast(msg, {
         title: "알림",
         autoHideDelay: 1000,
         appendToast: true,
-        variant: "warning",
+        variant: st,
       });
     },
   },
@@ -216,7 +221,7 @@ export default {
     },
     registCheck: function () {
       if (this.registCheck) {
-        alert("회원가입이 되었습니다.");
+        this.makeToast("회원가입이 되었습니다.", "success");
         this.CLEAR_REGIST();
         // if (this.$route.path != "/") this.$router.push({ name: "home" });
         this.$router.go();

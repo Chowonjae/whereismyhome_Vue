@@ -8,7 +8,7 @@
         size="sm"
         placeholder="ID..."
         v-model="user.userId"
-        @keyup.enter="login"
+        @keyup.enter="checkValue"
       ></b-form-input>
       <!-- </b-form-group> -->
     </div>
@@ -22,15 +22,19 @@
         size="sm"
         placeholder="PW..."
         v-model="user.userPwd"
-        @keyup.enter="login"
+        @keyup.enter="checkValue"
       ></b-form-input>
     </div>
     <!-- </b-form-group> -->
-    <b-form-checkbox class="mb-3 idck" v-model="idck" value="remember" unchecked-value="not_remember"
+    <b-form-checkbox
+      class="mb-3 idck"
+      v-model="idck"
+      value="remember"
+      unchecked-value="not_remember"
       >아이디 저장</b-form-checkbox
     >
     <div class="mb-3">
-      <b-button class="loginbtn" size="sm" variant="primary" @click="login">로그인</b-button>
+      <b-button class="loginbtn" size="sm" variant="primary" @click="checkValue">로그인</b-button>
     </div>
     <!-- <br/> -->
     <div class="mb-3">
@@ -85,6 +89,22 @@ export default {
     // ...mapActions(["userlogin","userlogout"]),
     ...mapActions(memberStore, ["userConfirm", "getUserInfo", "userLogout"]),
     ...mapMutations(memberStore, ["SET_IS_LOGIN_ERROR", "CLEAR_IS_LOGIN", "SET_MODAL_NAME"]),
+    checkValue() {
+      let msg = "";
+      let err = true;
+      if (this.user.userId === null || this.user.userId === "") {
+        msg = "아이디를 입력해 주세요!";
+        err = false;
+      } else if (this.user.userPwd === null || this.user.userPwd === "") {
+        msg = "비밀번호를 입력해 주세요!";
+        err = false;
+      }
+      if (!err) {
+        this.makeToast(msg);
+        return;
+      }
+      this.login();
+    },
     moveMyPage() {
       console.log("clicked");
       this.$router.go("/mypage");

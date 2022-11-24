@@ -166,14 +166,14 @@ export default {
     modifyUser() {
       if (this.info.userPwd === "" && this.info.userPwd === null) {
         this.checkPwd = false;
-        alert("비밀번호를 입력해 주세요");
+        this.makeToast("비밀번호를 입력해 주세요", "warning");
         return;
       } else {
         this.checkPwd = true;
       }
       if (this.info.emailId === "" || this.info.emailDomain === null) {
         this.checkEmail = false;
-        alert("이메일을 확인해 주세요.");
+        this.makeToast("이메일을 확인해 주세요.", "warning");
         return;
       } else {
         this.checkEmail = true;
@@ -211,6 +211,14 @@ export default {
         // }
       }
     },
+    makeToast(msg, st) {
+      this.$bvToast.toast(msg, {
+        title: "알림",
+        autoHideDelay: 1000,
+        appendToast: true,
+        variant: st,
+      });
+    },
     deleteInfo() {
       this.$swal({
         title: "정말 탈퇴하시겠습니까?",
@@ -228,7 +236,10 @@ export default {
                   console.log(response);
                 },
                 fail: function (error) {
-                  alert("탈퇴처리가 미완료되었습니다. \n관리자에게 문의하시기 바랍니다.");
+                  this.makeToast(
+                    "탈퇴처리가 미완료되었습니다.\n관리자에게 문의하시기 바랍니다.",
+                    "danger"
+                  );
                   console.log(error);
                 },
               });

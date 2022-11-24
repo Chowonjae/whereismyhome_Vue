@@ -7,9 +7,9 @@
         :options="options"
         name="flavour-1"
       ></b-form-checkbox-group>
-      <b-form-input v-model="keyword"></b-form-input>
+      <b-form-input v-model="keyword" class="mb-1"></b-form-input>
       <b-input-group-append>
-        <b-button variant="outline-primary" @click="searchByKeyword">search</b-button>
+        <b-button variant="outline-primary" @click="searchByKeyword" style="height: 38px">검색</b-button>
       </b-input-group-append>
     </b-input-group>
     <b-container id="map"> </b-container>

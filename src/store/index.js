@@ -39,7 +39,7 @@ export default new Vuex.Store({
     ok: false,
     error: false,
 
-    news:[],
+    news: [],
     /////////////////////Board start ///////////////////////
     articles: [],
     article: null,
@@ -166,8 +166,6 @@ export default new Vuex.Store({
     },
 
     /////////////////////////////// News end ///////////////////////////////////
-
-
 
     /////////////////////////////// Board start ///////////////////////////////////
     SET_ARTICLE_LIST(state, articles) {
@@ -429,7 +427,6 @@ export default new Vuex.Store({
     },
 
     /////////////////////////////// News end /////////////////////////////////////
-
 
     /////////////////////////////// Board start /////////////////////////////////////
     getArticleList({ commit }, param) {

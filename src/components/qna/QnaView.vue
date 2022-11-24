@@ -5,9 +5,7 @@
         <b-button variant="outline-primary" @click="moveList">목록</b-button>
       </b-col>
       <b-col class="text-right" v-if="checkqna()">
-        <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2"
-          >글수정</b-button
-        >
+        <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2">글수정</b-button>
         <b-button variant="outline-danger" size="sm" @click="deleteArticle">글삭제</b-button>
       </b-col>
     </b-row>
@@ -27,11 +25,7 @@
       </b-col>
     </b-row>
     <b-input-group class="mt-3">
-      <b-form-textarea
-        v-model="replyComment"
-        placeholder="내용 입력...(100자 이내)"
-        maxlength="100"
-      ></b-form-textarea>
+      <b-form-textarea v-model="replyComment" placeholder="내용 입력...(100자 이내)" maxlength="100"></b-form-textarea>
       <b-input-group-append>
         <b-button variant="info" @click="registReply">댓글 작성</b-button>
       </b-input-group-append>
@@ -58,7 +52,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["qna", "replies", "ok"]),
+    ...mapState(["qna", "replies", "ok", "qnakey", "qnaword"]),
     ...mapState(memberStore, ["userInfo"]),
     message() {
       if (this.qna.content) return this.qna.content.split("\n").join("<br>");
@@ -113,7 +107,8 @@ export default {
     },
     moveList() {
       // view/:articleNo
-      this.$router.push({ name: "qnalist" });
+      this.$router.go(-1);
+      // this.$router.push({ name: "qnalist" });
     },
   },
   // filters: {

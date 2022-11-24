@@ -74,23 +74,33 @@ export default {
         name: "boardmodify",
         params: { articleNo: this.article.articleNo },
       });
-      //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
     },
     deleteArticle() {
-      if (confirm("정말로 삭제?")) {
-        this.removeArticle(this.article.articleNo);
-      }
+      // if (confirm("정말로 삭제?")) {
+      //   this.removeArticle(this.article.articleNo);
+      // }
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        icon: "error",
+        dangerMode: true,
+        buttons: true,
+      })
+        .then((value) => {
+          if (value) {
+            this.removeArticle(this.article.articleNo);
+            this.$swal("삭제완료!", "삭제에 성공했습니다.", "success");
+            this.$router.push({ path: "/board" });
+          }
+        })
+        .catch((error) => {
+          this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: "error" });
+          console.log(error);
+        });
     },
     moveList() {
       this.$router.go(-1);
-      // this.$router.push({ name: "boardlist" });
     },
   },
-  // filters: {
-  //   dateFormat(regtime) {
-  //     return moment(new Date(regtime)).format("YY.MM.DD hh:mm:ss");
-  //   },
-  // },
 };
 </script>
 

@@ -77,14 +77,25 @@ export default {
     },
 
     deleteReply() {
-      if (confirm("댓글을 삭제하시겠습니까?")) {
-        let param = {
+      let param = {
           QnAno: this.reply.article_no,
           Replyno: this.reply.memo_no,
         };
-        console.log(param);
-        this.removeReply(param);
-      }
+      this.$swal({
+        title: "댓글을 삭제하시겠습니까?",
+        icon: "error",
+        dangerMode: true,
+        buttons: true,
+      })
+        .then((value) => {
+          if (value) {
+            this.removeReply(param);
+          }
+        })
+        .catch((error) => {
+          this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: "error" });
+          console.log(error);
+        });
     },
     cancel() {
       this.isShow = true;
@@ -97,6 +108,7 @@ export default {
       };
       this.updateReply(param);
       this.isShow = true;
+      this.$swal("수정완료!", "수정했습니다!", "success");
     },
   },
 };

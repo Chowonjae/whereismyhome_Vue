@@ -470,33 +470,27 @@ export default new Vuex.Store({
     },
 
     updateArticle({ commit }, param) {
-      let msg = "수정이 완료되었습니다.";
       modifyArticle(
         param,
         () => {
           commit("SET_OK", true);
         },
         (error) => {
-          msg = "수정 과정에 문제가 발생했습니다.";
           console.log(error);
         }
       );
-      alert(msg);
     },
 
     addArticle({ commit }, param) {
-      let msg = "등록이 완료되었습니다.";
       writeArticle(
         param,
         () => {
           commit("SET_OK", true);
         },
         (error) => {
-          msg = "등록 과정에 문제가 발생했습니다.";
           console.log(error);
         }
       );
-      alert(msg);
     },
 
     searchArticle({ commit }, articleno) {
@@ -512,18 +506,15 @@ export default new Vuex.Store({
     },
 
     removeArticle({ commit }, articleno) {
-      let msg = "공지사항이 삭제되었습니다.";
       deleteArticle(
         articleno,
         () => {
           commit("SET_OK", true);
         },
         (error) => {
-          msg = "삭제 과정에 문제가 발생했습니다.";
           console.log(error);
         }
       );
-      alert(msg);
     },
 
     //////////////////////////////////Board end//////////////////////////////////
@@ -555,33 +546,27 @@ export default new Vuex.Store({
     },
 
     updateQnA({ commit }, param) {
-      let msg = "수정이 완료되었습니다.";
       modifyQnA(
         param,
         () => {
           commit("SET_OK", true);
         },
         (error) => {
-          msg = "수정 과정에 문제가 발생했습니다.";
-          console.log(error);
+          this.$swal("수정실패!", error, "fail");
         }
       );
-      alert(msg);
     },
 
     addQnA({ commit }, param) {
-      let msg = "등록이 완료되었습니다.";
       writeQnA(
         param,
         () => {
           commit("SET_OK", true);
         },
         (error) => {
-          msg = "등록 과정에 문제가 발생했습니다.";
-          console.log(error);
+          this.$swal("등록실패!", error, "fail");
         }
       );
-      alert(msg);
     },
 
     searchQnA({ commit }, QnAno) {
@@ -597,18 +582,16 @@ export default new Vuex.Store({
     },
 
     removeQnA({ commit }, QnAno) {
-      let msg = "QnA 게시물이 삭제되었습니다.";
       deleteQnA(
         QnAno,
         () => {
           commit("SET_OK", true);
         },
         (error) => {
-          msg = "삭제 과정에 문제가 발생했습니다.";
-          console.log(error);
+          this.$swal("삭제실패!", error, "fail");
+          // console.log(error);
         }
       );
-      alert(msg);
     },
 
     searchReplies({ commit }, QnAno) {
@@ -634,18 +617,15 @@ export default new Vuex.Store({
       );
     },
     updateReply({ commit }, param) {
-      let msg = "수정이 완료되었습니다.";
       modifyReply(
         param,
         ({ data }) => {
           commit("SET_REPLIES", data);
         },
         (error) => {
-          msg = "수정 과정에 문제가 발생했습니다.";
-          console.log(error);
+          this.$swal("수정실패!", error, "fail");
         }
       );
-      alert(msg);
     },
     removeReply({ commit }, param) {
       deleteReply(

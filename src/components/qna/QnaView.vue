@@ -98,24 +98,31 @@ export default {
       this.$router.push({ path: `/qna/modify/${this.qna.articleNo}` });
     },
     deleteArticle() {
-      if (confirm("정말로 삭제?")) {
-        this.removeQnA(this.qna.articleNo);
-      }
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        icon: "error",
+        dangerMode: true,
+        buttons: true,
+      })
+        .then((value) => {
+          if (value) {
+            this.removeQnA(this.qna.articleNo);
+            this.$swal("삭제완료!", "삭제에 성공했습니다.", "success");
+            this.$router.push({ path: "/qna" });
+          }
+        })
+        .catch((error) => {
+          this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: "error" });
+          console.log(error);
+        });
     },
     reload() {
       this.$router.go();
     },
     moveList() {
-      // view/:articleNo
       this.$router.go(-1);
-      // this.$router.push({ name: "qnalist" });
     },
   },
-  // filters: {
-  //   dateFormat(regtime) {
-  //     return moment(new Date(regtime)).format("YY.MM.DD hh:mm:ss");
-  //   },
-  // },
 };
 </script>
 

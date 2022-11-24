@@ -139,7 +139,23 @@ export default {
         subject: this.notice.subject,
         content: this.notice.content,
       };
-      this.addArticle(param);
+      // this.addArticle(param);
+      this.$swal({
+          title: "글을 작성 하시겠습니까?",
+          icon: "warning",
+          buttons: true,
+        })
+          .then((value) => {
+            if (value) {
+              this.addArticle(param);
+              this.$swal("등록완료!", "등록이 완료되었습니다.", "success");
+              this.moveList();
+            }
+          })
+          .catch((error) => {
+            this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: "error" });
+            console.log(error);
+          });
     },
     modify() {
       let param = {
@@ -148,7 +164,23 @@ export default {
         subject: this.notice.subject,
         content: this.notice.content,
       };
-      this.updateArticle(param);
+      // this.updateArticle(param);
+      this.$swal({
+          title: "정말 수정 하시겠습니까?",
+          icon: "warning",
+          buttons: true,
+        })
+          .then((value) => {
+            if (value) {
+              this.updateArticle(param);
+              this.$swal("수정완료!", "수정이 완료되었습니다.", "success");
+              this.moveList();
+            }
+          })
+          .catch((error) => {
+            this.$swal("서버에 문제가 발생했습니다. 죄송합니다.", { icon: "error" });
+            console.log(error);
+          });
     },
     moveList() {
       this.$router.push({ name: "boardlist" });

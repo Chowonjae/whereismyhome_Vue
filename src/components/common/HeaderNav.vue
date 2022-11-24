@@ -28,6 +28,11 @@
         >
           <template #button-content>
             <b-avatar class="mr-4" v-if="userInfo.type == 'kakao'" :src="kakaoImg"></b-avatar>
+            <b-avatar
+              v-else-if="userInfo.userId == 'admin'"
+              class="mr-4"
+              variant="danger"
+            ></b-avatar>
             <b-avatar v-else class="mr-4" variant="primary"></b-avatar>
           </template>
           <b-dropdown-item class="text-center">

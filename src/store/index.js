@@ -36,6 +36,7 @@ export default new Vuex.Store({
     schools: [],
     starbuck: null,
     metro: null,
+    school: null,
     ok: false,
     error: false,
 
@@ -136,6 +137,9 @@ export default new Vuex.Store({
     },
     SET_METRO(state, metro) {
       state.metro = metro;
+    },
+    SET_SCHOOL(state, school) {
+      state.school = school;
     },
     SET_DETAIL_HOUSE(state, house) {
       // console.log("Mutations", house);
@@ -367,6 +371,17 @@ export default new Vuex.Store({
         .then(({ data }) => {
           //  console.log(data);
           commit("SET_METRO", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getSchool({ commit }, param) {
+      http
+        .get(`map/school/${param.lat}/${param.lng}`)
+        .then(({ data }) => {
+          //  console.log(data);
+          commit("SET_SCHOOL", data);
         })
         .catch((error) => {
           console.log(error);

@@ -5,7 +5,9 @@
         <b-form id="form-join">
           <div class="mb-3">
             <label for="userid" class="form-label">아이디</label>
-            <b-button size="sm" pill variant="outline-primary" class="text-right" @click="idcheck">중복확인</b-button>
+            <b-button size="sm" pill variant="outline-primary" class="text-right" @click="idcheck"
+              >중복확인</b-button
+            >
             <input type="text" class="form-control" id="userid" name="userid" v-model="userid" />
             <label
               for="userid"
@@ -18,15 +20,33 @@
           </div>
           <div class="mb-3">
             <label for="username" class="form-label">이름</label>
-            <input type="text" class="form-control" id="username" name="username" v-model="info.userName" />
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              v-model="info.userName"
+            />
           </div>
           <div class="mb-3">
             <label for="userpwd" class="form-label">비밀번호</label>
-            <input type="password" class="form-control" id="userpwd" name="userpwd" v-model="userpwd" />
+            <input
+              type="password"
+              class="form-control"
+              id="userpwd"
+              name="userpwd"
+              v-model="userpwd"
+            />
           </div>
           <div class="mb-3">
             <label for="reuserpwd" class="form-label">비밀번호 확인</label>
-            <input type="password" class="form-control" id="userpwd" name="userpwd" v-model="reuserPwd" />
+            <input
+              type="password"
+              class="form-control"
+              id="userpwd"
+              name="userpwd"
+              v-model="reuserPwd"
+            />
           </div>
           <label
             for="userid"
@@ -39,7 +59,13 @@
           <div class="mb-3">
             <label for="emailid" class="form-label">이메일</label>
             <div class="input-group">
-              <input type="text" class="form-control" id="emailid" name="emailid" v-model="info.emailId" />
+              <input
+                type="text"
+                class="form-control"
+                id="emailid"
+                name="emailid"
+                v-model="info.emailId"
+              />
               <span class="input-group-text">@</span>
               <b-select
                 :options="domain"
@@ -106,35 +132,30 @@ export default {
       this.searchUserId(this.userid);
     },
     regist() {
-      let msg= ""
+      let msg = "";
       let err = true;
       if (this.userid === null || this.userid === "") {
-        msg="아이디를 입력해 주세요!";
+        msg = "아이디를 입력해 주세요!";
         err = false;
-      }
-      else if (err && (this.isGood === null || this.isGood === false)) {
-        msg="아이디 중복확인을 해주세요!"
+      } else if (err && (this.isGood === null || this.isGood === false)) {
+        msg = "아이디 중복확인을 해주세요!";
         err = false;
-      }
-      else if (err && this.info.userName === "") {
+      } else if (err && this.info.userName === "") {
         alert("이름을 입력해 주세요!");
         err = false;
-      }
-      else if (err && (this.pwdCheck === null || this.pwdCheck === false)) {
-        msg="비밀번호를 확인해 주세요!";
+      } else if (err && (this.pwdCheck === null || this.pwdCheck === false)) {
+        msg = "비밀번호를 확인해 주세요!";
         err = false;
-      }
-      else if (err && (this.info.emailId === "" || this.info.emailDomain === null)) {
+      } else if (err && (this.info.emailId === "" || this.info.emailDomain === null)) {
         this.checkEmail = false;
-        msg="이메일을 확인해 주세요.";
+        msg = "이메일을 확인해 주세요.";
         err = false;
       } else {
         this.checkEmail = true;
       }
-      if(!err){
+      if (!err) {
         this.makeToast(msg);
-      }
-      else if (this.isGood && this.pwdCheck && this.checkEmail) {
+      } else if (this.isGood && this.pwdCheck && this.checkEmail) {
         this.info.userId = this.userid;
         this.info.userPwd = this.userpwd;
         this.registUser(this.info);
@@ -144,12 +165,12 @@ export default {
     close() {
       this.$emit("close");
     },
-        makeToast(msg) {
+    makeToast(msg) {
       this.$bvToast.toast(msg, {
         title: "알림",
         autoHideDelay: 1000,
         appendToast: true,
-        variant: "danger",
+        variant: "warning",
       });
     },
   },

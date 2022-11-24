@@ -1,26 +1,41 @@
 <template>
   <b-container v-if="house != null">
     <div class="mb-2" style="font-size: 20px; font-weight: bold">{{ house.apartmentName }}</div>
-    <div id="roadview" style="width: 100%; height: 200px"></div>
+
+    <div id="roadview" style="width: 100%; height: 250px"></div>
     <hr />
-    <div>
-      <span v-if="starbuck != null" style="font-size: 12px" class="text-success">
-        <b-img :src="coffeeImg" width="20" height="20" class="icon"></b-img>{{ starbuck.name }}
-        {{ starbuck.dist }}m
-      </span>
-      <span v-else style="font-size: 12px" class="text-success">
-        <b-img :src="coffeeImg" width="20" height="20" class="icon"></b-img> 1km 이내에 없음
-      </span>
-      <span v-if="metro != null" style="font-size: 12px">
-        <b-img :src="metroImg" width="20" height="20" class="icon"></b-img>
-        {{ metro.name }} {{ metro.dist }}m
-      </span>
-      <span v-else style="font-size: 12px"
-        ><b-img :src="metroImg" width="20" height="20" class="icon"></b-img> 1km 이내에 없음</span
+    <div class="text-left" style="padding-left: 10px">
+      <div
+        v-if="starbuck != null && starbuck != ''"
+        style="font-size: 12px"
+        class="margin-left:10px;"
       >
+        <b-img :src="coffeeImg" width="20" height="20" class="icon"></b-img>&nbsp;&nbsp;&nbsp;{{
+          starbuck.name
+        }}&nbsp;{{ starbuck.dist }}m
+      </div>
+      <div v-else style="font-size: 12px; margin-top: 5px" class="text-success">
+        <b-img :src="coffeeImg" width="20" height="20" class="icon"></b-img>&nbsp; 1km 이내에 없음
+      </div>
+      <div v-if="metro != null && metro != ''" style="font-size: 12px; margin-top: 5px">
+        <b-img :src="metroImg" width="20" height="20" class="icon"></b-img>&nbsp; &nbsp;{{
+          metro.name
+        }}
+        {{ metro.dist }}m
+      </div>
+      <div v-else style="font-size: 12px; margin-top: 5px">
+        <b-img :src="metroImg" width="20" height="20" class="icon"></b-img>&nbsp;1km 이내에 없음
+      </div>
+      <div v-if="school != null && school != ''" style="font-size: 12px; margin-top: 5px">
+        <b-img :src="schoolImg" width="20" height="20" class="icon"></b-img>&nbsp;&nbsp;
+        {{ school.name }} {{ school.dist }}m
+      </div>
+      <div v-else style="font-size: 12px; margin-top: 5px">
+        <b-img :src="schoolImg" width="20" height="20" class="icon"></b-img>&nbsp;1km 이내에 없음
+      </div>
     </div>
     <hr />
-    <div class="apt-date text-center">건축년도: {{ house.buildYear }}</div>
+    <div class="apt-date text-center small text-muted">건축년도: {{ house.buildYear }}</div>
     <hr />
     <LineChartGenerator
       :chart-options="chartOptions"
@@ -54,10 +69,16 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale
 export default {
   name: "HouseInfo",
   components: { LineChartGenerator },
+  title() {
+    if (this.house != null) {
+      return this.house.name;
+    }
+  },
   data() {
     return {
       coffeeImg: require("@/assets/coffee.png"),
       metroImg: require("@/assets/metro.png"),
+      schoolImg: require("@/assets/school.png"),
       chartOptions: {
         layout: {
           padding: {
@@ -67,7 +88,7 @@ export default {
         scales: {
           x: {
             min: 0,
-            max: 7,
+            max: 5,
           },
           y: {
             beginAtZero: true,
@@ -119,7 +140,6 @@ export default {
   },
   watch: {
     house: function () {
-      console.log(this.house);
       if (this.house != null) {
         console.log("inside");
         var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
@@ -133,31 +153,31 @@ export default {
           roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
         });
         this.chartOptions.scales.x.min = 0;
-        this.chartOptions.scales.x.max = 7;
+        this.chartOptions.scales.x.max = 5;
       }
     },
   },
   methods: {
     ...mapMutations(["CLEAR_DEAL_LIST"]),
     rangeUp() {
-      this.chartOptions.scales.x.min += 8;
-      this.chartOptions.scales.x.max += 8;
+      this.chartOptions.scales.x.min += 6;
+      this.chartOptions.scales.x.max += 6;
       if (this.chartOptions.scales.x.max >= this.deals.labels.length) {
-        this.chartOptions.scales.x.min = this.deals.labels.length - 8;
+        this.chartOptions.scales.x.min = this.deals.labels.length - 6;
         this.chartOptions.scales.x.max = this.deals.labels.length - 1;
       }
     },
     rangeDown() {
-      this.chartOptions.scales.x.min -= 8;
-      this.chartOptions.scales.x.max -= 8;
+      this.chartOptions.scales.x.min -= 6;
+      this.chartOptions.scales.x.max -= 6;
       if (this.chartOptions.scales.x.min < 0) {
         this.chartOptions.scales.x.min = 0;
-        this.chartOptions.scales.x.max = 7;
+        this.chartOptions.scales.x.max = 5;
       }
     },
   },
   computed: {
-    ...mapState(["deals", "starbuck", "metro", "house"]),
+    ...mapState(["deals", "starbuck", "metro", "house", "school"]),
   },
 };
 </script>

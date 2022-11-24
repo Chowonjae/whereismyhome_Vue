@@ -65,11 +65,6 @@ const routes = [
         name: "boardmodify",
         component: () => import("@/components/board/BoardModify"),
       },
-      {
-        path: "delete/:articleNo",
-        name: "boarddelete",
-        component: () => import("@/components/board/BoardDelete"),
-      },
     ],
   },
   {
@@ -95,11 +90,6 @@ const routes = [
         path: "modify/:articleNo",
         name: "qnamodify",
         component: () => import("@/components/qna/QnaModify"),
-      },
-      {
-        path: "delete/:articleNo",
-        name: "qnadelete",
-        component: () => import("@/components/qna/QnaDelete"),
       },
     ],
   },

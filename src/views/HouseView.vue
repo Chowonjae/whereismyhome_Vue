@@ -34,18 +34,24 @@ export default {
     this.isShow = false;
   },
   computed: {
-    ...mapState(["house"]),
+    ...mapState(["house", "houses"]),
   },
+
   data() {
     return {
       isShow: false,
     };
   },
+  watch: {
+    houses: function () {
+      this.isShow = false;
+    },
+  },
   methods: {
     ...mapMutations(["SET_HOUSE", "CLEAR_HOUSE", "CLEAR_DEAL_LIST"]),
-    ...mapActions(["detailHouse", "getStarbuck", "getMetro"]),
+    ...mapActions(["detailHouse", "getStarbuck", "getMetro", "getSchool"]),
     houseDetail(h) {
-      if (this.isShow&&this.house != null && this.house.aptCode === h.aptCode) {
+      if (this.isShow && this.house != null && this.house.aptCode === h.aptCode) {
         this.isShow = false;
         this.CLEAR_DEAL_LIST();
       } else {
@@ -58,7 +64,8 @@ export default {
         this.detailHouse(this.house.aptCode);
         this.getStarbuck(param);
         this.getMetro(param);
-
+        this.getSchool(param);
+        this.name = this.house.name;
         this.isShow = true;
       }
     },

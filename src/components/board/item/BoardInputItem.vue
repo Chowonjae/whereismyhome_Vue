@@ -116,8 +116,16 @@ export default {
         !this.notice.content &&
         ((msg = "내용 입력해주세요"), (err = false), this.$refs.content.focus());
 
-      if (!err) alert(msg);
+      if (!err) this.makeToast(msg);
       else this.type === "register" ? this.regist() : this.modify();
+    },
+    makeToast(msg) {
+      this.$bvToast.toast(msg, {
+        title: "알림",
+        autoHideDelay: 1000,
+        appendToast: true,
+        variant: "warning",
+      });
     },
     onReset(event) {
       event.preventDefault();

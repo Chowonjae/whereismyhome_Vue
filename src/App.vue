@@ -44,12 +44,20 @@ export default {
       if (matched) {
         localStorage.setItem("loginUser", JSON.stringify(user));
         this.user = user;
-        alert("로그인 성공");
+        this.makeToast("로그인 성공", "success");
         this.$router.push("/");
       } else {
-        alert("로그인 실패");
+        this.makeToast("로그인 실패", "danger");
       }
     },
+  },
+  makeToast(msg, status) {
+    this.$bvToast.toast(msg, {
+      title: "알림",
+      autoHideDelay: 1000,
+      appendToast: true,
+      variant: status,
+    });
   },
 };
 </script>

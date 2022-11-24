@@ -46,8 +46,6 @@
     <hr />
     <b-container>
       <login-kakao :close="close"></login-kakao>
-      <login-naver :close="close"></login-naver>
-      <login-google :close="close"></login-google>
     </b-container>
   </b-form>
 </template>
@@ -55,16 +53,14 @@
 <script>
 import { mapMutations, mapState, mapActions } from "vuex";
 import LoginKakao from "@/components/login/LoginKakao.vue";
-import LoginNaver from "@/components/login/LoginNaver.vue";
-import LoginGoogle from "@/components/login/LoginGoogle.vue";
 
 const memberStore = "memberStore";
 export default {
   name: "LoginPage",
   components: {
     LoginKakao,
-    LoginNaver,
-    LoginGoogle,
+    // LoginNaver,
+    // LoginGoogle,
   },
 
   data() {

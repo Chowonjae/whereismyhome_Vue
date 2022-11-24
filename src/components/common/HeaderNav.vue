@@ -28,12 +28,6 @@
         >
           <template #button-content>
             <b-avatar class="mr-4" v-if="userInfo.type == 'kakao'" :src="kakaoImg"></b-avatar>
-            <b-avatar
-              class="mr-4"
-              v-else-if="userInfo.type == 'google'"
-              :src="googleImg"
-            ></b-avatar>
-            <b-avatar class="mr-4" v-else-if="userInfo.type == 'naver'" :src="naverImg"></b-avatar>
             <b-avatar v-else class="mr-4" variant="primary"></b-avatar>
           </template>
           <b-dropdown-item class="text-center">
@@ -69,8 +63,6 @@ export default {
   data() {
     return {
       kakaoImg: require("@/assets/login/kakaotalk_logo.png"),
-      googleImg: require("@/assets/login/google_logo.png"),
-      naverImg: require("@/assets/login/naver_logo.png"),
       showDrop: false,
     };
   },
@@ -109,10 +101,6 @@ export default {
           window.Kakao.Auth.logout((res) => {
             if (!res) console.log("kakao logout");
           });
-        } else if (this.userInfo.type == "google") {
-          console.log("google logout");
-        } else {
-          console.log("naver logout");
         }
         this.socialLogout();
       }

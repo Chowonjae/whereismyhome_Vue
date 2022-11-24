@@ -26,11 +26,7 @@
       ></b-form-input>
     </div>
     <!-- </b-form-group> -->
-    <b-form-checkbox
-      class="mb-3 idck"
-      v-model="idck"
-      value="remember"
-      unchecked-value="not_remember"
+    <b-form-checkbox class="mb-3 idck" v-model="idck" value="remember" unchecked-value="not_remember"
       >아이디 저장</b-form-checkbox
     >
     <div class="mb-3">
@@ -44,7 +40,7 @@
       <label class="findpw-label" @click="changeModal('findpwd')">비밀번호 찾기</label>
     </div>
     <hr />
-    <b-container>
+    <b-container class="text-center">
       <login-kakao :close="close"></login-kakao>
     </b-container>
   </b-form>

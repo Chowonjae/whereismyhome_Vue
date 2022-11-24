@@ -2,6 +2,7 @@
   <b-container v-if="house != null">
     <div class="mb-2" style="font-size: 20px; font-weight: bold">{{ house.apartmentName }}</div>
     <div id="roadview" style="width: 100%; height: 200px"></div>
+    <hr />
     <div>
       <span v-if="starbuck != null" style="font-size: 12px" class="text-success">
         <b-img :src="coffeeImg" width="20" height="20" class="icon"></b-img>{{ starbuck.name }}
@@ -18,7 +19,9 @@
         ><b-img :src="metroImg" width="20" height="20" class="icon"></b-img> 1km 이내에 없음</span
       >
     </div>
-    <div class="apt-date text-left">건축년도: {{ house.buildYear }}</div>
+    <hr />
+    <div class="apt-date text-center">건축년도: {{ house.buildYear }}</div>
+    <hr />
     <LineChartGenerator
       :chart-options="chartOptions"
       :chart-data="deals"

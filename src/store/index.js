@@ -30,7 +30,7 @@ export default new Vuex.Store({
     house: null,
     hospitals: [],
     coronas: [],
-    deals: { labels: [], datasets: [{ label: "거래금액", backgroundColor: "#f87979", data: [] }] },
+    deals: { labels: [], datasets: [{ label: "거래금액 (단위:만)", backgroundColor: "#f87979", data: [] }] },
     starbucks: [],
     metros: [],
     schools: [],
@@ -86,7 +86,7 @@ export default new Vuex.Store({
       state.inters = [];
     },
     CLEAR_DEAL_LIST(state) {
-      state.deals = { labels: [], datasets: [{ label: "거래금액", backgroundColor: "#f87979", data: [] }] };
+      state.deals = { labels: [], datasets: [{ label: "거래금액 (단위:만)", backgroundColor: "#f87979", data: [] }] };
     },
     CLEAR_HOSPITAL_LIST(state) {
       state.hospitals = [];
